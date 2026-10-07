@@ -1,5 +1,6 @@
+import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
-import { fmtDate, fmtDuration, fmtMoney } from "@/lib/format"
+import { fmtDuration, fmtMoney, fmtMonthYear } from "@/lib/format"
 import type { Analysis } from "@/lib/loan/types"
 
 function Tile({
@@ -7,28 +8,24 @@ function Tile({
   value,
   base,
   delta,
-  deltaGoodWhenNegative = true,
   note,
-  className,
 }: {
   label: string
   value: string
   base?: string
   delta?: number
-  deltaGoodWhenNegative?: boolean
   note?: string
-  className?: string
 }) {
   const show = delta !== undefined && Math.abs(delta) >= 1
-  const good = show && (deltaGoodWhenNegative ? delta < 0 : delta > 0)
+  const good = show && delta < 0
   return (
-    <div className={cn("grid gap-1 rounded-xl bg-card px-4 py-3.5 ring-1 ring-foreground/10", className)}>
-      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{label}</p>
-      <p className="font-mono text-xl font-semibold tracking-tight sm:text-2xl">{value}</p>
+    <div className="grid content-start gap-1 rounded-xl bg-card px-3.5 py-3 ring-1 ring-foreground/10 sm:px-4 sm:py-3.5">
+      <p className="text-[11px] font-medium tracking-wide text-muted-foreground uppercase sm:text-xs">{label}</p>
+      <p className="font-mono text-lg font-semibold tracking-tight sm:text-2xl">{value}</p>
       <div className="flex min-h-4 flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-        {base && <span>was {base}</span>}
+        {base && <span>{base}</span>}
         {show && (
-          <span className={cn("tnum font-mono font-medium", good ? "text-good" : "text-bad")}>
+          <span className={cn("font-mono font-medium tabular-nums", good ? "text-good" : "text-bad")}>
             {delta < 0 ? "−" : "+"}
             {fmtMoney(Math.abs(delta))}
           </span>
@@ -39,46 +36,70 @@ function Tile({
   )
 }
 
-export function SummaryCards({ a, hasChanges, payoffIso }: { a: Analysis; hasChanges: boolean; payoffIso: string }) {
+export function SummaryCards({
+  a,
+  hasChanges,
+  payoffIso,
+  stale,
+}: {
+  a: Analysis
+  hasChanges: boolean
+  payoffIso: string
+  stale?: boolean
+}) {
+  const { t } = useTranslation()
   const s = a.scenario
   const b = a.baseline
   const ioMonths = s.rows.filter((r) => r.interestOnly).length
+  const baseRate = b.rows[0]?.ratePct
+  const rateMonths = baseRate === undefined ? 0 : s.rows.filter((r) => Math.abs(r.ratePct - baseRate) > 1e-9).length
   const paymentNote =
     s.maxMonthlyPayment - s.monthlyPayment > 1
-      ? `rises to ${fmtMoney(s.maxMonthlyPayment)}`
-      : a.scenario.rows[0]?.interestOnly
-        ? `interest-only now: ${fmtMoney(a.scenario.rows[0].payment)}`
-        : undefined
+      ? t("tiles.risesTo", { amount: fmtMoney(s.maxMonthlyPayment) })
+      : s.rows[0]?.interestOnly
+        ? t("tiles.interestOnlyNow", { amount: fmtMoney(s.rows[0].payment) })
+        : s.rows[0]?.extra
+          ? t("tiles.extra", { amount: fmtMoney(s.rows[0].extra) })
+          : undefined
+
+  const payoffNote = [
+    t("tiles.in", { duration: fmtDuration(s.months, t) }),
+    hasChanges && a.delta.months !== 0
+      ? a.delta.months < 0
+        ? t("tiles.sooner", { duration: fmtDuration(a.delta.months, t) })
+        : t("tiles.later", { duration: fmtDuration(a.delta.months, t) })
+      : undefined,
+    ioMonths ? t("tiles.interestOnlyMonths", { count: ioMonths }) : undefined,
+    rateMonths ? t("tiles.ratePeriods", { count: rateMonths }) : undefined,
+  ]
+    .filter(Boolean)
+    .join(" · ")
 
   return (
-    <div className="rise rise-1 grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div className={cn("rise rise-1 grid grid-cols-2 gap-2 transition-opacity sm:gap-3 xl:grid-cols-4", stale && "opacity-50")}>
       <Tile
-        label="Monthly payment"
+        label={t("tiles.monthly")}
         value={fmtMoney(s.monthlyPayment)}
-        base={hasChanges && Math.abs(s.monthlyPayment - b.monthlyPayment) >= 1 ? fmtMoney(b.monthlyPayment) : undefined}
-        note={paymentNote ?? (s.rows[0]?.extra ? `+ ${fmtMoney(s.rows[0].extra)} extra` : undefined)}
+        base={
+          hasChanges && Math.abs(s.monthlyPayment - b.monthlyPayment) >= 1
+            ? t("tiles.was", { amount: fmtMoney(b.monthlyPayment) })
+            : undefined
+        }
+        note={paymentNote}
       />
+      <Tile label={t("tiles.paidOff")} value={fmtMonthYear(payoffIso)} note={payoffNote} />
       <Tile
-        label="Paid off"
-        value={fmtDate(payoffIso)}
-        note={`in ${fmtDuration(s.months)}${
-          hasChanges && a.delta.months !== 0
-            ? ` · ${fmtDuration(a.delta.months)} ${a.delta.months < 0 ? "sooner" : "later"}`
-            : ""
-        }${ioMonths ? ` · ${ioMonths} mo interest-only` : ""}`}
-      />
-      <Tile
-        label="Total interest"
+        label={t("tiles.totalInterest")}
         value={fmtMoney(s.totalInterest)}
-        base={hasChanges ? fmtMoney(b.totalInterest) : undefined}
+        base={hasChanges ? t("tiles.was", { amount: fmtMoney(b.totalInterest) }) : undefined}
         delta={hasChanges ? a.delta.interest : undefined}
       />
       <Tile
-        label="Total cost"
+        label={t("tiles.totalCost")}
         value={fmtMoney(s.totalPaid)}
-        base={hasChanges ? fmtMoney(b.totalPaid) : undefined}
+        base={hasChanges ? t("tiles.was", { amount: fmtMoney(b.totalPaid) }) : undefined}
         delta={hasChanges ? a.delta.totalCost : undefined}
-        note="incl. principal and fees"
+        note={t("tiles.inclPrincipal")}
       />
     </div>
   )

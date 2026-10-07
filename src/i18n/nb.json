@@ -1,0 +1,309 @@
+{
+  "app": {
+    "title": "Lånekalkulator",
+    "tagline": "hva lånet ditt egentlig koster",
+    "skip": "Hopp til innhold"
+  },
+  "nav": {
+    "calculator": "Kalkulator",
+    "loans": "Mine lån",
+    "label": "Sider"
+  },
+  "actions": {
+    "share": "Del",
+    "copied": "Lenke kopiert",
+    "copyLink": "Kopier delingslenke",
+    "new": "Nytt",
+    "newLoan": "Nytt lån",
+    "save": "Lagre",
+    "saveChanges": "Lagre endringer",
+    "saved": "Lagret",
+    "close": "Lukk",
+    "cancel": "Avbryt"
+  },
+  "theme": {
+    "toggle": "Bytt mellom lyst og mørkt tema"
+  },
+  "lang": {
+    "label": "Språk",
+    "nb": "Norsk",
+    "en": "English",
+    "pl": "Polski"
+  },
+  "steps": {
+    "edit": "Endre",
+    "done": "Ferdig",
+    "optional": "valgfritt"
+  },
+  "loan": {
+    "title": "Lånet",
+    "desc": "Hva du har lånt og på hvilke vilkår.",
+    "name": "Navn",
+    "namePlaceholder": "Boliglånet",
+    "amount": "Lånebeløp",
+    "rate": "Rente",
+    "ratePa": "% p.a.",
+    "fee": "Gebyr per måned",
+    "term": "Nedbetalingstid",
+    "years": "år",
+    "months": "mnd",
+    "type": "Lånetype",
+    "annuity": "Annuitet",
+    "serial": "Serie",
+    "annuityHint": "Samme beløp hver måned. Det vanligste.",
+    "serialHint": "Samme avdrag hver måned, så terminbeløpet starter høyt og synker.",
+    "startDate": "Startdato",
+    "startHint": "Viser hvor du er i dag på grafen.",
+    "remaining": "Restgjeld i dag",
+    "remainingHintWithStart": "Fra siste kontoutskrift. La stå tom for å anslå ut fra planen.",
+    "remainingHintNoStart": "Velg startdato først.",
+    "estimate": "Omtrent <0>{{amount}}</0> per måned.",
+    "estimateSerial": "Omtrent <0>{{amount}}</0> per måned i starten.",
+    "summary": "{{amount}} · {{rate}} % · {{term}}",
+    "more": "Flere detaljer",
+    "moreHint": "startdato, restgjeld, gebyr, navn",
+    "editLoan": "Endre lånet"
+  },
+  "extras": {
+    "title": "Betal ekstra",
+    "desc": "Hver krone går rett på hovedstolen.",
+    "empty": "Ingenting ennå. Prøv 1 000 kr i måneden og se årene forsvinne.",
+    "monthly": "Månedlig",
+    "oneoff": "Engang",
+    "kind": "Type ekstrabetaling {{n}}",
+    "amount": "Beløp",
+    "fromMonth": "Fra måned",
+    "inMonth": "I måned",
+    "toMonth": "Til måned",
+    "untilPaidOff": "Til lånet er nedbetalt",
+    "addMonthly": "Månedlig ekstra",
+    "addOneoff": "Engangsbeløp",
+    "remove": "Fjern ekstrabetaling {{n}}",
+    "summaryNone": "Ingen ekstrabetalinger",
+    "summaryMonthly": "{{amount}}/mnd",
+    "summaryOneoff": "{{amount}} i {{date}}",
+    "summaryCount": "{{count}} ekstrabetalinger"
+  },
+  "periods": {
+    "desc": "Måneder som avviker fra vanlig plan: bare renter når det er trangt, eller en annen rente, for eksempel 0 % eller fastrente.",
+    "empty": "Ingen perioder ennå. Legg til en for å se hva noen avdragsfrie måneder, eller en periode med 0 % rente, faktisk gjør.",
+    "kind": "Type periode {{n}}",
+    "interestOnly": "Avdragsfritt",
+    "otherRate": "Annen rente",
+    "from": "Fra",
+    "to": "Til",
+    "fromMonth": "Fra måned",
+    "fromYear": "Fra år",
+    "toMonth": "Til måned",
+    "toYear": "Til år",
+    "rate": "Rente i perioden",
+    "rateHint": "Terminbeløpet regnes om for denne renten, og igjen når perioden er over.",
+    "zero": "0 %",
+    "duration": "{{count}} mnd",
+    "past": "Denne perioden er allerede over og påvirker ikke beregningen. Legg heller inn restgjelden i dag.",
+    "add": "Legg til periode",
+    "remove": "Fjern periode {{n}}",
+    "after": "Etterpå",
+    "keepTerm": "Behold sluttdatoen",
+    "keepTermHint": "Terminbeløpet går opp etterpå.",
+    "keepPayment": "Behold terminbeløpet",
+    "keepPaymentHint": "Lånet varer lenger."
+  },
+  "verdict": {
+    "noChanges": "Bruk «Hva om …?» for å se hva ekstrabetaling, avdragsfrihet eller en annen rente gjør med lånet.",
+    "planSoFar": "Planen slik den er: nedbetalt om {{duration}}, med <0>{{amount}}</0> i renter og gebyrer.",
+    "withChanges": "Med endringene dine",
+    "earlier": "Nedbetalt {{duration}} tidligere",
+    "later": "Nedbetalt {{duration}} senere",
+    "cheaperSameDate": "{{amount}} billigere, samme sluttdato",
+    "dearerSameDate": "{{amount}} dyrere, samme sluttdato",
+    "noEffect": "Endringene påvirker ikke lånet",
+    "sameInterest": "Samme rentekostnad.",
+    "lessInterest": "{{amount}} mindre i renter",
+    "moreInterest": "{{amount}} mer i renter",
+    "lessFees": " og {{amount}} mindre i gebyrer",
+    "moreFees": " og {{amount}} mer i gebyrer",
+    "totalCost": "Total kostnad",
+    "paidOffTitle": "Dette lånet er nedbetalt",
+    "paidOffBody": "Ut fra startdato og restgjeld er det ingenting igjen å betale.",
+    "truncated": "Planen stopper etter 100 år. Dette går ikke opp, reduser pausene."
+  },
+  "tiles": {
+    "monthly": "Terminbeløp",
+    "paidOff": "Nedbetalt",
+    "totalInterest": "Totale renter",
+    "totalCost": "Total kostnad",
+    "was": "var {{amount}}",
+    "in": "om {{duration}}",
+    "sooner": "{{duration}} før",
+    "later": "{{duration}} senere",
+    "interestOnlyMonths": "{{count}} mnd avdragsfritt",
+    "risesTo": "stiger til {{amount}}",
+    "interestOnlyNow": "avdragsfritt nå: {{amount}}",
+    "extra": "+ {{amount}} ekstra",
+    "inclPrincipal": "inkl. hovedstol og gebyrer",
+    "ratePeriods": "{{count}} mnd med annen rente"
+  },
+  "charts": {
+    "balance": "Restgjeld",
+    "yearly": "Per år",
+    "interest": "Renter",
+    "table": "Nedbetalingsplan",
+    "balanceDesc": "Hvor mye du skylder, måned for måned.",
+    "yearlyDesc": "Hvor hvert års betalinger går, med endringene dine.",
+    "interestDesc": "Renter og gebyrer som hoper seg opp.",
+    "tableDesc": "Hver betaling, gruppert per år. Klikk et år for å åpne.",
+    "today": "I dag",
+    "region": "Resultater",
+    "tableShort": "Plan"
+  },
+  "series": {
+    "history": "Hittil",
+    "baseline": "Dagens plan",
+    "scenario": "Med endringer",
+    "interest": "Renter",
+    "principal": "Avdrag",
+    "extra": "Ekstra",
+    "fee": "Gebyr"
+  },
+  "table": {
+    "period": "Periode",
+    "payment": "Betaling",
+    "interest": "Renter",
+    "principal": "Avdrag",
+    "extra": "Ekstra",
+    "balance": "Restgjeld",
+    "interestOnly": "avdragsfritt",
+    "interestOnlyMonths": "{{count}} mnd avdragsfritt",
+    "toggle": "Vis måneder for {{year}}",
+    "region": "Nedbetalingsplan, kan rulles sidelengs"
+  },
+  "save": {
+    "title": "Lagre dette lånet",
+    "desc": "Lagres bare i denne nettleseren. Ingenting forlater maskinen din.",
+    "name": "Navn",
+    "update": "Oppdater",
+    "save": "Lagre",
+    "copy": "Lagre som kopi",
+    "savedHint": "Ingen ulagrede endringer"
+  },
+  "replace": {
+    "title": "Erstatte lånet du jobber med?",
+    "descShare": "Du åpnet en delt lenke. Lånet du har her er ikke lagret og blir borte.",
+    "descNew": "Lånet du har her er ikke lagret og blir borte.",
+    "descOpen": "Lånet du har åpent har endringer som ikke er lagret. Åpner du et annet, forsvinner de.",
+    "saveFirst": "Lagre dette først",
+    "replace": "Erstatt"
+  },
+  "shareFallback": {
+    "title": "Kopier lenken",
+    "desc": "Nettleseren ga ikke tilgang til utklippstavlen. Kopier den selv."
+  },
+  "loans": {
+    "title": "Mine lån",
+    "none": "Ingenting lagret ennå.",
+    "count_one": "{{count}} lagret i denne nettleseren.",
+    "count_other": "{{count}} lagret i denne nettleseren.",
+    "import": "Importer",
+    "export": "Eksporter alle",
+    "deleteAll": "Slett alle",
+    "privacyTitle": "Privat av natur",
+    "privacyBody": "Ingenting du skriver inn blir samlet, sporet eller sendt noe sted. Lånene lagres bare i denne nettleserens lokale lager. Sletter du nettstedsdata, forsvinner de, så bruk <0>Eksporter</0> for å ta en kopi eller flytte mellom enheter.",
+    "emptyHint": "Lagre et lån fra kalkulatoren, så dukker det opp her.",
+    "saved": "Lagret {{date}}",
+    "open": "Åpne",
+    "openNamed": "Åpne {{name}}",
+    "duplicate": "Dupliser",
+    "duplicateNamed": "Dupliser {{name}}",
+    "delete": "Slett",
+    "deleteNamed": "Slett {{name}}",
+    "copySuffix": "(kopi)",
+    "untitled": "Uten navn",
+    "current": "åpen",
+    "amount": "Beløp",
+    "rate": "Rente",
+    "term": "Løpetid",
+    "type": "Type",
+    "monthly": "Per måned",
+    "paidOff": "Nedbetalt",
+    "totalInterest": "Totale renter",
+    "changes": "Endringer",
+    "noChanges": "ingen",
+    "deleteAllTitle": "Slette alle lagrede lån?",
+    "deleteAllDesc": "Dette fjerner alle lagrede lån fra denne nettleseren. Det kan ikke angres, så eksporter først hvis du er i tvil.",
+    "deleteAllConfirm": "Slett alt",
+    "deleteOneTitle": "Slette «{{name}}»?",
+    "deleteOneDesc": "Fjerner lånet fra nettleseren. Kan ikke angres.",
+    "importError": {
+      "notExport": "Dette er ikke en eksportfil fra Lånekalkulator.",
+      "empty": "Fant ingen lån i den filen."
+    },
+    "imported_one": "{{count}} lån importert.",
+    "imported_other": "{{count}} lån importert."
+  },
+  "footer": {
+    "privacy": "Ingenting samles inn eller sendes noe sted. Lånene dine finnes bare i denne nettleseren.",
+    "estimates": "Kun anslag. Bankens tall er de som gjelder."
+  },
+  "storage": {
+    "off": "Denne nettleseren blokkerer lokal lagring, så lagring er av. Kalkulatoren virker likevel.",
+    "writeFailed": "Kunne ikke lagre. Lageret i nettleseren er fullt eller sperret."
+  },
+  "invalid": {
+    "hint": "Fyll inn beløp, rente og nedbetalingstid for å se tallene.",
+    "stale": "Tallene gjelder forrige gyldige innstilling."
+  },
+  "error": {
+    "title": "Noe gikk galt.",
+    "body": "Lagrede lån beholdes. Last siden på nytt. Hjelper ikke det, kan du starte på nytt med en tom kalkulator.",
+    "reload": "Last på nytt",
+    "reset": "Start på nytt"
+  },
+  "validation": {
+    "principal": "Oppgi et lånebeløp mellom 1 og 1 000 000 000 kr",
+    "rate": "0–100 %",
+    "term": "1–40 år",
+    "fee": "0–100 000 kr",
+    "startDate": "Ugyldig dato (1900–2100)",
+    "remainingNeedsStart": "Velg startdato først",
+    "remainingNegative": "Kan ikke være negativ",
+    "remainingTooHigh": "Kan ikke være større enn lånebeløpet"
+  },
+  "duration": {
+    "years_one": "{{count}} år",
+    "years_other": "{{count}} år",
+    "months_one": "{{count}} mnd",
+    "months_other": "{{count}} mnd"
+  },
+  "whatif": {
+    "title": "Hva om …?",
+    "desc": "Prøv én ting av gangen. Grafene oppdateres med en gang.",
+    "extras": "Betal ekstra",
+    "goal": "Ferdig innen",
+    "active": "{{count}} aktiv",
+    "periods": "Perioder"
+  },
+  "goal": {
+    "question": "Når vil du være gjeldfri?",
+    "target": "Nedbetalt",
+    "targetValue": "{{date}} · om {{duration}}",
+    "earlier": "{{duration}} tidligere",
+    "presetsLabel": "Hurtigvalg",
+    "needMonthly": "Betal <0>{{amount}}</0> ekstra hver måned",
+    "needOneoff": "eller <0>{{amount}}</0> én gang nå",
+    "onTop": "Det kommer i tillegg til endringene du allerede har lagt inn.",
+    "total": "Totalt {{amount}} per måned. Sparer {{saved}} i renter.",
+    "onTrack": "Du er allerede i rute til å bli ferdig da.",
+    "apply": "Legg til {{amount}}/mnd",
+    "applied": "Lagt til under «Betal ekstra»."
+  },
+  "a11y": {
+    "mainHeading": "Lånekalkulator",
+    "results": "Resultater",
+    "moreMenu": "Flere valg",
+    "status": "Status"
+  },
+  "mobileBar": {
+    "show": "Vis resultater"
+  }
+}

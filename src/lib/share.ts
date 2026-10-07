@@ -1,4 +1,5 @@
 import { uid } from "./ids"
+import { sanitizeScenario } from "./loan/sanitize"
 import type { Scenario } from "./loan/types"
 
 function toBase64Url(s: string): string {
@@ -16,22 +17,17 @@ function fromBase64Url(s: string): string {
 }
 
 export function encodeShare(s: Scenario): string {
-  const { loan, extras, interestOnly, afterInterestOnly } = s
-  return toBase64Url(JSON.stringify({ loan, extras, interestOnly, afterInterestOnly }))
+  const { loan, extras, periods, afterInterestOnly } = s
+  return toBase64Url(JSON.stringify({ loan, extras, periods, afterInterestOnly }))
 }
 
+/** Decodes a share hash. Hostile or malformed input yields undefined, never a throw. */
 export function decodeShare(hash: string): Scenario | undefined {
   try {
-    const raw = JSON.parse(fromBase64Url(hash)) as Partial<Scenario>
-    if (!raw.loan || typeof raw.loan.principal !== "number") return undefined
-    return {
-      id: uid(),
-      savedAt: new Date().toISOString(),
-      loan: raw.loan,
-      extras: raw.extras ?? [],
-      interestOnly: raw.interestOnly ?? [],
-      afterInterestOnly: raw.afterInterestOnly ?? "keep-term",
-    }
+    const s = sanitizeScenario(JSON.parse(fromBase64Url(hash)))
+    if (!s) return undefined
+    // A shared link is a new loan for the receiver, never an update of one of theirs.
+    return { ...s, id: uid(), savedAt: new Date().toISOString() }
   } catch {
     return undefined
   }
@@ -46,13 +42,19 @@ export function exportJson(items: Scenario[]): string {
   return JSON.stringify({ app: "lane-kalkulator", v: 1, exportedAt: new Date().toISOString(), items }, null, 2)
 }
 
+export class ImportError extends Error {}
+
+/** Parses an export file. Entries that cannot be sanitized are dropped; ids are kept so re-import updates instead of duplicating. */
 export function parseImport(text: string): Scenario[] {
-  const parsed = JSON.parse(text) as { items?: unknown }
-  const items = Array.isArray(parsed) ? parsed : parsed.items
-  if (!Array.isArray(items)) throw new Error("Not a lane-kalkulator export")
-  return items
-    .filter((i): i is Scenario => !!i && typeof i === "object" && "loan" in i)
-    .map((i) => ({ ...i, id: i.id || uid() }))
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(text)
+  } catch {
+    throw new ImportError("notExport")
+  }
+  const items = Array.isArray(parsed) ? parsed : (parsed as { items?: unknown } | null)?.items
+  if (!Array.isArray(items)) throw new ImportError("notExport")
+  return items.map((x) => sanitizeScenario(x)).filter((s): s is Scenario => s !== undefined)
 }
 
 export function downloadText(filename: string, text: string): void {

@@ -1,138 +1,181 @@
-import { useCallback, useEffect, useReducer, useState } from "react"
-import { CheckIcon, LinkIcon, PlusIcon, SaveIcon } from "lucide-react"
+import { useEffect, useEffectEvent, useReducer, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { CheckIcon, SaveIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AppShell } from "@/components/AppShell"
+import { ConfirmDialog } from "@/components/ConfirmDialog"
 import { SaveDialog } from "@/components/SaveDialog"
+import { ShareFallbackDialog } from "@/components/ShareFallbackDialog"
 import { CalculatorPage } from "@/pages/CalculatorPage"
 import { LoansPage } from "@/pages/LoansPage"
-import { useHashRoute } from "@/hooks/useHashRoute"
-import { uid } from "@/lib/ids"
-import { loadDraft, newScenario, saveDraft, storageAvailable, useSavedScenarios, useTheme } from "@/lib/storage"
+import { go, useHashRoute } from "@/hooks/useHashRoute"
+import { isPristine, loadDraft, newScenario, saveDraft, storageAvailable, useSavedScenarios, useTheme } from "@/lib/storage"
 import { decodeShare, shareUrl } from "@/lib/share"
 import { scenarioReducer } from "@/lib/scenarioReducer"
 import type { Scenario } from "@/lib/loan/types"
 
-function initialDraft(): Scenario {
-  if (location.hash.startsWith("#/share/")) {
-    const shared = decodeShare(location.hash.slice("#/share/".length))
-    if (shared) {
-      history.replaceState(null, "", location.pathname + "#/")
-      return shared
-    }
-  }
-  return loadDraft()
+const SHARE_PREFIX = "#/share/"
+
+type Reason = "share" | "new" | "open"
+
+/** Pulls a shared scenario out of the URL and strips the hash so a reload doesn't re-apply it. */
+function takeSharedFromHash(): Scenario | undefined {
+  if (!location.hash.startsWith(SHARE_PREFIX)) return undefined
+  const shared = decodeShare(location.hash.slice(SHARE_PREFIX.length))
+  history.replaceState(null, "", location.pathname + "#/")
+  return shared
 }
 
+const sameContent = (a: Scenario, b: Scenario) =>
+  JSON.stringify({ ...a, savedAt: "" }) === JSON.stringify({ ...b, savedAt: "" })
+
 export default function App() {
-  const [route, go] = useHashRoute()
+  const { t } = useTranslation()
+  const route = useHashRoute()
   const { theme, toggle } = useTheme()
-  const [scenario, dispatch] = useReducer(scenarioReducer, undefined, initialDraft)
+  const [scenario, dispatch] = useReducer(scenarioReducer, undefined, loadDraft)
   const saved = useSavedScenarios()
   const [saveOpen, setSaveOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [fallbackUrl, setFallbackUrl] = useState<string | null>(null)
   const [storageOk] = useState(storageAvailable)
+  /** A replacement waiting for the user to confirm losing unsaved work. */
+  const [pending, setPending] = useState<{ scenario: Scenario; reason: Reason } | null>(null)
+
+  const savedVersion = saved.items.find((s) => s.id === scenario.id)
+  const exists = !!savedVersion
+  const dirty = exists && !sameContent(savedVersion, scenario)
+  const wouldLoseWork = !isPristine(scenario) && (!exists || dirty)
 
   useEffect(() => {
     saveDraft(scenario)
   }, [scenario])
 
-  // A share link opened while the app is already running (hash change, no reload).
-  useEffect(() => {
-    const onHash = () => {
-      if (!location.hash.startsWith("#/share/")) return
-      const shared = decodeShare(location.hash.slice("#/share/".length))
-      history.replaceState(null, "", location.pathname + "#/")
-      if (shared) dispatch({ type: "load", scenario: shared })
+  /** Swap in another scenario, asking first only when unsaved work would be lost. */
+  const requestReplace = (next: Scenario, reason: Reason) => {
+    if (wouldLoseWork) {
+      setPending({ scenario: next, reason })
+      return
     }
-    window.addEventListener("hashchange", onHash)
-    return () => window.removeEventListener("hashchange", onHash)
+    dispatch({ type: "load", scenario: next })
+    go("calc")
+  }
+
+  const onSharedLink = useEffectEvent((shared: Scenario) => requestReplace(shared, "share"))
+
+  // Share links: on first load and when opened while the app is running.
+  useEffect(() => {
+    const handle = () => {
+      const shared = takeSharedFromHash()
+      if (shared) onSharedLink(shared)
+    }
+    handle()
+    window.addEventListener("hashchange", handle)
+    return () => window.removeEventListener("hashchange", handle)
   }, [])
 
-  const exists = saved.items.some((s) => s.id === scenario.id)
-  const savedVersion = saved.items.find((s) => s.id === scenario.id)
-  const dirty = exists && JSON.stringify({ ...savedVersion, savedAt: "" }) !== JSON.stringify({ ...scenario, savedAt: "" })
-
-  const onSave = useCallback(
-    (name: string) => {
-      const next = saved.save(scenario, name)
-      dispatch({ type: "load", scenario: next })
-      setSaveOpen(false)
-    },
-    [saved, scenario],
-  )
-  const onSaveCopy = useCallback(
-    (name: string) => {
-      const next = saved.saveAsCopy(scenario, name)
-      dispatch({ type: "load", scenario: next })
-      setSaveOpen(false)
-    },
-    [saved, scenario],
-  )
-
   const copyLink = async () => {
+    const url = shareUrl(scenario)
     try {
-      await navigator.clipboard.writeText(shareUrl(scenario))
+      await navigator.clipboard.writeText(url)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      window.setTimeout(() => setCopied(false), 2000)
     } catch {
-      prompt("Copy this link", shareUrl(scenario))
+      setFallbackUrl(url)
     }
   }
 
-  const actions =
+  const saveButton =
     route === "calc" ? (
-      <>
-        <Button variant="ghost" size="sm" onClick={copyLink} aria-label="Copy share link">
-          {copied ? <CheckIcon data-icon="inline-start" /> : <LinkIcon data-icon="inline-start" />}
-          <span className="hidden sm:inline">{copied ? "Copied" : "Share"}</span>
+      exists && !dirty ? (
+        <Button variant="outline" onClick={() => setSaveOpen(true)} disabled={!storageOk} title={t("save.savedHint")}>
+          <CheckIcon data-icon="inline-start" />
+          {t("actions.saved")}
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => dispatch({ type: "reset", scenario: newScenario() })}
-          aria-label="New loan"
-        >
-          <PlusIcon data-icon="inline-start" />
-          <span className="hidden sm:inline">New</span>
-        </Button>
-        <Button size="sm" onClick={() => setSaveOpen(true)} disabled={!storageOk}>
+      ) : (
+        <Button onClick={() => setSaveOpen(true)} disabled={!storageOk}>
           <SaveIcon data-icon="inline-start" />
-          {exists ? (dirty ? "Save changes" : "Saved") : "Save"}
+          {exists ? t("actions.saveChanges") : t("actions.save")}
         </Button>
-      </>
-    ) : null
+      )
+    ) : undefined
 
   return (
-    <AppShell route={route} go={go} theme={theme} onToggleTheme={toggle} actions={actions} savedCount={saved.items.length}>
-      {!storageOk && (
-        <p className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          This browser blocks local storage, so saving is off. The calculator still works.
+    <AppShell
+      route={route}
+      theme={theme}
+      onToggleTheme={toggle}
+      saveButton={saveButton}
+      onShare={route === "calc" ? copyLink : undefined}
+      onNew={route === "calc" ? () => requestReplace(newScenario(), "new") : undefined}
+      savedCount={saved.items.length}
+    >
+      <span role="status" className="sr-only">
+        {copied ? t("actions.copied") : ""}
+      </span>
+      {copied && (
+        <p className="fixed top-3 left-1/2 z-50 -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-sm text-background shadow-lg">
+          {t("actions.copied")}
         </p>
       )}
+      {!storageOk && (
+        <p role="alert" className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {t("storage.off")}
+        </p>
+      )}
+      {saved.writeFailed && (
+        <p role="alert" className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {t("storage.writeFailed")}
+        </p>
+      )}
+
       {route === "calc" ? (
-        <CalculatorPage scenario={scenario} dispatch={dispatch} />
+        <CalculatorPage key={scenario.id} scenario={scenario} dispatch={dispatch} />
       ) : (
         <LoansPage
           items={saved.items}
           currentId={scenario.id}
-          onOpen={(s) => {
-            dispatch({ type: "load", scenario: s })
-            go("calc")
-          }}
-          onDuplicate={(s) => saved.saveAsCopy(s, `${s.loan.name} (copy)`)}
+          onOpen={(s) => requestReplace(s, "open")}
+          onDuplicate={(s) => saved.saveAsCopy(s, `${s.loan.name || t("loans.untitled")} ${t("loans.copySuffix")}`)}
           onDelete={saved.remove}
-          onDeleteAll={() => saved.items.forEach((s) => saved.remove(s.id))}
-          onImport={(items) => items.forEach((s) => saved.save({ ...s, id: uid() }, s.loan.name))}
+          onDeleteAll={saved.removeAll}
+          onImport={saved.importMany}
         />
       )}
+
       <SaveDialog
         open={saveOpen}
         onOpenChange={setSaveOpen}
         initialName={scenario.loan.name}
         exists={exists}
-        onSave={onSave}
-        onSaveCopy={onSaveCopy}
+        onSave={(name) => {
+          dispatch({ type: "load", scenario: saved.save(scenario, name) })
+          setSaveOpen(false)
+        }}
+        onSaveCopy={(name) => {
+          dispatch({ type: "load", scenario: saved.saveAsCopy(scenario, name) })
+          setSaveOpen(false)
+        }}
       />
+      <ConfirmDialog
+        open={!!pending}
+        onOpenChange={(o) => !o && setPending(null)}
+        title={t("replace.title")}
+        description={
+          pending?.reason === "share"
+            ? t("replace.descShare")
+            : pending?.reason === "open"
+              ? t("replace.descOpen")
+              : t("replace.descNew")
+        }
+        confirmLabel={t("replace.replace")}
+        onConfirm={() => {
+          if (pending) dispatch({ type: "load", scenario: pending.scenario })
+          setPending(null)
+          go("calc")
+        }}
+      />
+      <ShareFallbackDialog url={fallbackUrl} onOpenChange={(o) => !o && setFallbackUrl(null)} />
     </AppShell>
   )
 }

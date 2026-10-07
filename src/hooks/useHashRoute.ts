@@ -3,18 +3,24 @@ import { useEffect, useState } from "react"
 export type Route = "calc" | "loans"
 
 function parse(): Route {
-  return location.hash.startsWith("#/loans") ? "loans" : "calc"
+  return /^#\/loans\/?$/.test(location.hash) ? "loans" : "calc"
 }
 
-export function useHashRoute(): [Route, (r: Route) => void] {
+export const ROUTE_HREF: Record<Route, string> = { calc: "#/", loans: "#/loans" }
+
+export function useHashRoute(): Route {
   const [route, setRoute] = useState<Route>(parse)
   useEffect(() => {
-    const on = () => setRoute(parse())
+    const on = () => {
+      setRoute(parse())
+      window.scrollTo({ top: 0 })
+    }
     window.addEventListener("hashchange", on)
     return () => window.removeEventListener("hashchange", on)
   }, [])
-  const go = (r: Route) => {
-    location.hash = r === "loans" ? "#/loans" : "#/"
-  }
-  return [route, go]
+  return route
+}
+
+export function go(route: Route): void {
+  location.hash = ROUTE_HREF[route]
 }

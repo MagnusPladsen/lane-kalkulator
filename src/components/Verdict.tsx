@@ -1,69 +1,97 @@
+import { forwardRef } from "react"
+import { Trans, useTranslation } from "react-i18next"
+import { AlertTriangleIcon, PartyPopperIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { fmtDuration, fmtMoney } from "@/lib/format"
+import { useVerdictText } from "./useVerdictText"
 import type { Analysis } from "@/lib/loan/types"
 
-export function Verdict({ a, hasChanges }: { a: Analysis; hasChanges: boolean }) {
-  if (!hasChanges) {
+export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolean; stale?: boolean }>(
+  function Verdict({ a, hasChanges, stale }, ref) {
+    const { t } = useTranslation()
+    const { mood, headline, costText } = useVerdictText(a, hasChanges)
+
+    if (a.paidOff) {
+      return (
+        <section ref={ref} className="rise rounded-xl bg-card px-5 py-5 ring-1 ring-foreground/10">
+          <p className="flex items-center gap-2 font-heading text-2xl sm:text-3xl" aria-live="polite">
+            <PartyPopperIcon className="size-6 text-good" aria-hidden />
+            {t("verdict.paidOffTitle")}
+          </p>
+          <p className="mt-1.5 text-sm text-muted-foreground">{t("verdict.paidOffBody")}</p>
+        </section>
+      )
+    }
+
+    if (!hasChanges) {
+      return (
+        <section ref={ref} className="rise rounded-xl border border-dashed bg-card/60 px-5 py-5">
+          <p className="font-heading text-xl leading-snug text-balance sm:text-2xl">{t("verdict.noChanges")}</p>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            <Trans
+              i18nKey="verdict.planSoFar"
+              values={{
+                duration: fmtDuration(a.baseline.months, t),
+                amount: fmtMoney(a.baseline.totalInterest + a.baseline.totalFees),
+              }}
+              components={[<span key="0" className="font-mono tabular-nums" />]}
+            />
+          </p>
+        </section>
+      )
+    }
+
+    const { interest } = a.delta
+    const feeDelta = a.scenario.totalFees - a.baseline.totalFees
+    const sub =
+      Math.abs(interest) < 1
+        ? t("verdict.sameInterest")
+        : (interest < 0
+            ? t("verdict.lessInterest", { amount: fmtMoney(Math.abs(interest)) })
+            : t("verdict.moreInterest", { amount: fmtMoney(Math.abs(interest)) })) +
+          (Math.abs(feeDelta) >= 1
+            ? feeDelta < 0
+              ? t("verdict.lessFees", { amount: fmtMoney(Math.abs(feeDelta)) })
+              : t("verdict.moreFees", { amount: fmtMoney(Math.abs(feeDelta)) })
+            : "") +
+          "."
+
     return (
-      <section className="rise rounded-xl border border-dashed bg-card/60 px-5 py-5 ring-1 ring-foreground/5">
-        <p className="font-heading text-2xl leading-tight text-balance sm:text-3xl">
-          Add an extra payment or an interest-only pause to see the difference.
+      <section
+        ref={ref}
+        className={cn(
+          "rise relative overflow-hidden rounded-xl px-5 py-5 ring-1 transition-opacity",
+          mood === "good" && "bg-good/10 ring-good/35",
+          mood === "bad" && "bg-bad/10 ring-bad/35",
+          mood === "neutral" && "bg-card ring-foreground/10",
+          stale && "opacity-50",
+        )}
+      >
+        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{t("verdict.withChanges")}</p>
+        <p className="mt-1 font-heading text-3xl leading-none text-balance sm:text-4xl" aria-live="polite" aria-atomic>
+          {headline}
         </p>
-        <p className="mt-1.5 text-sm text-muted-foreground">
-          The plan as it stands: paid off in {fmtDuration(a.baseline.months)}, costing{" "}
-          <span className="tnum font-mono">{fmtMoney(a.baseline.totalInterest + a.baseline.totalFees)}</span> in
-          interest and fees.
-        </p>
+        <p className="mt-2 text-sm">{sub}</p>
+        {costText && (
+          <p className="mt-3 text-sm">
+            {t("verdict.totalCost")}{" "}
+            <span
+              className={cn(
+                "rounded-md px-1.5 py-0.5 font-mono font-semibold tabular-nums",
+                mood === "good" ? "bg-good/15 text-good" : "bg-bad/15 text-bad",
+              )}
+            >
+              {costText}
+            </span>
+          </p>
+        )}
+        {a.scenario.truncated && (
+          <p role="alert" className="mt-3 flex items-start gap-2 text-sm text-bad">
+            <AlertTriangleIcon className="mt-0.5 size-4 shrink-0" aria-hidden />
+            {t("verdict.truncated")}
+          </p>
+        )}
       </section>
     )
-  }
-
-  const { months, interest } = a.delta
-  const cost = a.delta.totalCost
-  const saves = cost < 0
-  const headline =
-    months < 0
-      ? `Paid off ${fmtDuration(months)} earlier`
-      : months > 0
-        ? `Paid off ${fmtDuration(months)} later`
-        : "Same payoff date"
-  const sub =
-    Math.abs(interest) < 1
-      ? "Same total interest."
-      : `${fmtMoney(Math.abs(interest))} ${interest < 0 ? "less" : "more"} interest${
-          Math.abs(a.scenario.totalFees - a.baseline.totalFees) >= 1
-            ? ` and ${fmtMoney(Math.abs(a.scenario.totalFees - a.baseline.totalFees))} ${
-                a.scenario.totalFees < a.baseline.totalFees ? "less" : "more"
-              } in fees`
-            : ""
-        }.`
-
-  return (
-    <section
-      className={cn(
-        "rise relative overflow-hidden rounded-xl px-5 py-5 ring-1",
-        saves
-          ? "bg-[color-mix(in_oklab,var(--good)_10%,var(--card))] ring-[color-mix(in_oklab,var(--good)_35%,transparent)]"
-          : "bg-[color-mix(in_oklab,var(--bad)_10%,var(--card))] ring-[color-mix(in_oklab,var(--bad)_35%,transparent)]",
-      )}
-    >
-      <div
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute -top-16 -right-16 size-48 rounded-full blur-3xl",
-          saves ? "bg-good/25" : "bg-bad/25",
-        )}
-      />
-      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">With your changes</p>
-      <p className="mt-1 font-heading text-3xl leading-none text-balance sm:text-4xl">{headline}</p>
-      <p className="mt-2 text-sm">{sub}</p>
-      <p className="mt-3 text-sm">
-        Total cost{" "}
-        <span className={cn("tnum rounded-md px-1.5 py-0.5 font-mono font-semibold", saves ? "bg-good/15 text-good" : "bg-bad/15 text-bad")}>
-          {cost < 0 ? "−" : "+"}
-          {fmtMoney(Math.abs(cost))}
-        </span>
-      </p>
-    </section>
-  )
-}
+  },
+)

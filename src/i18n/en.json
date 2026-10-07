@@ -1,0 +1,309 @@
+{
+  "app": {
+    "title": "Lånekalkulator",
+    "tagline": "what your loan really costs",
+    "skip": "Skip to content"
+  },
+  "nav": {
+    "calculator": "Calculator",
+    "loans": "My loans",
+    "label": "Pages"
+  },
+  "actions": {
+    "share": "Share",
+    "copied": "Link copied",
+    "copyLink": "Copy share link",
+    "new": "New",
+    "newLoan": "New loan",
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "saved": "Saved",
+    "close": "Close",
+    "cancel": "Cancel"
+  },
+  "theme": {
+    "toggle": "Switch between light and dark theme"
+  },
+  "lang": {
+    "label": "Language",
+    "nb": "Norsk",
+    "en": "English",
+    "pl": "Polski"
+  },
+  "steps": {
+    "edit": "Edit",
+    "done": "Done",
+    "optional": "optional"
+  },
+  "loan": {
+    "title": "The loan",
+    "desc": "What you borrowed and on what terms.",
+    "name": "Name",
+    "namePlaceholder": "My mortgage",
+    "amount": "Loan amount",
+    "rate": "Interest rate",
+    "ratePa": "% p.a.",
+    "fee": "Fee per month",
+    "term": "Term",
+    "years": "yrs",
+    "months": "mo",
+    "type": "Repayment type",
+    "annuity": "Annuity",
+    "serial": "Serial",
+    "annuityHint": "Same payment every month. Most common.",
+    "serialHint": "Same principal every month, so payments start high and fall.",
+    "startDate": "Start date",
+    "startHint": "Shows where you are today on the graph.",
+    "remaining": "Remaining balance today",
+    "remainingHintWithStart": "From your latest statement. Leave empty to estimate from the plan.",
+    "remainingHintNoStart": "Set a start date first.",
+    "estimate": "Roughly <0>{{amount}}</0> per month.",
+    "estimateSerial": "Roughly <0>{{amount}}</0> per month at the start.",
+    "summary": "{{amount}} · {{rate}} % · {{term}}",
+    "more": "More details",
+    "moreHint": "start date, balance, fee, name",
+    "editLoan": "Edit the loan"
+  },
+  "extras": {
+    "title": "Pay extra",
+    "desc": "Every krone goes straight to the principal.",
+    "empty": "Nothing yet. Try 1 000 kr a month and watch the years fall off.",
+    "monthly": "Monthly",
+    "oneoff": "One-off",
+    "kind": "Kind of extra payment {{n}}",
+    "amount": "Amount",
+    "fromMonth": "From month",
+    "inMonth": "In month",
+    "toMonth": "To month",
+    "untilPaidOff": "Until paid off",
+    "addMonthly": "Monthly extra",
+    "addOneoff": "One-off",
+    "remove": "Remove extra payment {{n}}",
+    "summaryNone": "No extra payments",
+    "summaryMonthly": "{{amount}}/mo",
+    "summaryOneoff": "{{amount}} in {{date}}",
+    "summaryCount": "{{count}} extra payments"
+  },
+  "periods": {
+    "desc": "Months that differ from the normal plan: only paying interest when money is tight, or a different rate such as 0 % or a fixed-rate deal.",
+    "empty": "No periods yet. Add one to see what a few interest-only months, or a 0 % deal, really does.",
+    "kind": "Type of period {{n}}",
+    "interestOnly": "Interest only",
+    "otherRate": "Other rate",
+    "from": "From",
+    "to": "To",
+    "fromMonth": "From month",
+    "fromYear": "From year",
+    "toMonth": "To month",
+    "toYear": "To year",
+    "rate": "Rate during the period",
+    "rateHint": "The payment is recalculated for this rate, and again when the period ends.",
+    "zero": "0 %",
+    "duration": "{{count}} mo",
+    "past": "This period is already over, so it has no effect here. Enter today's remaining balance instead.",
+    "add": "Add period",
+    "remove": "Remove period {{n}}",
+    "after": "Afterwards",
+    "keepTerm": "Keep the end date",
+    "keepTermHint": "Payment goes up afterwards.",
+    "keepPayment": "Keep the payment",
+    "keepPaymentHint": "Loan runs longer."
+  },
+  "verdict": {
+    "noChanges": "Use \"What if …?\" to see what extra payments, interest-only months or another rate do to the loan.",
+    "planSoFar": "The plan as it stands: paid off in {{duration}}, costing <0>{{amount}}</0> in interest and fees.",
+    "withChanges": "With your changes",
+    "earlier": "Paid off {{duration}} earlier",
+    "later": "Paid off {{duration}} later",
+    "cheaperSameDate": "{{amount}} cheaper, same payoff date",
+    "dearerSameDate": "{{amount}} more expensive, same payoff date",
+    "noEffect": "Your changes don't affect the loan",
+    "sameInterest": "Same total interest.",
+    "lessInterest": "{{amount}} less interest",
+    "moreInterest": "{{amount}} more interest",
+    "lessFees": " and {{amount}} less in fees",
+    "moreFees": " and {{amount}} more in fees",
+    "totalCost": "Total cost",
+    "paidOffTitle": "This loan is paid off",
+    "paidOffBody": "Given the start date and remaining balance there is nothing left to pay.",
+    "truncated": "The plan stops after 100 years. This doesn't add up, shorten the pauses."
+  },
+  "tiles": {
+    "monthly": "Monthly payment",
+    "paidOff": "Paid off",
+    "totalInterest": "Total interest",
+    "totalCost": "Total cost",
+    "was": "was {{amount}}",
+    "in": "in {{duration}}",
+    "sooner": "{{duration}} sooner",
+    "later": "{{duration}} later",
+    "interestOnlyMonths": "{{count}} mo interest-only",
+    "ratePeriods": "{{count}} mo at another rate",
+    "risesTo": "rises to {{amount}}",
+    "interestOnlyNow": "interest-only now: {{amount}}",
+    "extra": "+ {{amount}} extra",
+    "inclPrincipal": "incl. principal and fees"
+  },
+  "charts": {
+    "balance": "Balance",
+    "yearly": "Per year",
+    "interest": "Interest",
+    "table": "Schedule",
+    "balanceDesc": "What you still owe, month by month.",
+    "yearlyDesc": "Where each year's payments go, with your changes.",
+    "interestDesc": "Interest and fees piling up over time.",
+    "tableDesc": "Every payment, grouped by year. Click a year to expand.",
+    "today": "Today",
+    "region": "Results",
+    "tableShort": "Schedule"
+  },
+  "series": {
+    "history": "So far",
+    "baseline": "Current plan",
+    "scenario": "With changes",
+    "interest": "Interest",
+    "principal": "Principal",
+    "extra": "Extra",
+    "fee": "Fees"
+  },
+  "table": {
+    "period": "Period",
+    "payment": "Payment",
+    "interest": "Interest",
+    "principal": "Principal",
+    "extra": "Extra",
+    "balance": "Balance",
+    "interestOnly": "interest only",
+    "interestOnlyMonths": "{{count}} mo interest-only",
+    "toggle": "Show months for {{year}}",
+    "region": "Payment schedule, scrolls sideways"
+  },
+  "save": {
+    "title": "Save this loan",
+    "desc": "Kept in this browser only. Nothing leaves your machine.",
+    "name": "Name",
+    "update": "Update",
+    "save": "Save",
+    "copy": "Save as copy",
+    "savedHint": "No unsaved changes"
+  },
+  "replace": {
+    "title": "Replace the loan you're working on?",
+    "descShare": "You opened a shared link. The loan you have here isn't saved and will be lost.",
+    "descNew": "The loan you have here isn't saved and will be lost.",
+    "descOpen": "The loan you have open has unsaved changes. Opening another one discards them.",
+    "saveFirst": "Save this one first",
+    "replace": "Replace"
+  },
+  "shareFallback": {
+    "title": "Copy the link",
+    "desc": "The browser didn't allow clipboard access. Copy it yourself."
+  },
+  "loans": {
+    "title": "My loans",
+    "none": "Nothing saved yet.",
+    "count_one": "{{count}} saved in this browser.",
+    "count_other": "{{count}} saved in this browser.",
+    "import": "Import",
+    "export": "Export all",
+    "deleteAll": "Delete all",
+    "privacyTitle": "Private by design",
+    "privacyBody": "Nothing you type is collected, tracked or sent anywhere. Loans are stored only in this browser's local storage. Clearing site data removes them, so use <0>Export</0> to keep a backup or move between devices.",
+    "emptyHint": "Save a loan from the calculator and it shows up here.",
+    "saved": "Saved {{date}}",
+    "open": "Open",
+    "openNamed": "Open {{name}}",
+    "duplicate": "Duplicate",
+    "duplicateNamed": "Duplicate {{name}}",
+    "delete": "Delete",
+    "deleteNamed": "Delete {{name}}",
+    "copySuffix": "(copy)",
+    "untitled": "Untitled",
+    "current": "open",
+    "amount": "Amount",
+    "rate": "Rate",
+    "term": "Term",
+    "type": "Type",
+    "monthly": "Monthly",
+    "paidOff": "Paid off",
+    "totalInterest": "Total interest",
+    "changes": "Changes",
+    "noChanges": "none",
+    "deleteAllTitle": "Delete all saved loans?",
+    "deleteAllDesc": "This removes every saved loan from this browser. There is no undo, so export first if in doubt.",
+    "deleteAllConfirm": "Delete everything",
+    "deleteOneTitle": "Delete \"{{name}}\"?",
+    "deleteOneDesc": "Removes this loan from the browser. No undo.",
+    "importError": {
+      "notExport": "That is not a Lånekalkulator export file.",
+      "empty": "No loans found in that file."
+    },
+    "imported_one": "{{count}} loan imported.",
+    "imported_other": "{{count}} loans imported."
+  },
+  "footer": {
+    "privacy": "Nothing is collected or sent anywhere. Your loans live only in this browser.",
+    "estimates": "Estimates only. Your bank's numbers are the ones that count."
+  },
+  "storage": {
+    "off": "This browser blocks local storage, so saving is off. The calculator still works.",
+    "writeFailed": "Could not save. Browser storage is full or blocked."
+  },
+  "invalid": {
+    "hint": "Fill in the amount, rate and term to see the numbers.",
+    "stale": "Showing the last valid result."
+  },
+  "error": {
+    "title": "Something went wrong.",
+    "body": "Your saved loans are kept. Reload the page. If that doesn't help, start over with an empty calculator.",
+    "reload": "Reload",
+    "reset": "Start over"
+  },
+  "validation": {
+    "principal": "Enter an amount between 1 and 1 000 000 000 kr",
+    "rate": "0–100 %",
+    "term": "1–40 years",
+    "fee": "0–100 000 kr",
+    "startDate": "Invalid date (1900–2100)",
+    "remainingNeedsStart": "Set a start date first",
+    "remainingNegative": "Cannot be negative",
+    "remainingTooHigh": "Cannot exceed the loan amount"
+  },
+  "duration": {
+    "years_one": "{{count}} yr",
+    "years_other": "{{count}} yrs",
+    "months_one": "{{count}} mo",
+    "months_other": "{{count}} mo"
+  },
+  "whatif": {
+    "title": "What if …?",
+    "desc": "Try one thing at a time. The charts update right away.",
+    "extras": "Pay extra",
+    "goal": "Done by",
+    "active": "{{count}} active",
+    "periods": "Periods"
+  },
+  "goal": {
+    "question": "When do you want to be debt-free?",
+    "target": "Paid off",
+    "targetValue": "{{date}} · in {{duration}}",
+    "earlier": "{{duration}} earlier",
+    "presetsLabel": "Quick picks",
+    "needMonthly": "Pay <0>{{amount}}</0> extra every month",
+    "needOneoff": "or <0>{{amount}}</0> once, now",
+    "onTop": "That comes on top of the changes you already added.",
+    "total": "{{amount}} per month in total. Saves {{saved}} in interest.",
+    "onTrack": "You're already on track to be done by then.",
+    "apply": "Add {{amount}}/mo",
+    "applied": "Added under \"Pay extra\"."
+  },
+  "a11y": {
+    "mainHeading": "Loan calculator",
+    "results": "Results",
+    "moreMenu": "More options",
+    "status": "Status"
+  },
+  "mobileBar": {
+    "show": "Show results"
+  }
+}
