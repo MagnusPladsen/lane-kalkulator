@@ -1,15 +1,9 @@
+import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, type ChartConfig } from "@/components/ui/chart"
 import { compactKr, yearTicks, type BalancePoint } from "@/lib/chartData"
 import { ChartTip } from "./ChartTip"
-
-const config = {
-  history: { label: "So far", color: "var(--chart-history)" },
-  baseline: { label: "Current plan", color: "var(--chart-baseline)" },
-  scenario: { label: "With changes", color: "var(--chart-scenario)" },
-} satisfies ChartConfig
-
-const labels = { history: "So far", baseline: "Current plan", scenario: "With changes" }
 
 export function BalanceChart({
   data,
@@ -20,16 +14,24 @@ export function BalanceChart({
   todayIndex: number
   showScenario: boolean
 }) {
-  const ticks = yearTicks(data)
-  const byI = new Map(data.map((d) => [d.i, d.date]))
+  const { t } = useTranslation()
+  const config = {
+    history: { label: t("series.history"), color: "var(--chart-history)" },
+    baseline: { label: t("series.baseline"), color: "var(--chart-baseline)" },
+    scenario: { label: t("series.scenario"), color: "var(--chart-scenario)" },
+  } satisfies ChartConfig
+  const labels = { history: t("series.history"), baseline: t("series.baseline"), scenario: t("series.scenario") }
+  const ticks = useMemo(() => yearTicks(data), [data])
+  const byI = useMemo(() => new Map(data.map((d) => [d.i, d.date])), [data])
+
   return (
-    <ChartContainer config={config} className="aspect-auto h-[320px] w-full">
+    <ChartContainer config={config} className="aspect-auto h-[260px] w-full sm:h-[320px]">
       <LineChart data={data} margin={{ top: 20, right: 12, left: 0, bottom: 0 }}>
         <CartesianGrid vertical={false} stroke="var(--border)" />
         <XAxis
           dataKey="i"
           type="number"
-          domain={[0, data.length - 1]}
+          domain={[0, Math.max(1, data.length - 1)]}
           ticks={ticks}
           tickFormatter={(i: number) => byI.get(i)?.slice(0, 4) ?? ""}
           tickLine={false}
@@ -37,7 +39,7 @@ export function BalanceChart({
           tickMargin={8}
           minTickGap={24}
         />
-        <YAxis tickFormatter={compactKr} tickLine={false} axisLine={false} width={44} />
+        <YAxis tickFormatter={compactKr} tickLine={false} axisLine={false} width={52} />
         <ChartTooltip cursor={{ stroke: "var(--border)" }} content={<ChartTip labels={labels} />} />
         {todayIndex > 0 && (
           <ReferenceLine
@@ -45,7 +47,7 @@ export function BalanceChart({
             stroke="var(--foreground)"
             strokeOpacity={0.5}
             strokeDasharray="3 3"
-            label={{ value: "Today", position: "top", fill: "var(--muted-foreground)", fontSize: 11 }}
+            label={{ value: t("charts.today"), position: "top", fill: "var(--muted-foreground)", fontSize: 11 }}
           />
         )}
         <Line dataKey="history" type="monotone" stroke="var(--color-history)" strokeWidth={2} dot={false} isAnimationActive={false} />

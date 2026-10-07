@@ -1,3 +1,4 @@
+import { currentLang, INTL_LOCALE } from "@/i18n"
 import type { Analysis, ScheduleRow } from "./loan/types"
 
 export interface BalancePoint {
@@ -43,7 +44,6 @@ export function balanceSeries(a: Analysis, dateFor: DateForIndex, principal: num
         const b = a.baseline.rows[m - 1]
         const s = a.scenario.rows[m - 1]
         if (b) p.baseline = b.balance
-        else if (m === a.baseline.months + 1) p.baseline = undefined
         if (s) p.scenario = s.balance
       }
     }
@@ -90,11 +90,12 @@ export function yearlySeries(rows: ScheduleRow[], offset: number, dateFor: DateF
   return [...map.values()]
 }
 
+/** Axis labels: "1,5 mill." / "750k" style, in the UI language. */
 export function compactKr(n: number): string {
-  const abs = Math.abs(n)
-  if (abs >= 1_000_000) return `${(n / 1_000_000).toLocaleString("nb-NO", { maximumFractionDigits: 1 })} M`
-  if (abs >= 1_000) return `${Math.round(n / 1_000)} k`
-  return String(Math.round(n))
+  return new Intl.NumberFormat(INTL_LOCALE[currentLang()], {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(n)
 }
 
 export function yearTicks(points: { i: number; date: string }[]): number[] {

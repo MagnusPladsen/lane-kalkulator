@@ -1,20 +1,16 @@
 import { uid } from "./ids"
-import type {
-  AfterInterestOnly,
-  ExtraPayment,
-  InterestOnlyPeriod,
-  LoanInput,
-  Scenario,
-} from "./loan/types"
+import { isValidIsoDate } from "./loan/engine"
+import type { AfterInterestOnly, CustomPeriod, ExtraPayment, LoanInput, Scenario } from "./loan/types"
 
 export type Action =
   | { type: "loan"; patch: Partial<LoanInput> }
   | { type: "extra/add"; kind: ExtraPayment["kind"] }
+  | { type: "extra/addAmount"; amount: number }
   | { type: "extra/update"; id: string; patch: Partial<ExtraPayment> }
   | { type: "extra/remove"; id: string }
-  | { type: "io/add" }
-  | { type: "io/update"; id: string; patch: Partial<InterestOnlyPeriod> }
-  | { type: "io/remove"; id: string }
+  | { type: "period/add"; period: CustomPeriod }
+  | { type: "period/update"; id: string; patch: Partial<Omit<CustomPeriod, "id">> }
+  | { type: "period/remove"; id: string }
   | { type: "afterIo"; value: AfterInterestOnly }
   | { type: "load"; scenario: Scenario }
   | { type: "reset"; scenario: Scenario }
@@ -36,6 +32,11 @@ export function scenarioReducer(state: Scenario, action: Action): Scenario {
           },
         ],
       }
+    case "extra/addAmount":
+      return {
+        ...state,
+        extras: [...state.extras, { id: uid(), kind: "recurring", amount: action.amount, fromMonth: 1 }],
+      }
     case "extra/update":
       return {
         ...state,
@@ -43,20 +44,15 @@ export function scenarioReducer(state: Scenario, action: Action): Scenario {
       }
     case "extra/remove":
       return { ...state, extras: state.extras.filter((e) => e.id !== action.id) }
-    case "io/add":
+    case "period/add":
+      return { ...state, periods: [...state.periods, action.period] }
+    case "period/update":
       return {
         ...state,
-        interestOnly: [...state.interestOnly, { id: uid(), fromMonth: 1, months: 6 }],
+        periods: state.periods.map((p) => (p.id === action.id ? { ...p, ...action.patch } : p)),
       }
-    case "io/update":
-      return {
-        ...state,
-        interestOnly: state.interestOnly.map((p) =>
-          p.id === action.id ? { ...p, ...action.patch } : p,
-        ),
-      }
-    case "io/remove":
-      return { ...state, interestOnly: state.interestOnly.filter((p) => p.id !== action.id) }
+    case "period/remove":
+      return { ...state, periods: state.periods.filter((p) => p.id !== action.id) }
     case "afterIo":
       return { ...state, afterInterestOnly: action.value }
     case "load":
@@ -70,14 +66,27 @@ export interface LoanValidation {
   errors: Partial<Record<keyof LoanInput, string>>
 }
 
+export const LIMITS = {
+  principalMax: 1_000_000_000,
+  rateMax: 100,
+  termMax: 480,
+  feeMax: 100_000,
+} as const
+
+/** Error values are i18n keys under "validation". */
 export function validateLoan(l: LoanInput): LoanValidation {
   const errors: LoanValidation["errors"] = {}
-  if (!(l.principal > 0)) errors.principal = "Enter the loan amount"
-  if (!(l.annualRatePct >= 0) || l.annualRatePct > 100) errors.annualRatePct = "0–100 %"
-  if (!(l.termMonths >= 1) || l.termMonths > 480) errors.termMonths = "1–40 years"
-  if (l.monthlyFee < 0) errors.monthlyFee = "Cannot be negative"
-  if (l.remainingBalance !== undefined && l.remainingBalance > l.principal)
-    errors.remainingBalance = "Cannot exceed the loan amount"
-  if (l.startDate && !/^\d{4}-\d{2}-\d{2}$/.test(l.startDate)) errors.startDate = "Invalid date"
+  const fin = (n: unknown): n is number => typeof n === "number" && Number.isFinite(n)
+  if (!fin(l.principal) || l.principal <= 0 || l.principal > LIMITS.principalMax) errors.principal = "principal"
+  if (!fin(l.annualRatePct) || l.annualRatePct < 0 || l.annualRatePct > LIMITS.rateMax) errors.annualRatePct = "rate"
+  if (!fin(l.termMonths) || !Number.isInteger(l.termMonths) || l.termMonths < 1 || l.termMonths > LIMITS.termMax)
+    errors.termMonths = "term"
+  if (!fin(l.monthlyFee) || l.monthlyFee < 0 || l.monthlyFee > LIMITS.feeMax) errors.monthlyFee = "fee"
+  if (l.startDate !== undefined && !isValidIsoDate(l.startDate)) errors.startDate = "startDate"
+  if (l.remainingBalance !== undefined) {
+    if (!l.startDate) errors.remainingBalance = "remainingNeedsStart"
+    else if (!fin(l.remainingBalance) || l.remainingBalance < 0) errors.remainingBalance = "remainingNegative"
+    else if (fin(l.principal) && l.remainingBalance > l.principal) errors.remainingBalance = "remainingTooHigh"
+  }
   return { ok: Object.keys(errors).length === 0, errors }
 }

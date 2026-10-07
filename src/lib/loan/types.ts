@@ -34,6 +34,32 @@ export interface InterestOnlyPeriod {
   months: number
 }
 
+/** A stretch of months with a different nominal rate, e.g. a fixed-rate deal or a stress test. */
+export interface RatePeriod {
+  id: string
+  /** 1-based month index counted from "now". */
+  fromMonth: number
+  months: number
+  annualRatePct: number
+}
+
+export type PeriodKind = "interest-only" | "rate"
+
+/**
+ * A stretch of calendar months that differs from the normal plan, entered by the user.
+ * Stored as real months ("YYYY-MM") so a saved loan keeps its dates as time passes.
+ */
+export interface CustomPeriod {
+  id: string
+  kind: PeriodKind
+  /** First month, inclusive, "YYYY-MM". */
+  from: string
+  /** Last month, inclusive, "YYYY-MM". */
+  to: string
+  /** Kind "rate" only: nominal annual rate during the period, e.g. 0. */
+  annualRatePct: number
+}
+
 /**
  * keep-term:    after an interest-only period, recompute the payment so the original end date holds.
  * keep-payment: keep the old payment; the loan runs longer.
@@ -45,7 +71,7 @@ export interface Scenario {
   savedAt: string
   loan: LoanInput
   extras: ExtraPayment[]
-  interestOnly: InterestOnlyPeriod[]
+  periods: CustomPeriod[]
   afterInterestOnly: AfterInterestOnly
 }
 
@@ -63,6 +89,8 @@ export interface ScheduleRow {
   cumInterest: number
   cumPaid: number
   interestOnly: boolean
+  /** Nominal annual rate in percent applied this month. */
+  ratePct: number
 }
 
 export interface ScheduleResult {
@@ -76,6 +104,8 @@ export interface ScheduleResult {
   /** Highest base payment seen (relevant for keep-term after interest-only). */
   maxMonthlyPayment: number
   payoffDate?: string
+  /** True when the schedule hit the row guard before the balance reached zero. */
+  truncated: boolean
 }
 
 export interface Analysis {
@@ -85,6 +115,8 @@ export interface Analysis {
   startingBalance: number
   /** Original-plan rows from loan start up to today (empty without startDate). */
   pastRows: ScheduleRow[]
+  /** Nothing left to pay as of today. */
+  paidOff: boolean
   baseline: ScheduleResult
   scenario: ScheduleResult
   delta: {

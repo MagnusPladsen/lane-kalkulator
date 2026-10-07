@@ -1,9 +1,10 @@
 # Lånekalkulator
 
-A loan calculator that answers two questions most bank tools dodge:
+A loan calculator that answers the questions most bank tools dodge:
 
 - **What if I pay a bit extra?** Monthly or one-off. See how many years fall off and how much interest you skip.
-- **What if I can only pay interest for a while?** Pick the months. See what the pause really costs, and whether to keep the end date (payment rises) or keep the payment (loan runs longer).
+- **What if I need a break, or get a better rate for a while?** Add a period with a start and end month: interest only when money is tight, or a different rate such as 0 % or a fixed-rate deal. See what it really costs or saves.
+- **What does it take to be done by a given year?** The goal tool works out the extra payment needed.
 
 Everything runs in the browser. Nothing is collected or sent anywhere. Saved loans live in `localStorage`; export them as JSON if you want a backup.
 
@@ -12,10 +13,11 @@ Everything runs in the browser. Nothing is collected or sent anywhere. Saved loa
 - Annuity and serial loans, monthly fee, optional start date and remaining balance so the chart shows where you are today.
 - Verdict banner plus four stat tiles: monthly payment, payoff date, total interest, total cost, each with the delta against the current plan.
 - Charts: balance over time (history, current plan, with changes), yearly breakdown (interest / principal / extra), cumulative interest.
-- Full schedule table grouped by year, interest-only months marked.
+- "What if" tools: extra payments, a payoff goal, and custom periods (interest only, or another rate) with calendar start and end months.
+- Full schedule table grouped by year, with interest-only months and months at another rate marked.
 - My loans page: save, open, duplicate, delete, delete all, export/import JSON.
 - Share link: the whole scenario encoded in the URL hash.
-- Light and dark theme.
+- Light and dark theme. Norwegian, English and Polish.
 
 ## Stack
 
@@ -45,7 +47,9 @@ bun run lint
 
 ## Engine notes
 
-- Months in extra payments and interest-only periods are counted from "now" (month 1 = next payment).
+- Extra payments are counted from "now" (month 1 = next payment).
+- Custom periods are stored as calendar months (`YYYY-MM`, inclusive) so a saved loan keeps its dates as time passes. A period that has already ended has no effect; one that started in the past counts from the next payment. Older saves with relative months are converted on load.
+- A rate period re-prices an annuity over the months left when it starts, and again when it ends.
 - With a start date, the forward projection starts at the balance after the elapsed months, or at the remaining balance you type in.
 - Interest-only months: principal 0, payment = interest + fee. Afterwards either the payment is recomputed to hold the end date (`keep-term`) or kept, extending the loan (`keep-payment`).
 - Estimates only. Banks round, charge differently, and change rates. Treat the numbers as a good approximation, not a quote.

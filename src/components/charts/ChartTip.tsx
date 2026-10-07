@@ -31,7 +31,7 @@ export function ChartTip({
           <div key={String(p.dataKey)} className="flex items-center gap-2">
             <span className="size-2 shrink-0 rounded-[2px]" style={{ background: p.color }} />
             <span className="text-muted-foreground">{labels[String(p.dataKey)] ?? String(p.dataKey)}</span>
-            <span className="tnum ml-auto font-mono font-medium">{fmtMoney(p.value as number)}</span>
+            <span className="ml-auto font-mono font-medium tabular-nums">{fmtMoney(p.value as number)}</span>
           </div>
         ))}
     </div>
