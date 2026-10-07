@@ -342,5 +342,9 @@
     "needsStart": "This is before today. Add the loan's start date to include it in the history.",
     "outside": "This is outside the loan's lifetime, so it has no effect.",
     "pinnedPast": "The part before today changes the history and the interest paid so far. Today's balance is still the one you entered."
+  },
+  "share": {
+    "failed": "The share link couldn't be read. It was probably cut off or changed when it was copied. Try copying the whole link again.",
+    "dismiss": "Dismiss"
   }
 }
