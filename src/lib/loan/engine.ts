@@ -1,5 +1,6 @@
 import type {
   CalendarExtra,
+  DayCount,
   CustomPeriod,
   AfterInterestOnly,
   LoanInput,
@@ -65,6 +66,71 @@ export function monthsElapsed(start: string | undefined, today: string): number 
   // Compare against the real due date so month-end clamping agrees with addMonths.
   if (n > 0 && addMonths(start, n) > today) n -= 1
   return Math.max(0, n)
+}
+
+function dayNumber(iso: string): number {
+  const { y, m, d } = parseIso(iso)
+  return Date.UTC(y, m - 1, d) / 86_400_000
+}
+
+function daysInYear(y: number): number {
+  return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0 ? 366 : 365
+}
+
+/** Share of a year from `from` to `to` (ISO dates) under a day count. */
+export function yearFraction(from: string, to: string, dayCount: DayCount): number {
+  const a = dayNumber(from)
+  const b = dayNumber(to)
+  if (dayCount === "30/360") {
+    // 30/360 with month-end dates as day 30 (30E/360 ISDA). Schedules don't use this
+    // branch: under 30/360 every payment period is exactly 1/12 of a year.
+    const day30 = (p: { y: number; m: number; d: number }) => (p.d >= daysInMonth(p.y, p.m) ? 30 : Math.min(p.d, 30))
+    const f = parseIso(from)
+    const t = parseIso(to)
+    return ((t.y - f.y) * 360 + (t.m - f.m) * 30 + (day30(t) - day30(f))) / 360
+  }
+  if (dayCount === "act/360") return (b - a) / 360
+  // act/act: days in each calendar year over that year's length.
+  let frac = 0
+  let cur = a
+  let y = parseIso(from).y
+  while (cur < b) {
+    const yearEnd = Date.UTC(y + 1, 0, 1) / 86_400_000
+    const end = Math.min(b, yearEnd)
+    frac += (end - cur) / daysInYear(y)
+    cur = end
+    y++
+  }
+  return frac
+}
+
+/**
+ * Year fraction of each payment period for a loan anchored at `anchor` (payment k due
+ * addMonths(anchor, k)), counted after `offset` payments. Undefined for 30/360.
+ */
+export function periodYearFractions(
+  dayCount: DayCount | undefined,
+  anchor: string,
+  offset: number,
+): ((month: number) => number) | undefined {
+  if (!dayCount || dayCount === "30/360") return undefined
+  const cache = new Map<number, number>()
+  return (m) => {
+    let f = cache.get(m)
+    if (f === undefined) {
+      f = yearFraction(addMonths(anchor, offset + m - 1), addMonths(anchor, offset + m), dayCount)
+      cache.set(m, f)
+    }
+    return f
+  }
+}
+
+/**
+ * How much more interest a day count charges over a year than rate / 12 assumes,
+ * on average. The payment is priced with it so the loan still ends on time.
+ */
+export function pricingFactor(dayCount: DayCount | undefined): number {
+  return dayCount === "act/360" ? 365.25 / 360 : 1
 }
 
 /** True for "YYYY-MM" with a year in 1900–2100. */
@@ -176,6 +242,16 @@ export interface BuildScheduleOptions {
   interestOnly: InterestOnlyPeriod[]
   ratePeriods?: RatePeriod[]
   afterInterestOnly: AfterInterestOnly
+  /**
+   * Share of a year that payment period `month` covers, for day-count interest.
+   * Undefined means 30/360: every month is exactly 1/12.
+   */
+  yearFraction?: (month: number) => number
+  /**
+   * Scales the rate used to price the payment, so it fits the term under the day count:
+   * 365.25/360 for act/360, otherwise 1.
+   */
+  pricingFactor?: number
 }
 
 /** Later periods win when they overlap. */
@@ -238,11 +314,12 @@ export function buildSchedule(o: BuildScheduleOptions): ScheduleResult {
   const io = interestOnlyMonths(o.interestOnly)
   const ratePeriods = o.ratePeriods ?? []
   const annuity = o.loanType === "annuity"
+  const k = o.pricingFactor ?? 1
   let r = rateForMonth(ratePeriods, 1, o.monthlyRate)
   let balance = o.balance
   const term = Math.max(1, Math.round(o.months))
   let plannedEnd = term
-  let basePayment = annuity ? annuityPayment(balance, r, term) : 0
+  let basePayment = annuity ? annuityPayment(balance, r * k, term) : 0
   let serialPrincipal = annuity ? 0 : balance / term
   let cumInterest = 0
   let cumPaid = 0
@@ -251,7 +328,7 @@ export function buildSchedule(o: BuildScheduleOptions): ScheduleResult {
   let repriceAfterPause = false
 
   const repriceOver = (months: number) => {
-    if (annuity) basePayment = annuityPayment(balance, r, months)
+    if (annuity) basePayment = annuityPayment(balance, r * k, months)
     else serialPrincipal = balance / months
   }
 
@@ -269,19 +346,21 @@ export function buildSchedule(o: BuildScheduleOptions): ScheduleResult {
         // If a keep-term pause ran past the end date there is nothing to hold;
         // keep the old payment rather than demand everything at once.
         if (left >= 1) repriceOver(left)
-        else plannedEnd = month - 1 + (annuity ? (monthsToPayoff(balance, r, basePayment) ?? 1) : Math.ceil(balance / serialPrincipal))
+        else plannedEnd = month - 1 + (annuity ? (monthsToPayoff(balance, r * k, basePayment) ?? 1) : Math.ceil(balance / serialPrincipal))
       }
       repriceAfterPause = false
     } else if (rateChanged) {
       // A bank re-prices an annuity to keep the current end date. Serial principal is unaffected.
       if (isIo) repriceAfterPause = true
       else if (annuity) {
-        const n = left >= 1 ? left : (monthsToPayoff(balance, oldR, basePayment) ?? 1)
-        basePayment = annuityPayment(balance, r, Math.max(1, n))
+        const n = left >= 1 ? left : (monthsToPayoff(balance, oldR * k, basePayment) ?? 1)
+        basePayment = annuityPayment(balance, r * k, Math.max(1, n))
       }
     }
 
-    const interest = balance * r
+    // The payment is priced on rate / 12 (× pricingFactor, so act/360 still ends on time);
+    // the interest inside it follows the actual days in the period when a day count is set.
+    const interest = o.yearFraction ? balance * r * 12 * o.yearFraction(month) : balance * r
     let principal = 0
     if (!isIo) {
       principal = annuity ? Math.max(0, basePayment - interest) : serialPrincipal
@@ -313,7 +392,7 @@ export function buildSchedule(o: BuildScheduleOptions): ScheduleResult {
     // Move the planned end: a keep-payment pause adds a month, an extra payment shortens the plan.
     if (isIo && (io.get(month) ?? o.afterInterestOnly) === "keep-payment") plannedEnd += 1
     if (!isIo && extra > 0 && balance > EPSILON) {
-      const n = annuity ? monthsToPayoff(balance, r, basePayment) : Math.ceil(balance / serialPrincipal - 1e-9)
+      const n = annuity ? monthsToPayoff(balance, r * k, basePayment) : Math.ceil(balance / serialPrincipal - 1e-9)
       if (n !== undefined) plannedEnd = month + n
     }
     prevWasIo = isIo
@@ -436,12 +515,24 @@ export function analyze(scenario: Scenario, today: string = todayIso()): Analysi
   let balancePinned = false
 
   if (!loan.startDate) {
-    const forward = { ...common, balance: loan.principal, months: termMonths }
+    const forward = {
+      ...common,
+      balance: loan.principal,
+      months: termMonths,
+      yearFraction: periodYearFractions(loan.dayCount, today, 0),
+      pricingFactor: pricingFactor(loan.dayCount),
+    }
     baseline = buildSchedule({ ...forward, ...loanTerms(loan, 0) })
     result = buildSchedule({ ...forward, ...changesFrom(today, 0) })
   } else {
     const start = loan.startDate
-    const life = { ...common, balance: loan.principal, months: termMonths }
+    const life = {
+      ...common,
+      balance: loan.principal,
+      months: termMonths,
+      yearFraction: periodYearFractions(loan.dayCount, start, 0),
+      pricingFactor: pricingFactor(loan.dayCount),
+    }
     const fullB = buildSchedule({ ...life, ...loanTerms(loan, 0) })
     const fullS = buildSchedule({ ...life, ...changesFrom(start, 0) })
     pastB = fullB.rows.slice(0, offsetMonths)
@@ -452,7 +543,13 @@ export function analyze(scenario: Scenario, today: string = todayIso()): Analysi
       startB = startS = Math.max(0, loan.remainingBalance!)
       // If the term is over but something is still owed, give it one month (a settlement).
       const months = startS <= EPSILON ? 0 : Math.max(1, termMonths - offsetMonths)
-      const forward = { ...common, balance: startS, months }
+      const forward = {
+        ...common,
+        balance: startS,
+        months,
+        yearFraction: periodYearFractions(loan.dayCount, start, offsetMonths),
+        pricingFactor: pricingFactor(loan.dayCount),
+      }
       baseline = buildSchedule({ ...forward, ...loanTerms(loan, offsetMonths) })
       result = buildSchedule({ ...forward, ...changesFrom(start, offsetMonths) })
     } else {
@@ -535,8 +632,10 @@ export function effectiveRateOf(netAmount: number, payments: number[]): number |
  * The effective rate a bank quotes for this loan at signing: the plain plan with today's
  * nominal rate for the whole term, monthly fees, and the setup fee taken off the payout.
  */
-export function planEffectiveRate(loan: LoanInput): number | undefined {
+export function planEffectiveRate(loan: LoanInput, today: string = todayIso()): number | undefined {
   const plan = buildSchedule({
+    yearFraction: periodYearFractions(loan.dayCount, loan.startDate ?? today, 0),
+    pricingFactor: pricingFactor(loan.dayCount),
     balance: loan.principal,
     monthlyRate: loan.annualRatePct / 100 / 12,
     months: Math.max(1, Math.round(loan.termMonths)),
@@ -551,8 +650,8 @@ export function planEffectiveRate(loan: LoanInput): number | undefined {
  * The monthly fee, in whole kroner, that makes planEffectiveRate hit `targetPct`,
  * keeping everything else. Undefined when no fee between 0 and 10 000 kr gets there.
  */
-export function solveMonthlyFee(loan: LoanInput, targetPct: number): number | undefined {
-  const eff = (fee: number) => planEffectiveRate({ ...loan, monthlyFee: fee })
+export function solveMonthlyFee(loan: LoanInput, targetPct: number, today: string = todayIso()): number | undefined {
+  const eff = (fee: number) => planEffectiveRate({ ...loan, monthlyFee: fee }, today)
   const at0 = eff(0)
   const atMax = eff(10_000)
   if (at0 === undefined || atMax === undefined) return undefined

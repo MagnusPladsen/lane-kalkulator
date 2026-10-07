@@ -116,7 +116,13 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
               <Verdict ref={verdictRef} a={shown} hasChanges={hasChanges} stale={stale} />
               {!shown.paidOff && (
                 <>
-                  <SummaryCards a={shown} hasChanges={hasChanges} payoffIso={payoffIso} stale={stale} />
+                  <SummaryCards
+                    a={shown}
+                    hasChanges={hasChanges}
+                    payoffIso={payoffIso}
+                    nominalRatePct={scenario.loan.annualRatePct}
+                    stale={stale}
+                  />
                   <Card className={stale ? "rise rise-2 opacity-50 transition-opacity" : "rise rise-2 transition-opacity"}>
                     <CardContent>
                       <Tabs value={chartTab} onValueChange={(v) => setChartTab(v as ChartTab)}>

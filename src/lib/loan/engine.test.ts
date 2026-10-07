@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
+  yearFraction,
   planEffectiveRate,
   solveMonthlyFee,
   periodToMonths,
@@ -655,5 +656,59 @@ describe("typed-in balance and lifetime totals", () => {
     )
     const principalRepaid = a.lifetime.scenario.paid - a.lifetime.scenario.interest - a.lifetime.scenario.fees
     expect(principalRepaid).toBeCloseTo(3_000_000, 0)
+  })
+})
+
+describe("day count (rentedager)", () => {
+  it("year fractions follow the calendar", () => {
+    expect(yearFraction("2026-02-01", "2026-03-01", "act/act")).toBeCloseTo(28 / 365, 12)
+    expect(yearFraction("2028-02-01", "2028-03-01", "act/act")).toBeCloseTo(29 / 366, 12)
+    // Crossing New Year into a leap year: 17 days of 2027, 14 days of 2028.
+    expect(yearFraction("2027-12-15", "2028-01-15", "act/act")).toBeCloseTo(17 / 365 + 14 / 366, 12)
+    expect(yearFraction("2026-01-01", "2026-02-01", "act/360")).toBeCloseTo(31 / 360, 12)
+    expect(yearFraction("2026-01-31", "2026-02-28", "30/360")).toBeCloseTo(1 / 12, 12)
+  })
+  const loan = (dayCount?: "30/360" | "act/act" | "act/360") =>
+    base({ principal: 3_000_000, annualRatePct: 6.15, termMonths: 300, startDate: "2026-01-01", dayCount })
+  it("act/act: February interest is balance × rate × 28/365", () => {
+    const a = analyze(loan("act/act"), "2026-01-01")
+    const feb = a.scenario.rows[1] // payment due 2026-03-01 covers February
+    const balJan = a.scenario.rows[0].balance
+    expect(feb.interest).toBeCloseTo(balJan * 0.0615 * 28 / 365, 6)
+    expect(a.scenario.rows[0].interest).toBeCloseTo(3_000_000 * 0.0615 * 31 / 365, 6)
+    expect(a.scenario.rows[0].interest).toBeCloseTo(15_669.86, 1)
+  })
+  it("the payment stays the bank's annuity amount; only its interest share moves", () => {
+    const a = analyze(loan("act/act"), "2026-01-01")
+    const A = (3_000_000 * (0.0615 / 12)) / (1 - Math.pow(1 + 0.0615 / 12, -300))
+    for (const r of a.scenario.rows.slice(0, 24)) expect(r.interest + r.principal).toBeCloseTo(A, 6)
+    expect(a.scenario.rows.at(-1)!.balance).toBeCloseTo(0, 2)
+    expect(Math.abs(a.scenario.months - 300)).toBeLessThanOrEqual(1)
+  })
+  it("every day count still ends on the agreed term", () => {
+    for (const dc of ["30/360", "act/act", "act/360"] as const) {
+      const a = analyze(loan(dc), "2026-01-01")
+      expect(Math.abs(a.scenario.months - 300)).toBeLessThanOrEqual(1)
+      expect(a.scenario.rows.at(-1)!.balance).toBeCloseTo(0, 2)
+    }
+  })
+  it("act/360 costs more than act/act, which is close to 30/360 over the life of the loan", () => {
+    const i = (dc?: "30/360" | "act/act" | "act/360") => analyze(loan(dc), "2026-01-01").lifetime.scenario.interest
+    const flat = i("30/360")
+    const actAct = i("act/act")
+    const act360 = i("act/360")
+    expect(i(undefined)).toBe(flat)
+    expect(Math.abs(actAct - flat) / flat).toBeLessThan(0.01)
+    expect(act360).toBeGreaterThan(actAct * 1.01)
+  })
+  it("the effective rate reflects the day count", () => {
+    const flat = planEffectiveRate(loan("30/360").loan, "2026-01-01")!
+    const act360 = planEffectiveRate(loan("act/360").loan, "2026-01-01")!
+    expect(act360).toBeGreaterThan(flat + 0.05)
+  })
+  it("past history and the forward plan use the same calendar", () => {
+    const a = analyze(base({ principal: 1_000_000, annualRatePct: 6, termMonths: 120, startDate: "2024-10-07", dayCount: "act/act" }), "2026-10-07")
+    // First forward payment is due 2026-11-07 and covers 7 Oct → 7 Nov: 31 days of 2026.
+    expect(a.scenario.rows[0].interest).toBeCloseTo(a.startingBalance * 0.06 * 31 / 365, 6)
   })
 })

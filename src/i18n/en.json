@@ -85,7 +85,12 @@
     "introSummaryIo": "{{duration}} interest-only",
     "introSummaryRate": "{{duration}} at {{rate}} %",
     "effUnusual": "That would take a monthly fee of {{fee}}, which is unusually high. The amount, term, setup fee or start terms probably differ from what the bank used.",
-    "effUseAnyway": "Use {{fee}} anyway"
+    "effUseAnyway": "Use {{fee}} anyway",
+    "dayCount": "Interest day count",
+    "dayCountHint": "It's in the loan terms. Floating-rate loans usually use actual days (365/365). 365/360 costs a little more.",
+    "dayCountActAct": "Actual days (365/365)",
+    "dayCountAct360": "Actual days / 360 (365/360)",
+    "dayCount30360": "Equal months (360/360)"
   },
   "extras": {
     "title": "Pay extra",

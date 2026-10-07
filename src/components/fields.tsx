@@ -387,3 +387,32 @@ export function FieldGroup({ children, className }: { children: React.ReactNode;
     </div>
   )
 }
+
+/** Native select wired to the surrounding Field (label, description, invalid state). */
+export function NativeSelect<T extends string>({
+  value,
+  onChange,
+  options,
+}: {
+  value: T
+  onChange: (v: T) => void
+  options: { value: T; label: string }[]
+}) {
+  const f = useField()
+  return (
+    <select
+      id={f?.id}
+      aria-describedby={f?.describedBy}
+      aria-invalid={f?.invalid || undefined}
+      className={cn(selectClass, "w-full")}
+      value={value}
+      onChange={(e) => onChange(e.target.value as T)}
+    >
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>
+          {o.label}
+        </option>
+      ))}
+    </select>
+  )
+}
