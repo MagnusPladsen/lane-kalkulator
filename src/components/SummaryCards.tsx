@@ -90,14 +90,15 @@ export function SummaryCards({
       <Tile label={t("tiles.paidOff")} value={fmtMonthYear(payoffIso)} note={payoffNote} />
       <Tile
         label={t("tiles.totalInterest")}
-        value={fmtMoney(s.totalInterest)}
-        base={hasChanges ? t("tiles.was", { amount: fmtMoney(b.totalInterest) }) : undefined}
+        value={fmtMoney(a.lifetime.scenario.interest)}
+        base={hasChanges ? t("tiles.was", { amount: fmtMoney(a.lifetime.baseline.interest) }) : undefined}
         delta={hasChanges ? a.delta.interest : undefined}
+        note={a.past.scenario.interest >= 1 ? t("tiles.paidSoFar", { amount: fmtMoney(a.past.scenario.interest) }) : undefined}
       />
       <Tile
         label={t("tiles.totalCost")}
-        value={fmtMoney(s.totalPaid)}
-        base={hasChanges ? t("tiles.was", { amount: fmtMoney(b.totalPaid) }) : undefined}
+        value={fmtMoney(a.lifetime.scenario.paid)}
+        base={hasChanges ? t("tiles.was", { amount: fmtMoney(a.lifetime.baseline.paid) }) : undefined}
         delta={hasChanges ? a.delta.totalCost : undefined}
         note={t("tiles.inclPrincipal")}
       />

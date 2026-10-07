@@ -15,6 +15,29 @@ export interface LoanInput {
   startDate?: string
   /** Balance today. Only meaningful together with startDate. */
   remainingBalance?: number
+  /** One-off fee when the loan was set up (etableringsgebyr). */
+  setupFee?: number
+  /** Effective rate quoted by the bank, used only to check the inputs. */
+  effectiveRatePct?: number
+  /**
+   * Special terms from the first payment that are part of the loan itself, e.g.
+   * "first 3 years interest-only" or "first 3 years at 0 %". Counted in both plans.
+   */
+  intro?: LoanIntro
+}
+
+export interface LoanIntro {
+  kind: PeriodKind
+  months: number
+  /** Kind "rate" only. */
+  annualRatePct: number
+}
+
+export interface Totals {
+  interest: number
+  fees: number
+  /** Everything paid: principal, interest, extras and fees. */
+  paid: number
 }
 
 export interface ExtraPayment {
@@ -32,6 +55,8 @@ export interface InterestOnlyPeriod {
   /** 1-based month index counted from "now". */
   fromMonth: number
   months: number
+  /** Overrides the scenario-wide choice for what happens after this period. */
+  after?: AfterInterestOnly
 }
 
 /** A stretch of months with a different nominal rate, e.g. a fixed-rate deal or a stress test. */
@@ -41,6 +66,20 @@ export interface RatePeriod {
   fromMonth: number
   months: number
   annualRatePct: number
+}
+
+/**
+ * An extra payment as the user enters it, pinned to calendar months ("YYYY-MM")
+ * so a saved loan keeps its dates as time passes.
+ */
+export interface CalendarExtra {
+  id: string
+  kind: "recurring" | "oneoff"
+  amount: number
+  /** First month (recurring) or the month (one-off), "YYYY-MM". */
+  from: string
+  /** Recurring only: last month, inclusive. Undefined = until paid off. */
+  to?: string
 }
 
 export type PeriodKind = "interest-only" | "rate"
@@ -70,7 +109,7 @@ export interface Scenario {
   id: string
   savedAt: string
   loan: LoanInput
-  extras: ExtraPayment[]
+  extras: CalendarExtra[]
   periods: CustomPeriod[]
   afterInterestOnly: AfterInterestOnly
 }
@@ -113,8 +152,17 @@ export interface Analysis {
   offsetMonths: number
   /** Balance the forward projection starts from. */
   startingBalance: number
-  /** Original-plan rows from loan start up to today (empty without startDate). */
+  /** Balance the plan without changes starts from today. */
+  baselineStartingBalance: number
+  /** Today's balance was typed in by the user rather than simulated. */
+  balancePinned: boolean
+  /** Simulated history with the user's changes, loan start up to today (empty without startDate). */
   pastRows: ScheduleRow[]
+  /** Simulated history without changes. */
+  baselinePastRows: ScheduleRow[]
+  past: { baseline: Totals; scenario: Totals }
+  /** Whole loan: history + forward plan + setup fee. */
+  lifetime: { baseline: Totals; scenario: Totals }
   /** Nothing left to pay as of today. */
   paidOff: boolean
   baseline: ScheduleResult

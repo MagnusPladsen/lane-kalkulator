@@ -1,12 +1,12 @@
 import { uid } from "./ids"
 import { isValidIsoDate } from "./loan/engine"
-import type { AfterInterestOnly, CustomPeriod, ExtraPayment, LoanInput, Scenario } from "./loan/types"
+import type { AfterInterestOnly, CalendarExtra, CustomPeriod, LoanInput, Scenario } from "./loan/types"
 
 export type Action =
   | { type: "loan"; patch: Partial<LoanInput> }
-  | { type: "extra/add"; kind: ExtraPayment["kind"] }
-  | { type: "extra/addAmount"; amount: number }
-  | { type: "extra/update"; id: string; patch: Partial<ExtraPayment> }
+  | { type: "extra/add"; kind: CalendarExtra["kind"]; from: string }
+  | { type: "extra/addAmount"; amount: number; from: string }
+  | { type: "extra/update"; id: string; patch: Partial<Omit<CalendarExtra, "id">> }
   | { type: "extra/remove"; id: string }
   | { type: "period/add"; period: CustomPeriod }
   | { type: "period/update"; id: string; patch: Partial<Omit<CustomPeriod, "id">> }
@@ -28,14 +28,14 @@ export function scenarioReducer(state: Scenario, action: Action): Scenario {
             id: uid(),
             kind: action.kind,
             amount: action.kind === "oneoff" ? 50_000 : 1_000,
-            fromMonth: 1,
+            from: action.from,
           },
         ],
       }
     case "extra/addAmount":
       return {
         ...state,
-        extras: [...state.extras, { id: uid(), kind: "recurring", amount: action.amount, fromMonth: 1 }],
+        extras: [...state.extras, { id: uid(), kind: "recurring", amount: action.amount, from: action.from }],
       }
     case "extra/update":
       return {
@@ -83,6 +83,16 @@ export function validateLoan(l: LoanInput): LoanValidation {
     errors.termMonths = "term"
   if (!fin(l.monthlyFee) || l.monthlyFee < 0 || l.monthlyFee > LIMITS.feeMax) errors.monthlyFee = "fee"
   if (l.startDate !== undefined && !isValidIsoDate(l.startDate)) errors.startDate = "startDate"
+  if (l.setupFee !== undefined && (!fin(l.setupFee) || l.setupFee < 0 || (fin(l.principal) && l.setupFee >= l.principal)))
+    errors.setupFee = "setupFee"
+  if (l.effectiveRatePct !== undefined && (!fin(l.effectiveRatePct) || l.effectiveRatePct < 0 || l.effectiveRatePct > LIMITS.rateMax))
+    errors.effectiveRatePct = "rate"
+  if (l.intro) {
+    const m = l.intro.months
+    if (!fin(m) || !Number.isInteger(m) || m < 1 || (fin(l.termMonths) && m >= l.termMonths)) errors.intro = "intro"
+    else if (l.intro.kind === "rate" && (!fin(l.intro.annualRatePct) || l.intro.annualRatePct < 0 || l.intro.annualRatePct > LIMITS.rateMax))
+      errors.intro = "rate"
+  }
   if (l.remainingBalance !== undefined) {
     if (!l.startDate) errors.remainingBalance = "remainingNeedsStart"
     else if (!fin(l.remainingBalance) || l.remainingBalance < 0) errors.remainingBalance = "remainingNegative"

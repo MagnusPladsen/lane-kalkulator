@@ -168,22 +168,27 @@ function fmtDecimal(n: number): string {
 export function NumberInput({
   value,
   onChange,
+  onClear,
   suffix,
   integer,
   className,
+  placeholder,
   "aria-label": ariaLabel,
 }: {
-  value: number
+  value: number | undefined
   onChange: (v: number) => void
+  /** Makes the field optional: emptying it calls this. */
+  onClear?: () => void
   suffix?: string
   integer?: boolean
   className?: string
+  placeholder?: string
   "aria-label"?: string
 }) {
   const f = useField()
   const [text, setText] = React.useState("")
   const [focused, setFocused] = React.useState(false)
-  const display = focused ? text : Number.isFinite(value) ? fmtDecimal(value) : ""
+  const display = focused ? text : value !== undefined && Number.isFinite(value) ? fmtDecimal(value) : ""
   return (
     <div className={cn("relative", className)}>
       <Input
@@ -193,9 +198,10 @@ export function NumberInput({
         aria-invalid={f?.invalid || undefined}
         inputMode={integer ? "numeric" : "decimal"}
         autoComplete="off"
+        placeholder={placeholder}
         value={display}
         onFocus={(e) => {
-          setText(Number.isFinite(value) ? fmtDecimal(value) : "")
+          setText(value !== undefined && Number.isFinite(value) ? fmtDecimal(value) : "")
           setFocused(true)
           selectSoon(e.currentTarget)
         }}
@@ -205,7 +211,8 @@ export function NumberInput({
           const next = e.target.value.replace(re, "")
           setText(next)
           const n = Number(next.replace(",", "."))
-          if (next !== "" && Number.isFinite(n)) onChange(integer ? Math.round(n) : n)
+          if (next === "") onClear?.()
+          else if (Number.isFinite(n)) onChange(integer ? Math.round(n) : n)
         }}
         className={cn("font-mono tabular-nums", suffix && "pr-12")}
       />

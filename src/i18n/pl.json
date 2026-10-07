@@ -41,7 +41,7 @@
     "name": "Nazwa",
     "namePlaceholder": "Mój kredyt hipoteczny",
     "amount": "Kwota kredytu",
-    "rate": "Oprocentowanie",
+    "rate": "Oprocentowanie nominalne",
     "ratePa": "% rocznie",
     "fee": "Opłata miesięczna",
     "term": "Okres spłaty",
@@ -61,8 +61,31 @@
     "estimateSerial": "Około <0>{{amount}}</0> miesięcznie na początku.",
     "summary": "{{amount}} · {{rate}} % · {{term}}",
     "more": "Więcej szczegółów",
-    "moreHint": "data, saldo, opłata, nazwa",
-    "editLoan": "Edytuj kredyt"
+    "moreHint": "data startu, saldo, opłaty, RRSO, nazwa",
+    "editLoan": "Edytuj kredyt",
+    "rateHint": "Zmienne (nominalne) oprocentowanie, nie RRSO.",
+    "feeHint": "Opłata za każdą ratę. Na fakturze lub w umowie, często 0–75 kr.",
+    "setupFee": "Prowizja za udzielenie",
+    "setupFeeHint": "Jednorazowa opłata przy udzieleniu kredytu. Dolicz opłatę za wpis do rejestru (tinglysingsgebyr), jeśli bank wlicza ją do RRSO.",
+    "bankEffective": "RRSO z banku",
+    "bankEffectiveHint": "Służy tylko do sprawdzenia, czy opłaty się zgadzają.",
+    "effCalc": "RRSO przy tych danych: <0>{{rate}} %</0>",
+    "effMatch": "Zgadza się z bankiem.",
+    "effHigher": "Bank podaje {{bank}} %. Różnica to zwykle brakujące opłaty, najczęściej opłata miesięczna.",
+    "effLower": "Bank podaje niższe {{bank}} %. Sprawdź oprocentowanie, okres, opłaty i czy kredyt zaczyna się okresem tylko z odsetkami lub bez odsetek.",
+    "effSolve": "Znajdź opłatę miesięczną dającą {{bank}} %",
+    "effSolved": "Opłata miesięczna ustawiona na {{fee}}.",
+    "effNoSolve": "Żadna opłata od 0 do 10 000 kr nie daje {{bank}} %. Sprawdź pozostałe dane.",
+    "effAbout": "RRSO uwzględnia miesięczną kapitalizację i wszystkie opłaty. Same odsetki zawsze liczone są od oprocentowania nominalnego.",
+    "intro": "Początek tylko z odsetkami lub bez odsetek",
+    "introHint": "Częste w wielu kredytach, np. pierwsze 3 lata tylko odsetki albo 0 %. Liczone jako część kredytu.",
+    "introKind": "Rodzaj warunków początkowych",
+    "introLength": "Czas trwania",
+    "introRateHint": "0 % oznacza bez odsetek.",
+    "introSummaryIo": "{{duration}} tylko odsetki",
+    "introSummaryRate": "{{duration}} na {{rate}} %",
+    "effUnusual": "Wymagałoby to opłaty {{fee}} miesięcznie, co jest nietypowo wysokie. Kwota, okres, prowizja lub warunki początkowe prawdopodobnie różnią się od przyjętych przez bank.",
+    "effUseAnyway": "Użyj mimo to {{fee}}"
   },
   "extras": {
     "title": "Nadpłaty",
@@ -75,6 +98,8 @@
     "fromMonth": "Od miesiąca",
     "inMonth": "W miesiącu",
     "toMonth": "Do miesiąca",
+    "month": "Miesiąc",
+    "year": "Rok",
     "untilPaidOff": "Do spłaty kredytu",
     "addMonthly": "Nadpłata miesięczna",
     "addOneoff": "Jednorazowa",
@@ -100,7 +125,6 @@
     "rateHint": "Rata jest przeliczana dla tej stopy i ponownie po zakończeniu okresu.",
     "zero": "0 %",
     "duration": "{{count}} mies.",
-    "past": "Ten okres już minął, więc nie wpływa na wyliczenia. Podaj zamiast tego dzisiejsze saldo.",
     "add": "Dodaj okres",
     "remove": "Usuń okres {{n}}",
     "after": "Potem",
@@ -142,7 +166,8 @@
     "risesTo": "rośnie do {{amount}}",
     "interestOnlyNow": "teraz tylko odsetki: {{amount}}",
     "extra": "+ {{amount}} nadpłaty",
-    "inclPrincipal": "z kapitałem i opłatami"
+    "inclPrincipal": "z kapitałem i opłatami",
+    "paidSoFar": "z tego {{amount}} już zapłacone"
   },
   "charts": {
     "balance": "Saldo",
@@ -271,7 +296,9 @@
     "startDate": "Nieprawidłowa data (1900–2100)",
     "remainingNeedsStart": "Najpierw ustaw datę rozpoczęcia",
     "remainingNegative": "Nie może być ujemna",
-    "remainingTooHigh": "Nie może przekraczać kwoty kredytu"
+    "remainingTooHigh": "Nie może przekraczać kwoty kredytu",
+    "setupFee": "Nie może być ujemna ani równa kwocie kredytu",
+    "intro": "Musi być krótszy niż okres kredytu"
   },
   "duration": {
     "years_one": "{{count}} rok",
@@ -313,5 +340,10 @@
   },
   "mobileBar": {
     "show": "Pokaż wyniki"
+  },
+  "timing": {
+    "needsStart": "To jest przed dzisiejszą datą. Dodaj datę rozpoczęcia kredytu, aby uwzględnić to w historii.",
+    "outside": "To jest poza okresem kredytu i nie wpływa na wyliczenia.",
+    "pinnedPast": "Część przed dzisiaj zmienia historię i dotychczas zapłacone odsetki. Dzisiejsze saldo to nadal kwota, którą wpisano."
   }
 }

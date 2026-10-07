@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
+  planEffectiveRate,
+  solveMonthlyFee,
   periodToMonths,
   periodsToSchedule,
   addMonths,
@@ -230,7 +232,7 @@ describe("analyze", () => {
   })
   it("delta is negative when extras save money and time", () => {
     const s = base()
-    s.extras = [{ id: "x", kind: "recurring", amount: 3000, fromMonth: 1 }]
+    s.extras = [{ id: "x", kind: "recurring", amount: 3000, from: "2026-11" }]
     const a = analyze(s, "2026-10-07")
     expect(a.delta.months).toBeLessThan(0)
     expect(a.delta.interest).toBeLessThan(0)
@@ -356,15 +358,15 @@ describe("solveForTarget", () => {
     const sol = solveForTarget(s, "2026-10-07", 60, "recurring")!
     expect(sol.amount).toBeGreaterThan(0)
     expect(sol.amount % 10).toBe(0)
-    const hit = analyze({ ...s, extras: [{ id: "g", kind: "recurring", amount: sol.amount, fromMonth: 1 }] }, "2026-10-07")
+    const hit = analyze({ ...s, extras: [{ id: "g", kind: "recurring", amount: sol.amount, from: "2026-11" }] }, "2026-10-07")
     expect(hit.scenario.months).toBeLessThanOrEqual(60)
-    const miss = analyze({ ...s, extras: [{ id: "g", kind: "recurring", amount: sol.amount - 10, fromMonth: 1 }] }, "2026-10-07")
+    const miss = analyze({ ...s, extras: [{ id: "g", kind: "recurring", amount: sol.amount - 10, from: "2026-11" }] }, "2026-10-07")
     expect(miss.scenario.months).toBeGreaterThan(60)
     expect(sol.interestSaved).toBeGreaterThan(0)
   })
   it("one-off variant pays a lump sum in month 1", () => {
     const sol = solveForTarget(base(), "2026-10-07", 60, "oneoff")!
-    const hit = analyze({ ...base(), extras: [{ id: "g", kind: "oneoff", amount: sol.amount, fromMonth: 1 }] }, "2026-10-07")
+    const hit = analyze({ ...base(), extras: [{ id: "g", kind: "oneoff", amount: sol.amount, from: "2026-11" }] }, "2026-10-07")
     expect(hit.scenario.months).toBeLessThanOrEqual(60)
   })
   it("returns 0 when already on track, and undefined when paid off", () => {
@@ -373,7 +375,7 @@ describe("solveForTarget", () => {
   })
   it("solves on top of the user's existing changes", () => {
     const s = base()
-    s.extras = [{ id: "x", kind: "recurring", amount: 3000, fromMonth: 1 }]
+    s.extras = [{ id: "x", kind: "recurring", amount: 3000, from: "2026-11" }]
     const withExisting = solveForTarget(s, "2026-10-07", 60, "recurring")!
     const without = solveForTarget(base(), "2026-10-07", 60, "recurring")!
     expect(withExisting.amount).toBeLessThan(without.amount)
@@ -431,5 +433,227 @@ describe("calendar periods", () => {
       expect(r.interestOnly).toBe(inside)
       if (inside) expect(r.principal).toBe(0)
     })
+  })
+})
+
+describe("calculation review: closed-form checks", () => {
+  // Independent formulas, not the engine's own loop.
+  const P = 3_000_000
+  const r = 0.0615 / 12
+  const n = 300
+  const A = (P * r) / (1 - Math.pow(1 + r, -n))
+  const balanceAfter = (k: number) => P * Math.pow(1 + r, k) - (A * (Math.pow(1 + r, k) - 1)) / r
+
+  it("annuity payment and balance match the textbook formulas every month", () => {
+    const s = buildSchedule({
+      balance: P, monthlyRate: r, months: n, loanType: "annuity", fee: 0,
+      extras: [], interestOnly: [], afterInterestOnly: "keep-term",
+    })
+    expect(s.months).toBe(n)
+    expect(s.monthlyPayment).toBeCloseTo(A, 6)
+    for (const k of [1, 12, 60, 150, 299]) expect(s.rows[k - 1].balance).toBeCloseTo(balanceAfter(k), 4)
+    expect(s.totalInterest).toBeCloseTo(A * n - P, 2)
+  })
+  it("serial loan interest totals r·P·(n+1)/2", () => {
+    const s = buildSchedule({
+      balance: P, monthlyRate: r, months: n, loanType: "serial", fee: 0,
+      extras: [], interestOnly: [], afterInterestOnly: "keep-term",
+    })
+    expect(s.totalInterest).toBeCloseTo((r * P * (n + 1)) / 2, 2)
+  })
+  it("today's balance from a start date equals the closed form after the elapsed payments", () => {
+    const a = analyze(
+      { ...base({ principal: P, annualRatePct: 6.15, termMonths: n, startDate: "2022-03-01" }) },
+      "2026-10-07",
+    )
+    // Mar 2022 → Oct 2026: 55 payments made.
+    expect(a.offsetMonths).toBe(55)
+    expect(a.startingBalance).toBeCloseTo(balanceAfter(55), 4)
+  })
+})
+
+describe("effective rate", () => {
+  const loan = (over: Partial<Scenario["loan"]> = {}) => base({ principal: 3_000_000, annualRatePct: 6.15, termMonths: 300, ...over }).loan
+  it("without fees it is just monthly compounding, (1 + i/12)^12 − 1", () => {
+    expect(planEffectiveRate(loan())!).toBeCloseTo((Math.pow(1 + 0.0615 / 12, 12) - 1) * 100, 6)
+  })
+  it("fees raise it, and the payments discounted at that rate give back the payout", () => {
+    const l = loan({ monthlyFee: 75, setupFee: 2_500 })
+    const eff = planEffectiveRate(l)!
+    expect(eff).toBeGreaterThan(6.333)
+    const m = Math.pow(1 + eff / 100, 1 / 12) - 1
+    const plan = buildSchedule({
+      balance: l.principal, monthlyRate: 0.0615 / 12, months: 300, loanType: "annuity", fee: 75,
+      extras: [], interestOnly: [], afterInterestOnly: "keep-term",
+    })
+    const pv = plan.rows.reduce((sum, row, k) => sum + row.payment / Math.pow(1 + m, k + 1), 0)
+    expect(pv).toBeCloseTo(3_000_000 - 2_500, 0)
+  })
+  it("solving for the monthly fee recovers a known fee", () => {
+    const target = planEffectiveRate(loan({ monthlyFee: 75, setupFee: 2_500 }))!
+    expect(solveMonthlyFee(loan({ monthlyFee: 0, setupFee: 2_500 }), target)).toBe(75)
+  })
+  it("gives up when no fee can reach the target", () => {
+    expect(solveMonthlyFee(loan(), 5)).toBeUndefined()
+  })
+})
+
+describe("history follows past periods and extras", () => {
+  const start = "2024-10-07"
+  const today = "2026-10-07" // 24 payments made; first payment Nov 2024
+  it("a 0 % period at the start lowers today's balance and lifetime interest", () => {
+    const s = base({ startDate: start })
+    s.periods = [{ id: "z", kind: "rate", from: "2024-11", to: "2025-10", annualRatePct: 0 }]
+    const a = analyze(s, today)
+    for (let i = 0; i < 12; i++) expect(a.pastRows[i].interest).toBe(0)
+    expect(a.pastRows[12].interest).toBeGreaterThan(0)
+    expect(a.baselinePastRows[0].interest).toBeGreaterThan(0)
+    expect(a.startingBalance).toBeLessThan(a.baselineStartingBalance)
+    expect(a.past.scenario.interest).toBeLessThan(a.past.baseline.interest)
+    expect(a.delta.interest).toBeLessThan(a.past.scenario.interest - a.past.baseline.interest + 1)
+    expect(a.delta.interest).toBeLessThan(0)
+    expect(a.scenario.rows.at(-1)!.balance).toBeCloseTo(0, 2)
+  })
+  it("with a typed-in balance, past changes only move history and interest so far", () => {
+    const s = base({ startDate: start, remainingBalance: 800_000 })
+    s.periods = [{ id: "z", kind: "rate", from: "2024-11", to: "2025-10", annualRatePct: 0 }]
+    const a = analyze(s, today)
+    expect(a.balancePinned).toBe(true)
+    expect(a.startingBalance).toBe(800_000)
+    expect(a.baselineStartingBalance).toBe(800_000)
+    expect(a.delta.months).toBe(0)
+    expect(a.delta.interest).toBeCloseTo(a.past.scenario.interest - a.past.baseline.interest, 6)
+  })
+  it("a past one-off extra pays the loan down in history", () => {
+    const s = base({ startDate: start })
+    s.extras = [{ id: "x", kind: "oneoff", amount: 100_000, from: "2025-06" }]
+    const a = analyze(s, today)
+    expect(a.pastRows.some((r) => r.extra === 100_000)).toBe(true)
+    expect(a.baselineStartingBalance - a.startingBalance).toBeGreaterThan(100_000)
+  })
+  it("a period spanning today continues seamlessly into the forward plan", () => {
+    const s = base({ startDate: start })
+    s.periods = [{ id: "p", kind: "interest-only", from: "2026-05", to: "2027-04", annualRatePct: 0 }]
+    s.afterInterestOnly = "keep-payment"
+    const a = analyze(s, today)
+    expect(a.pastRows.slice(-6).every((r) => r.interestOnly)).toBe(true)
+    expect(a.scenario.rows.slice(0, 6).every((r) => r.interestOnly)).toBe(true)
+    expect(a.scenario.rows[6].interestOnly).toBe(false)
+    // keep-payment: the full 12-month pause extends the loan by 12 months
+    expect(a.scenario.months - a.baseline.months).toBe(12)
+  })
+  it("the setup fee counts in lifetime cost on both sides", () => {
+    const a = analyze(base({ setupFee: 2_500 }), today)
+    expect(a.lifetime.baseline.fees).toBe(2_500)
+    expect(a.lifetime.scenario.paid - a.scenario.totalPaid).toBe(2_500)
+    expect(a.delta.totalCost).toBe(0)
+  })
+})
+
+describe("loan intro terms", () => {
+  it("first 3 years interest-only is part of the loan: both plans, end date kept", () => {
+    const a = analyze(base({ intro: { kind: "interest-only", months: 36, annualRatePct: 0 } }), "2026-10-07")
+    expect(a.baseline.rows.slice(0, 36).every((r) => r.interestOnly && r.principal === 0)).toBe(true)
+    expect(a.baseline.rows[36].interestOnly).toBe(false)
+    expect(a.baseline.months).toBe(120)
+    expect(a.delta.months).toBe(0)
+    expect(a.delta.interest).toBeCloseTo(0, 6)
+  })
+  it("stays keep-term even when the user's what-if pauses use keep-payment", () => {
+    const s = base({ intro: { kind: "interest-only", months: 36, annualRatePct: 0 } })
+    s.afterInterestOnly = "keep-payment"
+    const a = analyze(s, "2026-10-07")
+    expect(a.scenario.months).toBe(120)
+    expect(a.delta.interest).toBeCloseTo(0, 6)
+  })
+  it("first 3 years at 0 % charges no interest then re-prices at the normal rate", () => {
+    const a = analyze(base({ intro: { kind: "rate", months: 36, annualRatePct: 0 } }), "2026-10-07")
+    expect(a.baseline.rows.slice(0, 36).every((r) => r.interest === 0)).toBe(true)
+    expect(a.baseline.rows[36].interest).toBeGreaterThan(0)
+    expect(a.baseline.rows.at(-1)!.balance).toBeCloseTo(0, 2)
+    expect(a.baseline.months).toBe(120)
+  })
+  it("with a start date, the intro shows up in history, not again from today", () => {
+    const a = analyze(
+      base({ startDate: "2024-10-07", intro: { kind: "interest-only", months: 36, annualRatePct: 0 } }),
+      "2026-10-07",
+    )
+    expect(a.pastRows.every((r) => r.interestOnly)).toBe(true) // 24 months so far
+    expect(a.scenario.rows.slice(0, 12).every((r) => r.interestOnly)).toBe(true)
+    expect(a.scenario.rows[12].interestOnly).toBe(false)
+    expect(a.startingBalance).toBe(1_000_000)
+  })
+  it("the bank's effective rate includes intro terms", () => {
+    const plain = planEffectiveRate(base().loan)!
+    const zeroStart = planEffectiveRate(base({ intro: { kind: "rate", months: 36, annualRatePct: 0 } }).loan)!
+    expect(zeroStart).toBeLessThan(plain)
+  })
+})
+
+describe("re-pricing keeps the plan's current end date (verifier findings)", () => {
+  const P = 3_000_000
+  const r = 0.0615 / 12
+  const common = {
+    balance: P, monthlyRate: r, months: 300, loanType: "annuity" as const, fee: 0,
+    interestOnly: [] as { id: string; fromMonth: number; months: number }[],
+  }
+  it("a rate change after an extra payment keeps the shortened term", () => {
+    const extras = [{ id: "x", kind: "oneoff" as const, amount: 500_000, fromMonth: 12 }]
+    const alone = buildSchedule({ ...common, extras, afterInterestOnly: "keep-term" })
+    expect(alone.months).toBe(212)
+    const withRate = buildSchedule({
+      ...common, extras, afterInterestOnly: "keep-term",
+      ratePeriods: [{ id: "r", fromMonth: 24, months: 1000, annualRatePct: 6.4 }],
+    })
+    expect(withRate.months).toBe(212)
+    expect(withRate.totalInterest).toBeCloseTo(1_715_539, -1)
+  })
+  it("a keep-payment pause keeps its longer term through a later rate change", () => {
+    const pause = { interestOnly: [{ id: "p", fromMonth: 1, months: 24 }], afterInterestOnly: "keep-payment" as const }
+    expect(buildSchedule({ ...common, extras: [], ...pause }).months).toBe(324)
+    const withRate = buildSchedule({
+      ...common, extras: [], ...pause,
+      ratePeriods: [{ id: "r", fromMonth: 36, months: 1000, annualRatePct: 6.4 }],
+    })
+    expect(withRate.months).toBe(324)
+  })
+  it("a long keep-payment pause plus a steep rate rise still pays off, no runaway", () => {
+    const s = buildSchedule({
+      ...common, extras: [],
+      interestOnly: [{ id: "p", fromMonth: 1, months: 120 }], afterInterestOnly: "keep-payment",
+      ratePeriods: [{ id: "r", fromMonth: 301, months: 1000, annualRatePct: 14 }],
+    })
+    expect(s.truncated).toBe(false)
+    expect(s.months).toBe(420)
+    expect(s.rows.at(-1)!.balance).toBeCloseTo(0, 2)
+  })
+  it("a rate change during a keep-payment pause doesn't depend on whether it lands inside the pause", () => {
+    const run = (from: number) =>
+      buildSchedule({
+        ...common, extras: [],
+        interestOnly: [{ id: "p", fromMonth: 1, months: 24 }], afterInterestOnly: "keep-payment",
+        ratePeriods: [{ id: "r", fromMonth: from, months: 1000, annualRatePct: 7 }],
+      }).months
+    expect(run(12)).toBe(324)
+    expect(run(25)).toBe(324)
+  })
+  it("extra payments then a keep-term pause hold the shortened end date", () => {
+    const s = buildSchedule({
+      ...common,
+      extras: [{ id: "x", kind: "oneoff", amount: 500_000, fromMonth: 12 }],
+      interestOnly: [{ id: "p", fromMonth: 30, months: 6 }], afterInterestOnly: "keep-term",
+    })
+    expect(s.months).toBe(212)
+  })
+})
+
+describe("typed-in balance and lifetime totals", () => {
+  it("lifetime principal repaid never exceeds the loan", () => {
+    const a = analyze(
+      base({ principal: 3_000_000, annualRatePct: 6.15, termMonths: 300, startDate: "2020-01-15", remainingBalance: 2_900_000 }),
+      "2026-10-07",
+    )
+    const principalRepaid = a.lifetime.scenario.paid - a.lifetime.scenario.interest - a.lifetime.scenario.fees
+    expect(principalRepaid).toBeCloseTo(3_000_000, 0)
   })
 })

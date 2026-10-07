@@ -12,7 +12,7 @@ describe("share", () => {
   })
   it("round-trips custom periods and extras", () => {
     const s = newScenario()
-    s.extras = [{ id: "e", kind: "recurring", amount: 2000, fromMonth: 1 }]
+    s.extras = [{ id: "e", kind: "recurring", amount: 2000, from: "2027-01" }]
     s.periods = [
       { id: "p1", kind: "interest-only", from: "2027-01", to: "2027-06", annualRatePct: 0 },
       { id: "p2", kind: "rate", from: "2028-01", to: "2028-12", annualRatePct: 0 },
