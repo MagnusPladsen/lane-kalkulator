@@ -47,7 +47,7 @@ bun run lint
 
 ## How the numbers are calculated
 
-- **Interest** each month is the balance times the nominal rate / 12. Banks usually accrue per actual day, so a single month can differ by a few percent from a bank statement, while yearly totals match closely.
+- **Interest** follows the loan's day count (rentedager), set under "Renteberegning": *365/365* actual days over 365 (366 in leap years, periods split at New Year), the usual one for floating-rate loans and the default; *365/360* actual days over 360, slightly dearer; or *360/360* where every month is exactly 1/12. The payment amount is priced on the nominal rate / 12 (for 365/360 scaled by 365.25/360 so the loan still ends on time); only the interest share inside each payment varies with the days, and the final payment absorbs the difference. Older saves without a setting use 365/365.
 - **Annuity** payments use the standard formula. Whenever the payment is re-priced (a rate change, or the end of an interest-only pause that keeps the end date) it is spread over the months left to the plan's *current* end date. That end moves earlier when extra payments shorten the loan and later for each pause month that keeps the payment. **Serial** loans repay a fixed principal; rate changes only change the interest.
 - **Monthly fee** (termingebyr) is added to every payment, pauses included. The **setup fee** (etableringsgebyr) counts once, at the start.
 - **Extra payments** go straight to principal and keep the regular payment, so the loan ends sooner.

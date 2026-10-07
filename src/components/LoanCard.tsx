@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Field, FieldInput, MoneyInput, NumberInput, SectionTitle, Segmented, FieldGroup } from "@/components/fields"
+import { Field, FieldInput, MoneyInput, NumberInput, SectionTitle, Segmented, FieldGroup, NativeSelect } from "@/components/fields"
 import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
-import type { LoanInput } from "@/lib/loan/types"
+import type { DayCount, LoanInput } from "@/lib/loan/types"
 import { EffectiveRateCheck, IntroTerms } from "@/components/LoanExtras"
 import type { LoanValidation } from "@/lib/scenarioReducer"
 
@@ -215,6 +215,17 @@ export function LoanCard({
                 />
               </Field>
             </div>
+            <Field label={t("loan.dayCount")} hint={t("loan.dayCountHint")}>
+              <NativeSelect<DayCount>
+                value={loan.dayCount ?? "30/360"}
+                onChange={(dayCount) => onChange({ dayCount })}
+                options={[
+                  { value: "act/act", label: t("loan.dayCountActAct") },
+                  { value: "act/360", label: t("loan.dayCountAct360") },
+                  { value: "30/360", label: t("loan.dayCount30360") },
+                ]}
+              />
+            </Field>
             <EffectiveRateCheck loan={loan} valid={valid} onChange={onChange} />
           </CollapsibleContent>
         </Collapsible>

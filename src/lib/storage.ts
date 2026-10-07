@@ -55,6 +55,7 @@ export function newScenario(): Scenario {
       termMonths: 25 * 12,
       loanType: "annuity",
       monthlyFee: 0,
+      dayCount: "act/act",
     },
     extras: [],
     periods: [],

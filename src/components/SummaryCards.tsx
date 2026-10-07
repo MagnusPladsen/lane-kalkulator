@@ -40,19 +40,22 @@ export function SummaryCards({
   a,
   hasChanges,
   payoffIso,
+  nominalRatePct,
   stale,
 }: {
   a: Analysis
   hasChanges: boolean
   payoffIso: string
+  /** The loan's normal rate, to count months that differ from it. */
+  nominalRatePct: number
   stale?: boolean
 }) {
   const { t } = useTranslation()
   const s = a.scenario
   const b = a.baseline
   const ioMonths = s.rows.filter((r) => r.interestOnly).length
-  const baseRate = b.rows[0]?.ratePct
-  const rateMonths = baseRate === undefined ? 0 : s.rows.filter((r) => Math.abs(r.ratePct - baseRate) > 1e-9).length
+  // Months left at a rate other than the loan's nominal rate (start terms or rate periods).
+  const rateMonths = s.rows.filter((r) => Math.abs(r.ratePct - nominalRatePct) > 1e-9).length
   const paymentNote =
     s.maxMonthlyPayment - s.monthlyPayment > 1
       ? t("tiles.risesTo", { amount: fmtMoney(s.maxMonthlyPayment) })

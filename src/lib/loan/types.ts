@@ -1,5 +1,13 @@
 export type LoanType = "annuity" | "serial"
 
+/**
+ * How interest days are counted (rentedager).
+ * 30/360: every month is 1/12 of a year (often fixed-rate loans).
+ * act/act: actual days / 365, or 366 in leap years (usual for floating-rate loans).
+ * act/360: actual days / 360, slightly dearer.
+ */
+export type DayCount = "30/360" | "act/act" | "act/360"
+
 export interface LoanInput {
   name: string
   /** Original loan amount. */
@@ -11,6 +19,8 @@ export interface LoanInput {
   loanType: LoanType
   /** Fixed fee per payment (termingebyr). */
   monthlyFee: number
+  /** Interest day count. Undefined means 30/360. */
+  dayCount?: DayCount
   /** ISO date yyyy-mm-dd. Optional. */
   startDate?: string
   /** Balance today. Only meaningful together with startDate. */

@@ -85,7 +85,12 @@
     "introSummaryIo": "{{duration}} tylko odsetki",
     "introSummaryRate": "{{duration}} na {{rate}} %",
     "effUnusual": "Wymagałoby to opłaty {{fee}} miesięcznie, co jest nietypowo wysokie. Kwota, okres, prowizja lub warunki początkowe prawdopodobnie różnią się od przyjętych przez bank.",
-    "effUseAnyway": "Użyj mimo to {{fee}}"
+    "effUseAnyway": "Użyj mimo to {{fee}}",
+    "dayCount": "Naliczanie odsetek",
+    "dayCountHint": "Jest w warunkach kredytu. Kredyty o zmiennym oprocentowaniu zwykle liczą rzeczywiste dni (365/365). 365/360 jest nieco droższe.",
+    "dayCountActAct": "Rzeczywiste dni (365/365)",
+    "dayCountAct360": "Rzeczywiste dni / 360 (365/360)",
+    "dayCount30360": "Równe miesiące (360/360)"
   },
   "extras": {
     "title": "Nadpłaty",

@@ -85,7 +85,12 @@
     "introSummaryIo": "{{duration}} avdragsfritt",
     "introSummaryRate": "{{duration}} med {{rate}} %",
     "effUnusual": "Det ville krevd et gebyr på {{fee}} per måned, som er uvanlig høyt. Trolig stemmer lånebeløpet, løpetiden, etableringsgebyret eller startvilkårene ikke med det banken regnet på.",
-    "effUseAnyway": "Bruk {{fee}} likevel"
+    "effUseAnyway": "Bruk {{fee}} likevel",
+    "dayCount": "Renteberegning",
+    "dayCountHint": "Står i lånevilkårene. Lån med flytende rente bruker som regel faktiske dager (365/365). 365/360 blir litt dyrere.",
+    "dayCountActAct": "Faktiske dager (365/365)",
+    "dayCountAct360": "Faktiske dager / 360 (365/360)",
+    "dayCount30360": "Like måneder (360/360)"
   },
   "extras": {
     "title": "Betal ekstra",

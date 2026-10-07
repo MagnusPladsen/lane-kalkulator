@@ -156,6 +156,8 @@ export function sanitizeScenario(raw: unknown, today: string = todayIso()): Scen
       termMonths: Math.round(num(l.termMonths, 300, 1, 480)),
       loanType,
       monthlyFee: num(l.monthlyFee, 0, 0, 100_000),
+      // Older saves have no day count; actual days is what floating-rate loans use.
+      dayCount: l.dayCount === "30/360" || l.dayCount === "act/360" ? l.dayCount : "act/act",
       startDate,
       remainingBalance,
       setupFee: optNum(l.setupFee, 0, Math.min(1_000_000, principal)),
