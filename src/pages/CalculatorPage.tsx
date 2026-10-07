@@ -60,7 +60,7 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
   )
 
   // Based on the baseline so the month pickers don't shrink as extras are added.
-  const maxMonth = shown ? Math.max(12, shown.baseline.months + 24) : 480
+  const maxMonth = shown ? Math.max(12, shown.baseline.months + 24) : 600
   const payoffIso = shown ? dateFor(shown.offsetMonths + shown.scenario.months) : today
   const hasExtra = shown ? shown.scenario.rows.some((r) => r.extra > 0) : false
   const firstPayment = analysis && !analysis.paidOff ? analysis.baseline.monthlyPayment : undefined

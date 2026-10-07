@@ -296,7 +296,7 @@
   "validation": {
     "principal": "Podaj kwotę od 1 do 1 000 000 000 kr",
     "rate": "0–100 %",
-    "term": "1–40 lat",
+    "term": "1–50 lat",
     "fee": "0–100 000 kr",
     "startDate": "Nieprawidłowa data (1900–2100)",
     "remainingNeedsStart": "Najpierw ustaw datę rozpoczęcia",

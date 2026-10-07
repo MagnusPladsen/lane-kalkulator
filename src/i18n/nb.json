@@ -292,7 +292,7 @@
   "validation": {
     "principal": "Oppgi et lånebeløp mellom 1 og 1 000 000 000 kr",
     "rate": "0–100 %",
-    "term": "1–40 år",
+    "term": "1–50 år",
     "fee": "0–100 000 kr",
     "startDate": "Ugyldig dato (1900–2100)",
     "remainingNeedsStart": "Velg startdato først",

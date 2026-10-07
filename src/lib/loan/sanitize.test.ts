@@ -86,3 +86,11 @@ describe("periods", () => {
     expect(s.periods).toEqual([])
   })
 })
+
+describe("long terms", () => {
+  it("keeps a 43-year startlån term instead of cutting it to 40 years", () => {
+    const s = sanitizeScenario({ loan: { principal: 2_400_000, termMonths: 514 } })!
+    expect(s.loan.termMonths).toBe(514)
+    expect(sanitizeScenario({ loan: { principal: 1, termMonths: 900 } })!.loan.termMonths).toBe(600)
+  })
+})
