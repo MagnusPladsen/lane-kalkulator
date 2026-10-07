@@ -59,7 +59,7 @@ function sanitizeExtra(v: unknown, anchor: string, offset: number): CalendarExtr
 
 function sanitizeIntro(v: unknown): LoanIntro | undefined {
   if (!isRecord(v)) return undefined
-  const months = optNum(v.months, 1, 480)
+  const months = optNum(v.months, 1, 600)
   if (months === undefined) return undefined
   return {
     kind: v.kind === "rate" ? "rate" : "interest-only",
@@ -153,7 +153,7 @@ export function sanitizeScenario(raw: unknown, today: string = todayIso()): Scen
       name: str(l.name, "", MAX_NAME),
       principal,
       annualRatePct: num(l.annualRatePct, 0, 0, 100),
-      termMonths: Math.round(num(l.termMonths, 300, 1, 480)),
+      termMonths: Math.round(num(l.termMonths, 300, 1, 600)),
       loanType,
       monthlyFee: num(l.monthlyFee, 0, 0, 100_000),
       // Older saves have no day count; actual days is what floating-rate loans use.

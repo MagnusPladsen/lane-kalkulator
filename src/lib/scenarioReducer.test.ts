@@ -50,3 +50,12 @@ describe("scenarioReducer periods", () => {
     expect(s.periods.map((p) => p.id)).toEqual(["a"])
   })
 })
+
+describe("validateLoan term limit", () => {
+  it("accepts up to 50 years", () => {
+    const ok = (termMonths: number) => validateLoan({ name: "", principal: 1_000_000, annualRatePct: 5, termMonths, loanType: "annuity", monthlyFee: 0 }).ok
+    expect(ok(514)).toBe(true)
+    expect(ok(600)).toBe(true)
+    expect(ok(601)).toBe(false)
+  })
+})

@@ -292,7 +292,7 @@
   "validation": {
     "principal": "Enter an amount between 1 and 1 000 000 000 kr",
     "rate": "0–100 %",
-    "term": "1–40 years",
+    "term": "1–50 years",
     "fee": "0–100 000 kr",
     "startDate": "Invalid date (1900–2100)",
     "remainingNeedsStart": "Set a start date first",

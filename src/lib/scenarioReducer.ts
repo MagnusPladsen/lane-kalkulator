@@ -69,7 +69,8 @@ export interface LoanValidation {
 export const LIMITS = {
   principalMax: 1_000_000_000,
   rateMax: 100,
-  termMax: 480,
+  // Startlån (Husbanken via the municipality) can run up to 50 years.
+  termMax: 600,
   feeMax: 100_000,
 } as const
 
