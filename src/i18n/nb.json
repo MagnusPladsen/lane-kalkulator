@@ -41,7 +41,7 @@
     "name": "Navn",
     "namePlaceholder": "Boliglånet",
     "amount": "Lånebeløp",
-    "rate": "Rente",
+    "rate": "Nominell rente",
     "ratePa": "% p.a.",
     "fee": "Gebyr per måned",
     "term": "Nedbetalingstid",
@@ -61,8 +61,31 @@
     "estimateSerial": "Omtrent <0>{{amount}}</0> per måned i starten.",
     "summary": "{{amount}} · {{rate}} % · {{term}}",
     "more": "Flere detaljer",
-    "moreHint": "startdato, restgjeld, gebyr, navn",
-    "editLoan": "Endre lånet"
+    "moreHint": "startdato, restgjeld, gebyrer, effektiv rente, navn",
+    "editLoan": "Endre lånet",
+    "rateHint": "Den flytende (nominelle) renten, ikke den effektive.",
+    "feeHint": "Termingebyret. Står på fakturaen eller i låneavtalen, ofte 0–75 kr.",
+    "setupFee": "Etableringsgebyr",
+    "setupFeeHint": "Engangsgebyr da lånet ble tatt opp. Ta med tinglysingsgebyret hvis banken regner det inn i effektiv rente.",
+    "bankEffective": "Effektiv rente fra banken",
+    "bankEffectiveHint": "Brukes bare til å sjekke at gebyrene stemmer.",
+    "effCalc": "Effektiv rente med disse tallene: <0>{{rate}} %</0>",
+    "effMatch": "Stemmer med banken.",
+    "effHigher": "Banken oppgir {{bank}} %. Forskjellen er som regel gebyrer som mangler, oftest termingebyret.",
+    "effLower": "Banken oppgir lavere, {{bank}} %. Sjekk renten, løpetiden, gebyrene og om lånet har avdragsfri eller rentefri start.",
+    "effSolve": "Finn gebyret per måned som gir {{bank}} %",
+    "effSolved": "Gebyr per måned er satt til {{fee}}.",
+    "effNoSolve": "Ingen gebyr mellom 0 og 10 000 kr gir {{bank}} %. Sjekk de andre tallene.",
+    "effAbout": "Effektiv rente tar med renters rente og alle gebyrer. Selve rentene regnes alltid av den nominelle renten.",
+    "intro": "Avdragsfri eller rentefri start",
+    "introHint": "Vanlig på mange lån, for eksempel de 3 første årene avdragsfritt eller med 0 % rente. Regnes som en del av lånet.",
+    "introKind": "Type startvilkår",
+    "introLength": "Varighet",
+    "introRateHint": "0 % betyr rentefritt.",
+    "introSummaryIo": "{{duration}} avdragsfritt",
+    "introSummaryRate": "{{duration}} med {{rate}} %",
+    "effUnusual": "Det ville krevd et gebyr på {{fee}} per måned, som er uvanlig høyt. Trolig stemmer lånebeløpet, løpetiden, etableringsgebyret eller startvilkårene ikke med det banken regnet på.",
+    "effUseAnyway": "Bruk {{fee}} likevel"
   },
   "extras": {
     "title": "Betal ekstra",
@@ -75,6 +98,8 @@
     "fromMonth": "Fra måned",
     "inMonth": "I måned",
     "toMonth": "Til måned",
+    "month": "Måned",
+    "year": "År",
     "untilPaidOff": "Til lånet er nedbetalt",
     "addMonthly": "Månedlig ekstra",
     "addOneoff": "Engangsbeløp",
@@ -100,7 +125,6 @@
     "rateHint": "Terminbeløpet regnes om for denne renten, og igjen når perioden er over.",
     "zero": "0 %",
     "duration": "{{count}} mnd",
-    "past": "Denne perioden er allerede over og påvirker ikke beregningen. Legg heller inn restgjelden i dag.",
     "add": "Legg til periode",
     "remove": "Fjern periode {{n}}",
     "after": "Etterpå",
@@ -142,7 +166,8 @@
     "interestOnlyNow": "avdragsfritt nå: {{amount}}",
     "extra": "+ {{amount}} ekstra",
     "inclPrincipal": "inkl. hovedstol og gebyrer",
-    "ratePeriods": "{{count}} mnd med annen rente"
+    "ratePeriods": "{{count}} mnd med annen rente",
+    "paidSoFar": "{{amount}} av dette er betalt"
   },
   "charts": {
     "balance": "Restgjeld",
@@ -267,7 +292,9 @@
     "startDate": "Ugyldig dato (1900–2100)",
     "remainingNeedsStart": "Velg startdato først",
     "remainingNegative": "Kan ikke være negativ",
-    "remainingTooHigh": "Kan ikke være større enn lånebeløpet"
+    "remainingTooHigh": "Kan ikke være større enn lånebeløpet",
+    "setupFee": "Kan ikke være negativt eller like stort som lånet",
+    "intro": "Må være kortere enn løpetiden"
   },
   "duration": {
     "years_one": "{{count}} år",
@@ -305,5 +332,10 @@
   },
   "mobileBar": {
     "show": "Vis resultater"
+  },
+  "timing": {
+    "needsStart": "Dette er før i dag. Legg inn lånets startdato for å ta det med i historikken.",
+    "outside": "Dette ligger utenfor lånets løpetid og påvirker ikke beregningen.",
+    "pinnedPast": "Delen før i dag endrer historikken og rentene betalt så langt. Restgjelden i dag er fortsatt den du la inn."
   }
 }

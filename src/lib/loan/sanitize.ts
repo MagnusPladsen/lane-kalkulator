@@ -1,6 +1,6 @@
 import { uid } from "../ids"
 import { addMonths, isValidIsoDate, isValidYearMonth, monthsElapsed, todayIso, yearMonthOf } from "./engine"
-import type { AfterInterestOnly, CustomPeriod, ExtraPayment, LoanType, Scenario } from "./types"
+import type { AfterInterestOnly, CalendarExtra, CustomPeriod, LoanIntro, LoanType, Scenario } from "./types"
 
 const MAX_LIST = 50
 const MAX_NAME = 80
@@ -28,19 +28,43 @@ function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v)
 }
 
-function sanitizeExtra(v: unknown): ExtraPayment | undefined {
+/**
+ * Extra payments in the current calendar format, or the older "month N from today"
+ * format, which is pinned to the calendar month it meant on the day it is read.
+ */
+function sanitizeExtra(v: unknown, anchor: string, offset: number): CalendarExtra | undefined {
   if (!isRecord(v)) return undefined
-  const kind: ExtraPayment["kind"] = v.kind === "oneoff" ? "oneoff" : "recurring"
+  const kind: CalendarExtra["kind"] = v.kind === "oneoff" ? "oneoff" : "recurring"
   const amount = optNum(v.amount, 0, 1_000_000_000)
+  if (amount === undefined) return undefined
+  const id = str(v.id, "", 64) || uid()
+
+  if (isValidYearMonth(v.from)) {
+    const to = kind === "recurring" && isValidYearMonth(v.to) ? (v.to < v.from ? v.from : v.to) : undefined
+    return { id, kind, amount, from: v.from, to }
+  }
+
   const fromMonth = optNum(v.fromMonth, 1, MAX_MONTH)
-  if (amount === undefined || fromMonth === undefined) return undefined
+  if (fromMonth === undefined) return undefined
+  const from = yearMonthOf(addMonths(anchor, offset + Math.round(fromMonth)))
+  if (!isValidYearMonth(from)) return undefined
   const toMonth = kind === "recurring" ? optNum(v.toMonth, 1, MAX_MONTH) : undefined
+  let to: string | undefined
+  if (toMonth !== undefined) {
+    const t = yearMonthOf(addMonths(anchor, offset + Math.max(Math.round(fromMonth), Math.round(toMonth))))
+    to = isValidYearMonth(t) ? t : LAST_MONTH
+  }
+  return { id, kind, amount, from, to }
+}
+
+function sanitizeIntro(v: unknown): LoanIntro | undefined {
+  if (!isRecord(v)) return undefined
+  const months = optNum(v.months, 1, 480)
+  if (months === undefined) return undefined
   return {
-    id: str(v.id, "", 64) || uid(),
-    kind,
-    amount,
-    fromMonth: Math.round(fromMonth),
-    toMonth: toMonth === undefined ? undefined : Math.max(Math.round(fromMonth), Math.round(toMonth)),
+    kind: v.kind === "rate" ? "rate" : "interest-only",
+    months: Math.round(months),
+    annualRatePct: num(v.annualRatePct, 0, 0, 100),
   }
 }
 
@@ -134,8 +158,13 @@ export function sanitizeScenario(raw: unknown, today: string = todayIso()): Scen
       monthlyFee: num(l.monthlyFee, 0, 0, 100_000),
       startDate,
       remainingBalance,
+      setupFee: optNum(l.setupFee, 0, Math.min(1_000_000, principal)),
+      effectiveRatePct: optNum(l.effectiveRatePct, 0, 100),
+      intro: sanitizeIntro(l.intro),
     },
-    extras: list(raw.extras, sanitizeExtra),
+    extras: list(raw.extras, (v) =>
+      sanitizeExtra(v, startDate ?? today, monthsElapsed(startDate, today)),
+    ),
     periods: Array.isArray(raw.periods)
       ? list(raw.periods, sanitizeCustomPeriod)
       : migrateLegacyPeriods(raw, startDate, today),

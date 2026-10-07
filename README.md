@@ -45,11 +45,15 @@ bun run lint
 | `src/components/` | Form panels, verdict, stat tiles, charts, schedule table, dialogs. |
 | `docs/superpowers/specs/` | Design spec. |
 
-## Engine notes
+## How the numbers are calculated
 
-- Extra payments are counted from "now" (month 1 = next payment).
-- Custom periods are stored as calendar months (`YYYY-MM`, inclusive) so a saved loan keeps its dates as time passes. A period that has already ended has no effect; one that started in the past counts from the next payment. Older saves with relative months are converted on load.
-- A rate period re-prices an annuity over the months left when it starts, and again when it ends.
-- With a start date, the forward projection starts at the balance after the elapsed months, or at the remaining balance you type in.
-- Interest-only months: principal 0, payment = interest + fee. Afterwards either the payment is recomputed to hold the end date (`keep-term`) or kept, extending the loan (`keep-payment`).
-- Estimates only. Banks round, charge differently, and change rates. Treat the numbers as a good approximation, not a quote.
+- **Interest** each month is the balance times the nominal rate / 12. Banks usually accrue per actual day, so a single month can differ by a few percent from a bank statement, while yearly totals match closely.
+- **Annuity** payments use the standard formula. Whenever the payment is re-priced (a rate change, or the end of an interest-only pause that keeps the end date) it is spread over the months left to the plan's *current* end date. That end moves earlier when extra payments shorten the loan and later for each pause month that keeps the payment. **Serial** loans repay a fixed principal; rate changes only change the interest.
+- **Monthly fee** (termingebyr) is added to every payment, pauses included. The **setup fee** (etableringsgebyr) counts once, at the start.
+- **Extra payments** go straight to principal and keep the regular payment, so the loan ends sooner.
+- **Start terms** on the loan itself (for example the first 3 years interest-only or at 0 %) are part of the loan, so they are in both the plan and the comparison. An interest-only start keeps the end date afterwards.
+- **Dates.** Payment *k* is due *k* months after the start date. Extra payments and custom periods are stored as calendar months (`YYYY-MM`). With a start date the whole loan is simulated from the first payment, so items before today shape the history and today's balance. If you type in today's remaining balance, that balance wins: both plans continue from it, and items before today only change the history and the interest paid so far. Older saves with "month N from today" are converted on load.
+- **Totals** cover the whole loan: history, the rest of the plan and the setup fee.
+- **Effective rate** follows the Norwegian/EU definition: the monthly rate *m* where all payments (fees included), discounted at *m*, equal the amount paid out (loan minus setup fee); annual rate = (1 + *m*)¹² − 1. It assumes today's nominal rate for the whole term, after any start terms. Enter the bank's effective rate to check your fees; the app can solve for the monthly fee that matches it.
+- The engine is checked against closed-form formulas in the tests and was cross-checked against an independent Python implementation over 18 000+ random loans.
+- Estimates only. Banks round, accrue daily and change rates. Treat the numbers as a close approximation, not a quote.

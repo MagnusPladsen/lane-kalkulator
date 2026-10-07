@@ -41,7 +41,7 @@
     "name": "Name",
     "namePlaceholder": "My mortgage",
     "amount": "Loan amount",
-    "rate": "Interest rate",
+    "rate": "Nominal rate",
     "ratePa": "% p.a.",
     "fee": "Fee per month",
     "term": "Term",
@@ -61,8 +61,31 @@
     "estimateSerial": "Roughly <0>{{amount}}</0> per month at the start.",
     "summary": "{{amount}} · {{rate}} % · {{term}}",
     "more": "More details",
-    "moreHint": "start date, balance, fee, name",
-    "editLoan": "Edit the loan"
+    "moreHint": "start date, balance, fees, effective rate, name",
+    "editLoan": "Edit the loan",
+    "rateHint": "The floating (nominal) rate, not the effective rate.",
+    "feeHint": "The fee on each bill (termingebyr). On your invoice or loan agreement, often 0–75 kr.",
+    "setupFee": "Setup fee",
+    "setupFeeHint": "One-off fee when the loan was taken out. Include the registration fee (tinglysingsgebyr) if the bank counts it in the effective rate.",
+    "bankEffective": "Effective rate from the bank",
+    "bankEffectiveHint": "Only used to check that the fees add up.",
+    "effCalc": "Effective rate with these numbers: <0>{{rate}} %</0>",
+    "effMatch": "Matches the bank.",
+    "effHigher": "The bank says {{bank}} %. The gap is usually fees that are missing, most often the monthly fee.",
+    "effLower": "The bank says a lower {{bank}} %. Check the rate, the term, the fees, and whether the loan starts interest-only or interest-free.",
+    "effSolve": "Find the monthly fee that gives {{bank}} %",
+    "effSolved": "Monthly fee set to {{fee}}.",
+    "effNoSolve": "No fee between 0 and 10 000 kr gives {{bank}} %. Check the other numbers.",
+    "effAbout": "The effective rate includes monthly compounding and all fees. Interest itself is always charged at the nominal rate.",
+    "intro": "Interest-only or interest-free start",
+    "introHint": "Common on many loans, for example the first 3 years interest-only or at 0 %. Counted as part of the loan.",
+    "introKind": "Type of start terms",
+    "introLength": "Length",
+    "introRateHint": "0 % means interest-free.",
+    "introSummaryIo": "{{duration}} interest-only",
+    "introSummaryRate": "{{duration}} at {{rate}} %",
+    "effUnusual": "That would take a monthly fee of {{fee}}, which is unusually high. The amount, term, setup fee or start terms probably differ from what the bank used.",
+    "effUseAnyway": "Use {{fee}} anyway"
   },
   "extras": {
     "title": "Pay extra",
@@ -75,6 +98,8 @@
     "fromMonth": "From month",
     "inMonth": "In month",
     "toMonth": "To month",
+    "month": "Month",
+    "year": "Year",
     "untilPaidOff": "Until paid off",
     "addMonthly": "Monthly extra",
     "addOneoff": "One-off",
@@ -100,7 +125,6 @@
     "rateHint": "The payment is recalculated for this rate, and again when the period ends.",
     "zero": "0 %",
     "duration": "{{count}} mo",
-    "past": "This period is already over, so it has no effect here. Enter today's remaining balance instead.",
     "add": "Add period",
     "remove": "Remove period {{n}}",
     "after": "Afterwards",
@@ -142,7 +166,8 @@
     "risesTo": "rises to {{amount}}",
     "interestOnlyNow": "interest-only now: {{amount}}",
     "extra": "+ {{amount}} extra",
-    "inclPrincipal": "incl. principal and fees"
+    "inclPrincipal": "incl. principal and fees",
+    "paidSoFar": "{{amount}} of it already paid"
   },
   "charts": {
     "balance": "Balance",
@@ -267,7 +292,9 @@
     "startDate": "Invalid date (1900–2100)",
     "remainingNeedsStart": "Set a start date first",
     "remainingNegative": "Cannot be negative",
-    "remainingTooHigh": "Cannot exceed the loan amount"
+    "remainingTooHigh": "Cannot exceed the loan amount",
+    "setupFee": "Cannot be negative or as large as the loan",
+    "intro": "Must be shorter than the term"
   },
   "duration": {
     "years_one": "{{count}} yr",
@@ -305,5 +332,10 @@
   },
   "mobileBar": {
     "show": "Show results"
+  },
+  "timing": {
+    "needsStart": "This is before today. Add the loan's start date to include it in the history.",
+    "outside": "This is outside the loan's lifetime, so it has no effect.",
+    "pinnedPast": "The part before today changes the history and the interest paid so far. Today's balance is still the one you entered."
   }
 }

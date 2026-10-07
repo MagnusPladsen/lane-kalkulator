@@ -45,9 +45,15 @@ export function WhatIfCard({
     { id: "goal", label: t("whatif.goal"), icon: CalendarCheckIcon },
     { id: "periods", label: t("whatif.periods"), icon: CalendarRangeIcon },
   ]
-  const anchor = scenario.loan.startDate ?? today
-  const offset = analysis?.offsetMonths ?? 0
-  const minYear = Number(today.slice(0, 4))
+  const startDate = scenario.loan.startDate
+  const timing = {
+    startDate,
+    anchor: startDate ?? today,
+    offset: analysis?.offsetMonths ?? 0,
+    pinned: analysis?.balancePinned ?? false,
+  }
+  // With a start date, past months are allowed: they shape the loan's history.
+  const minYear = Number((startDate ?? today).slice(0, 4))
   const maxYear = Math.min(2100, Number(monthDate(maxMonth).slice(0, 4)))
 
   return (
@@ -86,9 +92,10 @@ export function WhatIfCard({
           <TabsContent value="extras" className="pt-4">
             <ExtrasTool
               extras={scenario.extras}
-              monthDate={monthDate}
-              maxMonth={maxMonth}
-              onAdd={(kind) => dispatch({ type: "extra/add", kind })}
+              timing={timing}
+              minYear={minYear}
+              maxYear={maxYear}
+              onAdd={(kind) => dispatch({ type: "extra/add", kind, from: yearMonthOf(monthDate(1)) })}
               onUpdate={(id, patch) => dispatch({ type: "extra/update", id, patch })}
               onRemove={(id) => dispatch({ type: "extra/remove", id })}
             />
@@ -100,7 +107,7 @@ export function WhatIfCard({
                 analysis={analysis}
                 today={today}
                 monthDate={monthDate}
-                onApply={(amount) => dispatch({ type: "extra/addAmount", amount })}
+                onApply={(amount) => dispatch({ type: "extra/addAmount", amount, from: yearMonthOf(monthDate(1)) })}
               />
             ) : (
               <p className="text-sm text-muted-foreground">
@@ -112,8 +119,7 @@ export function WhatIfCard({
             <PeriodsTool
               periods={scenario.periods}
               after={scenario.afterInterestOnly}
-              anchor={anchor}
-              offset={offset}
+              timing={timing}
               minYear={minYear}
               maxYear={maxYear}
               onAdd={() =>

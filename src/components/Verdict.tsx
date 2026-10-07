@@ -32,7 +32,7 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
               i18nKey="verdict.planSoFar"
               values={{
                 duration: fmtDuration(a.baseline.months, t),
-                amount: fmtMoney(a.baseline.totalInterest + a.baseline.totalFees),
+                amount: fmtMoney(a.lifetime.baseline.interest + a.lifetime.baseline.fees),
               }}
               components={[<span key="0" className="font-mono tabular-nums" />]}
             />
@@ -42,7 +42,7 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
     }
 
     const { interest } = a.delta
-    const feeDelta = a.scenario.totalFees - a.baseline.totalFees
+    const feeDelta = a.lifetime.scenario.fees - a.lifetime.baseline.fees
     const sub =
       Math.abs(interest) < 1
         ? t("verdict.sameInterest")

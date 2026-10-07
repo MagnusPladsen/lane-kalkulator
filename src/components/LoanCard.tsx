@@ -8,6 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Field, FieldInput, MoneyInput, NumberInput, SectionTitle, Segmented, FieldGroup } from "@/components/fields"
 import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
 import type { LoanInput } from "@/lib/loan/types"
+import { EffectiveRateCheck, IntroTerms } from "@/components/LoanExtras"
 import type { LoanValidation } from "@/lib/scenarioReducer"
 
 export function LoanCard({
@@ -30,7 +31,14 @@ export function LoanCard({
 }) {
   const { t } = useTranslation()
   const err = (k: keyof LoanInput) => (errors[k] ? t(`validation.${errors[k]}`) : undefined)
-  const hasDetails = !!(loan.startDate || loan.remainingBalance !== undefined || loan.monthlyFee || loan.name)
+  const hasDetails = !!(
+    loan.startDate ||
+    loan.remainingBalance !== undefined ||
+    loan.monthlyFee ||
+    loan.setupFee ||
+    loan.effectiveRatePct !== undefined ||
+    loan.name
+  )
   const [detailsOpen, setDetailsOpen] = useState(hasDetails || !!errors.startDate || !!errors.remainingBalance)
 
   const summary = t("loan.summary", {
@@ -44,6 +52,11 @@ export function LoanCard({
       loan.loanType === "annuity" ? t("loan.annuity") : t("loan.serial"),
       loan.startDate ? `${t("loan.startDate")} ${fmtMonthYear(loan.startDate)}` : undefined,
       loan.remainingBalance !== undefined ? `${t("loan.remaining")} ${fmtMoney(loan.remainingBalance)}` : undefined,
+      loan.intro
+        ? loan.intro.kind === "interest-only"
+          ? t("loan.introSummaryIo", { duration: fmtDuration(loan.intro.months, t) })
+          : t("loan.introSummaryRate", { duration: fmtDuration(loan.intro.months, t), rate: fmtRate(loan.intro.annualRatePct) })
+        : undefined,
       loan.monthlyFee ? `${t("loan.fee")} ${fmtMoney(loan.monthlyFee)}` : undefined,
     ].filter(Boolean)
     return (
@@ -77,7 +90,7 @@ export function LoanCard({
         </Field>
 
         <div className="grid grid-cols-2 gap-3">
-          <Field label={t("loan.rate")} error={err("annualRatePct")}>
+          <Field label={t("loan.rate")} hint={t("loan.rateHint")} error={err("annualRatePct")}>
             <NumberInput
               value={loan.annualRatePct}
               onChange={(v) => onChange({ annualRatePct: v })}
@@ -116,6 +129,8 @@ export function LoanCard({
             ]}
           />
         </Field>
+
+        <IntroTerms loan={loan} error={err("intro")} onChange={onChange} />
 
         <Collapsible open={detailsOpen} onOpenChange={setDetailsOpen}>
           <CollapsibleTrigger
@@ -164,8 +179,31 @@ export function LoanCard({
               </Field>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <Field label={t("loan.fee")} error={err("monthlyFee")}>
+              <Field label={t("loan.fee")} hint={t("loan.feeHint")} error={err("monthlyFee")}>
                 <MoneyInput value={loan.monthlyFee} onChange={(v) => onChange({ monthlyFee: v ?? 0 })} />
+              </Field>
+              <Field
+                label={t("loan.setupFee")}
+                optional
+                optionalLabel={t("steps.optional")}
+                hint={t("loan.setupFeeHint")}
+                error={err("setupFee")}
+              >
+                <MoneyInput value={loan.setupFee} allowEmpty onChange={(v) => onChange({ setupFee: v })} />
+              </Field>
+              <Field
+                label={t("loan.bankEffective")}
+                optional
+                optionalLabel={t("steps.optional")}
+                hint={t("loan.bankEffectiveHint")}
+                error={err("effectiveRatePct")}
+              >
+                <NumberInput
+                  value={loan.effectiveRatePct}
+                  onChange={(v) => onChange({ effectiveRatePct: v })}
+                  onClear={() => onChange({ effectiveRatePct: undefined })}
+                  suffix="%"
+                />
               </Field>
               <Field label={t("loan.name")} optional optionalLabel={t("steps.optional")}>
                 <FieldInput
@@ -177,6 +215,7 @@ export function LoanCard({
                 />
               </Field>
             </div>
+            <EffectiveRateCheck loan={loan} valid={valid} onChange={onChange} />
           </CollapsibleContent>
         </Collapsible>
 

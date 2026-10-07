@@ -154,7 +154,7 @@ export function LoansPage({
                               : t("tiles.in", { duration: fmtDuration(a.scenario.months, t) })
                         }
                       />
-                      <Row k={t("loans.totalInterest")} v={fmtMoney(a.scenario.totalInterest)} />
+                      <Row k={t("loans.totalInterest")} v={fmtMoney(a.lifetime.scenario.interest)} />
                       <Row
                         k={t("loans.changes")}
                         v={

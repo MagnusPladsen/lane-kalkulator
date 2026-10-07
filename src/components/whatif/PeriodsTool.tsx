@@ -1,18 +1,19 @@
 import { useTranslation } from "react-i18next"
-import { PlusIcon, TriangleAlertIcon } from "lucide-react"
+import { PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Field, MonthPicker, NumberInput, Segmented } from "@/components/fields"
-import { periodToMonths } from "@/lib/loan/engine"
+import { monthSpan, periodToMonths } from "@/lib/loan/engine"
 import type { AfterInterestOnly, CustomPeriod, PeriodKind } from "@/lib/loan/types"
 import { EmptyHint, ItemBox } from "./shared"
+import { timingOf, type TimingContext } from "./timing"
+import { TimingHint } from "./TimingHint"
 
 export function PeriodsTool({
   periods,
   after,
-  anchor,
-  offset,
+  timing,
   minYear,
   maxYear,
   onAdd,
@@ -22,10 +23,7 @@ export function PeriodsTool({
 }: {
   periods: CustomPeriod[]
   after: AfterInterestOnly
-  /** Loan start date, or today when unknown. */
-  anchor: string
-  /** Payments already made. */
-  offset: number
+  timing: TimingContext
   minYear: number
   maxYear: number
   onAdd: () => void
@@ -46,7 +44,7 @@ export function PeriodsTool({
       {periods.length === 0 && <EmptyHint>{t("periods.empty")}</EmptyHint>}
 
       {periods.map((p, i) => {
-        const span = periodToMonths(p, anchor, offset)
+        const when = timingOf(p.from, (a, o) => periodToMonths(p, a, o), timing)
         return (
           <ItemBox
             key={p.id}
@@ -104,14 +102,8 @@ export function PeriodsTool({
               </div>
             )}
 
-            {span ? (
-              <p className="text-xs text-muted-foreground">{t("periods.duration", { count: span.months })}</p>
-            ) : (
-              <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
-                <TriangleAlertIcon className="mt-px size-3.5 shrink-0" aria-hidden />
-                {t("periods.past")}
-              </p>
-            )}
+            <p className="text-xs text-muted-foreground">{t("periods.duration", { count: monthSpan(p.from, p.to) })}</p>
+            <TimingHint timing={when} />
           </ItemBox>
         )
       })}

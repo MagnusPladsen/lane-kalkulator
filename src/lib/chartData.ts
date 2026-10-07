@@ -31,14 +31,19 @@ export type DateForIndex = (i: number) => string
 export function balanceSeries(a: Analysis, dateFor: DateForIndex, principal: number): BalancePoint[] {
   const off = a.offsetMonths
   const len = off + Math.max(a.baseline.months, a.scenario.months) + 1
+  // When changes before today moved the history, draw the unchanged plan's history too.
+  const historyDiffers = a.pastRows.some((r, k) => Math.abs(r.balance - (a.baselinePastRows[k]?.balance ?? 0)) > 0.5)
   const out: BalancePoint[] = []
   for (let i = 0; i < len; i++) {
     const p: BalancePoint = { i, date: dateFor(i) }
-    if (off > 0 && i <= off) p.history = i === 0 ? principal : a.pastRows[i - 1]?.balance
+    if (off > 0 && i <= off) {
+      p.history = i === 0 ? principal : (a.pastRows[i - 1]?.balance ?? 0)
+      if (historyDiffers) p.baseline = i === 0 ? principal : (a.baselinePastRows[i - 1]?.balance ?? 0)
+    }
     if (i >= off) {
       const m = i - off
       if (m === 0) {
-        p.baseline = a.startingBalance
+        p.baseline = a.baselineStartingBalance
         p.scenario = a.startingBalance
       } else {
         const b = a.baseline.rows[m - 1]
@@ -55,17 +60,20 @@ export function balanceSeries(a: Analysis, dateFor: DateForIndex, principal: num
 export function cumulativeSeries(a: Analysis, dateFor: DateForIndex): CumPoint[] {
   const off = a.offsetMonths
   const len = Math.max(a.baseline.months, a.scenario.months) + 1
+  // Start each line at what was already paid in interest and fees (history + setup fee).
+  const startB = a.lifetime.baseline.interest + a.lifetime.baseline.fees - a.baseline.totalInterest - a.baseline.totalFees
+  const startS = a.lifetime.scenario.interest + a.lifetime.scenario.fees - a.scenario.totalInterest - a.scenario.totalFees
   const out: CumPoint[] = []
   for (let m = 0; m < len; m++) {
     const p: CumPoint = { i: off + m, date: dateFor(off + m) }
     if (m === 0) {
-      p.baseline = 0
-      p.scenario = 0
+      p.baseline = startB
+      p.scenario = startS
     } else {
       const b = a.baseline.rows[m - 1]
       const s = a.scenario.rows[m - 1]
-      if (b) p.baseline = b.cumInterest + b.fee * m
-      if (s) p.scenario = s.cumInterest + s.fee * m
+      if (b) p.baseline = startB + b.cumInterest + b.fee * m
+      if (s) p.scenario = startS + s.cumInterest + s.fee * m
     }
     out.push(p)
   }
