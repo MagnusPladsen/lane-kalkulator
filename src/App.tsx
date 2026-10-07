@@ -19,11 +19,12 @@ const SHARE_PREFIX = "#/share/"
 type Reason = "share" | "new" | "open"
 
 /** Pulls a shared scenario out of the URL and strips the hash so a reload doesn't re-apply it. */
-function takeSharedFromHash(): Scenario | undefined {
+/** Undefined: no share link in the URL. Null: a share link that could not be read. */
+function takeSharedFromHash(): Scenario | null | undefined {
   if (!location.hash.startsWith(SHARE_PREFIX)) return undefined
   const shared = decodeShare(location.hash.slice(SHARE_PREFIX.length))
   history.replaceState(null, "", location.pathname + "#/")
-  return shared
+  return shared ?? null
 }
 
 const sameContent = (a: Scenario, b: Scenario) =>
@@ -38,6 +39,7 @@ export default function App() {
   const [saveOpen, setSaveOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [fallbackUrl, setFallbackUrl] = useState<string | null>(null)
+  const [shareFailed, setShareFailed] = useState(false)
   const [storageOk] = useState(storageAvailable)
   /** A replacement waiting for the user to confirm losing unsaved work. */
   const [pending, setPending] = useState<{ scenario: Scenario; reason: Reason } | null>(null)
@@ -68,6 +70,7 @@ export default function App() {
     const handle = () => {
       const shared = takeSharedFromHash()
       if (shared) onSharedLink(shared)
+      else if (shared === null) setShareFailed(true)
     }
     handle()
     window.addEventListener("hashchange", handle)
@@ -122,6 +125,14 @@ export default function App() {
         <p role="alert" className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t("storage.off")}
         </p>
+      )}
+      {shareFailed && (
+        <div role="alert" className="mb-4 flex items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p className="flex-1">{t("share.failed")}</p>
+          <Button variant="ghost" size="sm" onClick={() => setShareFailed(false)}>
+            {t("share.dismiss")}
+          </Button>
+        </div>
       )}
       {saved.writeFailed && (
         <p role="alert" className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">

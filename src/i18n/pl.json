@@ -350,5 +350,9 @@
     "needsStart": "To jest przed dzisiejszą datą. Dodaj datę rozpoczęcia kredytu, aby uwzględnić to w historii.",
     "outside": "To jest poza okresem kredytu i nie wpływa na wyliczenia.",
     "pinnedPast": "Część przed dzisiaj zmienia historię i dotychczas zapłacone odsetki. Dzisiejsze saldo to nadal kwota, którą wpisano."
+  },
+  "share": {
+    "failed": "Nie udało się odczytać linku. Prawdopodobnie został ucięty lub zmieniony podczas kopiowania. Skopiuj cały link jeszcze raz.",
+    "dismiss": "Zamknij"
   }
 }

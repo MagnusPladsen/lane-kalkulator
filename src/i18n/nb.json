@@ -342,5 +342,9 @@
     "needsStart": "Dette er før i dag. Legg inn lånets startdato for å ta det med i historikken.",
     "outside": "Dette ligger utenfor lånets løpetid og påvirker ikke beregningen.",
     "pinnedPast": "Delen før i dag endrer historikken og rentene betalt så langt. Restgjelden i dag er fortsatt den du la inn."
+  },
+  "share": {
+    "failed": "Delingslenken kunne ikke leses. Den ble trolig kuttet eller endret da den ble kopiert. Prøv å kopiere hele lenken på nytt.",
+    "dismiss": "Lukk"
   }
 }

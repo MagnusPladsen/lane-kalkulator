@@ -24,7 +24,15 @@ export function encodeShare(s: Scenario): string {
 /** Decodes a share hash. Hostile or malformed input yields undefined, never a throw. */
 export function decodeShare(hash: string): Scenario | undefined {
   try {
-    const s = sanitizeScenario(JSON.parse(fromBase64Url(hash)))
+    // Copying a long link out of a terminal or chat can add spaces, line breaks or %20s.
+    let code = hash
+    try {
+      code = decodeURIComponent(code)
+    } catch {
+      /* keep as is */
+    }
+    code = code.replace(/\s+/g, "")
+    const s = sanitizeScenario(JSON.parse(fromBase64Url(code)))
     if (!s) return undefined
     // A shared link is a new loan for the receiver, never an update of one of theirs.
     return { ...s, id: uid(), savedAt: new Date().toISOString() }

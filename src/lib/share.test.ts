@@ -33,3 +33,26 @@ describe("share", () => {
     expect(() => parseImport("null")).toThrow(/export/i)
   })
 })
+
+describe("share links copied badly", () => {
+  it("survives spaces, line breaks and %20 inserted by copying", () => {
+    const s = newScenario()
+    s.loan.name = "Startlån – Eksempel kommune"
+    s.loan.termMonths = 514
+    const code = encodeShare(s)
+    const mangled = [
+      code.slice(0, 40) + " " + code.slice(40, 90) + "\n" + code.slice(90),
+      code.slice(0, 50) + "%20" + code.slice(50),
+      "  " + code + "\n",
+    ]
+    for (const m of mangled) {
+      const d = decodeShare(m)
+      expect(d?.loan.name).toBe(s.loan.name)
+      expect(d?.loan.termMonths).toBe(514)
+    }
+  })
+  it("a truncated link is rejected, not half-loaded", () => {
+    const code = encodeShare(newScenario())
+    expect(decodeShare(code.slice(0, code.length - 30))).toBeUndefined()
+  })
+})
