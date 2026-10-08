@@ -7,7 +7,8 @@
   "nav": {
     "calculator": "Kalkulator",
     "loans": "Mine lån",
-    "label": "Sider"
+    "label": "Sider",
+    "compare": "Sammenlign"
   },
   "actions": {
     "share": "Del",
@@ -417,5 +418,35 @@
     "stressHint": "Velg hvor mange prosentpoeng, så ser du hva det betyr for deg.",
     "stressResult": "Ved {{rate}} % blir terminbeløpet {{payment}}, {{delta}} mer i måneden. Lånet koster {{cost}} mer totalt.",
     "stressAdd": "Legg til som periode"
+  },
+  "compare": {
+    "title": "Sammenlign",
+    "desc": "Sammenlign to lånetilbud, eller sjekk om det lønner seg å bytte bank.",
+    "tabOffers": "To tilbud",
+    "tabSwitch": "Bytte bank?",
+    "offerA": "Tilbud A",
+    "offerB": "Tilbud B",
+    "bank": "Bank eller navn",
+    "fees": "Gebyrer totalt",
+    "verdict": "{{name}} er {{total}} billigere totalt, og {{monthly}} lavere i måneden i starten.",
+    "same": "Tilbudene koster det samme totalt.",
+    "use": "Åpne {{name}} i kalkulatoren",
+    "reset": "Hent fra kalkulatoren",
+    "today": "Lånet ditt i dag",
+    "todayDesc": "Fra kalkulatoren. Endre lånet der for å oppdatere.",
+    "left": "Gjenstår",
+    "newOffer": "Nytt tilbud",
+    "switchCost": "Kostnad ved å bytte",
+    "switchCostHelp": "Etableringsgebyr i den nye banken pluss tinglysingsgebyr, og eventuelt gebyr for å innfri lånet i dag. Ofte 1 500–4 000 kr.",
+    "newTerm": "Ny nedbetalingstid",
+    "newTermHint": "Samme som i dag: {{term}}. Lengre tid gir lavere terminbeløp, men koster ofte mer totalt.",
+    "switchYes": "Å bytte sparer deg {{total}} totalt. Byttekostnaden er tjent inn etter {{months}} måneder ({{date}}).",
+    "switchNo": "Å bytte lønner seg ikke: det koster {{total}} mer totalt.",
+    "paymentNow": "Terminbeløp i dag",
+    "paymentNew": "Nytt terminbeløp",
+    "perMonth": "Per måned",
+    "useNew": "Åpne det nye lånet i kalkulatoren",
+    "moved": "flyttet",
+    "needLoan": "Fyll ut lånet ditt i kalkulatoren først, så kan du sjekke om det lønner seg å bytte."
   }
 }

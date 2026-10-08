@@ -7,7 +7,8 @@
   "nav": {
     "calculator": "Calculator",
     "loans": "My loans",
-    "label": "Pages"
+    "label": "Pages",
+    "compare": "Compare"
   },
   "actions": {
     "share": "Share",
@@ -417,5 +418,35 @@
     "stressHint": "Pick how many percentage points to see what it means for you.",
     "stressResult": "At {{rate}} % the payment becomes {{payment}}, {{delta}} more a month. The loan costs {{cost}} more in total.",
     "stressAdd": "Add as a period"
+  },
+  "compare": {
+    "title": "Compare",
+    "desc": "Compare two loan offers, or check whether moving your loan to another bank pays off.",
+    "tabOffers": "Two offers",
+    "tabSwitch": "Switch bank?",
+    "offerA": "Offer A",
+    "offerB": "Offer B",
+    "bank": "Bank or name",
+    "fees": "Total fees",
+    "verdict": "{{name}} is {{total}} cheaper in total, and {{monthly}} less a month at first.",
+    "same": "The offers cost the same in total.",
+    "use": "Open {{name}} in the calculator",
+    "reset": "Take from the calculator",
+    "today": "Your loan today",
+    "todayDesc": "From the calculator. Change the loan there to update.",
+    "left": "Left",
+    "newOffer": "New offer",
+    "switchCost": "Cost of switching",
+    "switchCostHelp": "The new bank's setup fee plus the registration fee (tinglysing), and any fee for paying off the current loan. Often 1 500–4 000 kr.",
+    "newTerm": "New term",
+    "newTermHint": "Same as today: {{term}}. A longer term lowers the payment but often costs more overall.",
+    "switchYes": "Switching saves you {{total}} in total. The switching cost is earned back after {{months}} months ({{date}}).",
+    "switchNo": "Switching doesn't pay off: it costs {{total}} more in total.",
+    "paymentNow": "Payment today",
+    "paymentNew": "New payment",
+    "perMonth": "Per month",
+    "useNew": "Open the new loan in the calculator",
+    "moved": "moved",
+    "needLoan": "Fill in your loan in the calculator first, then you can check whether switching pays off."
   }
 }

@@ -8,6 +8,7 @@ import { SaveDialog } from "@/components/SaveDialog"
 import { ShareFallbackDialog } from "@/components/ShareFallbackDialog"
 import { CalculatorPage } from "@/pages/CalculatorPage"
 import { LoansPage } from "@/pages/LoansPage"
+import { ComparePage } from "@/pages/ComparePage"
 import { go, useHashRoute } from "@/hooks/useHashRoute"
 import { isPristine, loadDraft, newScenario, saveDraft, storageAvailable, useSavedScenarios, useTheme } from "@/lib/storage"
 import { decodeShare, shareUrl } from "@/lib/share"
@@ -145,6 +146,11 @@ export default function App() {
 
       {route === "calc" ? (
         <CalculatorPage key={scenario.id} scenario={scenario} dispatch={dispatch} />
+      ) : route === "compare" ? (
+        <ComparePage
+          scenario={scenario}
+          onUseLoan={(loan) => requestReplace({ ...newScenario(), loan: { ...newScenario().loan, ...loan } }, "new")}
+        />
       ) : (
         <LoansPage
           items={saved.items}
