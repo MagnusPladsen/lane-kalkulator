@@ -239,7 +239,7 @@
     "export": "Export all",
     "deleteAll": "Delete all",
     "privacyTitle": "Private by design",
-    "privacyBody": "Nothing you type about your loans is collected or sent anywhere. Loans are stored only in this browser's local storage. We only count anonymous visits, without cookies and without any loan data. Clearing site data removes your loans, so use <0>Export</0> to keep a backup or move between devices.",
+    "privacyBody": "Your loans are stored only in this browser's local storage, and we only count anonymous visits without cookies. The AI help is optional: if you use it, your question and loan figures (never the name) are sent to OpenAI. Clearing site data removes your loans, so use <0>Export</0> to keep a backup or move between devices.",
     "emptyHint": "Save a loan from the calculator and it shows up here.",
     "saved": "Saved {{date}}",
     "open": "Open",
@@ -273,7 +273,7 @@
     "imported_other": "{{count}} loans imported."
   },
   "footer": {
-    "privacy": "Your loans are stored only in this browser and never sent anywhere. We only count anonymous visits, without cookies.",
+    "privacy": "Your loans are stored only in this browser. We count anonymous visits without cookies. If you use the AI help, your question and loan figures (not names) are sent to OpenAI.",
     "estimates": "Estimates only. Your bank's numbers are the ones that count."
   },
   "storage": {
@@ -368,7 +368,13 @@
     "derivedRemaining": "From the remaining term",
     "derivedFee": "Worked out: payment minus principal and interest",
     "derivedBalance": "Current loan amount",
-    "derivedName": "From the lender"
+    "derivedName": "From the lender",
+    "pasteLabel": "Or paste text",
+    "pastePlaceholder": "Paste text from the loan agreement, a loan offer or your online bank …",
+    "readText": "Read the text",
+    "readWithAi": "Read with AI",
+    "aiNote": "\"Read with AI\" sends the text to OpenAI. Remove names and account numbers first.",
+    "fromAi": "Read by AI"
   },
   "help": {
     "aria": "What does {{field}} mean?",
@@ -448,5 +454,42 @@
     "useNew": "Open the new loan in the calculator",
     "moved": "moved",
     "needLoan": "Fill in your loan in the calculator first, then you can check whether switching pays off."
+  },
+  "ai": {
+    "short": "AI",
+    "askAbout": "Ask AI about {{field}}",
+    "open": "Ask AI",
+    "title": "Ask about your loan",
+    "privacy": "Your question and loan figures (not the name) are sent to OpenAI to write the answer. Don't type personal details.",
+    "reset": "New chat",
+    "close": "Close",
+    "intro": "Ask about your loan or the form. Answers are worked out with the calculator, and suggestions apply in one click.",
+    "starter1": "I want to be done by 2040. How much extra do I need to pay?",
+    "starter2": "What happens if I pay 1 000 kr extra a month?",
+    "starter3": "Does it pay to switch to a bank with a 0.3 point lower rate?",
+    "starter4": "What is the effective rate, and is mine right?",
+    "apply": "Use in calculator",
+    "applied": "Added",
+    "thinking": "Calculating …",
+    "placeholder": "Ask a question …",
+    "send": "Send",
+    "empty": "I couldn't find an answer to that. Try asking a little differently.",
+    "rateQuestion": "What is a typical {{type}} rate right now?",
+    "explainGap": "Explain with AI",
+    "checkRate": "Check with AI",
+    "error": {
+      "disabled": "AI help isn't switched on.",
+      "rate_limited": "You've used up the AI questions for now. Try again later.",
+      "bad_request": "Something was wrong with the question. Try again.",
+      "upstream": "The AI didn't answer just now. Try again in a moment.",
+      "too_long": "The chat has become too long. Start a new chat."
+    },
+    "q": {
+      "effective": "What is the effective rate, and why does mine match the bank's or not?",
+      "dayCount": "What does the day count mean, and which should I choose?",
+      "remaining": "Where do I find the remaining balance, and what happens if I leave it empty?",
+      "intro": "What's the difference between an interest-only and an interest-free start, and what does it mean for my loan?",
+      "gap": "The effective rate from my numbers doesn't match the bank's. What's missing?"
+    }
   }
 }

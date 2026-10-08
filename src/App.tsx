@@ -15,6 +15,9 @@ import { decodeShare, shareUrl } from "@/lib/share"
 import { scenarioReducer } from "@/lib/scenarioReducer"
 import type { Scenario } from "@/lib/loan/types"
 import { Telemetry } from "@/components/Telemetry"
+import { AiProvider } from "@/components/ai/AiProvider"
+import type { Suggestion } from "@/lib/ai/types"
+import { uid } from "@/lib/ids"
 import { trackUsage } from "@/lib/analytics"
 
 const SHARE_PREFIX = "#/share/"
@@ -107,7 +110,15 @@ export default function App() {
       )
     ) : undefined
 
+  const applySuggestion = (sg: Suggestion) => {
+    if (sg.kind === "extra") dispatch({ type: "extra/insert", extra: { id: uid(), ...sg.extra } })
+    else if (sg.kind === "period") dispatch({ type: "period/add", period: { id: uid(), ...sg.period } })
+    else dispatch({ type: "loan", patch: sg.patch })
+    go("calc")
+  }
+
   return (
+    <AiProvider scenario={scenario} page={route} onApply={applySuggestion}>
     <AppShell
       route={route}
       theme={theme}
@@ -200,5 +211,6 @@ export default function App() {
       <ShareFallbackDialog url={fallbackUrl} onOpenChange={(o) => !o && setFallbackUrl(null)} />
       <Telemetry route={route} />
     </AppShell>
+    </AiProvider>
   )
 }

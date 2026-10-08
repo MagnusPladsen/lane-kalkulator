@@ -121,7 +121,7 @@ export function LoanCard({
               suffix={t("loan.ratePa")}
             />
           </Field>
-          <Field label={t("loan.bankEffective")} help={t("help.effective")} hint={t("loan.bankEffectiveHint")} error={err("effectiveRatePct")}>
+          <Field label={t("loan.bankEffective")} help={t("help.effective")} ai={{ focus: "field:effectiveRatePct", question: t("ai.q.effective") }} hint={t("loan.bankEffectiveHint")} error={err("effectiveRatePct")}>
             <NumberInput
               value={loan.effectiveRatePct}
               onChange={(v) => onChange({ effectiveRatePct: v })}
@@ -201,6 +201,7 @@ export function LoanCard({
               <Field
                 label={t("loan.remaining")}
                 help={t("help.remaining")}
+                ai={{ focus: "field:remainingBalance", question: t("ai.q.remaining") }}
                 optional
                 optionalLabel={t("steps.optional")}
                 error={err("remainingBalance")}
@@ -230,7 +231,7 @@ export function LoanCard({
                 <MoneyInput value={loan.setupFee} allowEmpty onChange={(v) => onChange({ setupFee: v })} />
               </Field>
             </div>
-            <Field label={t("loan.dayCount")} help={t("help.dayCount")} hint={t("loan.dayCountHint")}>
+            <Field label={t("loan.dayCount")} help={t("help.dayCount")} ai={{ focus: "field:dayCount", question: t("ai.q.dayCount") }} hint={t("loan.dayCountHint")}>
               <NativeSelect<DayCount>
                 value={loan.dayCount ?? "30/360"}
                 onChange={(dayCount) => onChange({ dayCount })}

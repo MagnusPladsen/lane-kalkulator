@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react"
 import { HelpTip } from "@/components/HelpTip"
+import { AskAiButton } from "@/components/ai/AskAiButton"
+import { useAi } from "@/components/ai/AiContext"
 import { Trans, useTranslation } from "react-i18next"
 import { CircleCheckIcon, InfoIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -39,6 +41,7 @@ export function IntroTerms({
           <span className="flex items-center gap-1 text-sm font-medium">
             {t("loan.intro")}
             <HelpTip label={t("loan.intro")}>{t("help.intro")}</HelpTip>
+            <AskAiButton focus="field:intro" question={t("ai.q.intro")} label={t("loan.intro")} />
           </span>
           <span className="text-xs text-muted-foreground">{t("loan.introHint")}</span>
         </span>
@@ -136,7 +139,8 @@ export function EffectiveRateCheck({
           </p>
         ) : (
           <>
-            <p className="flex items-start gap-1.5 text-muted-foreground">
+            <p className="flex flex-wrap items-start gap-1.5 text-muted-foreground">
+              <AiExplainGap />
               <InfoIcon className="mt-0.5 size-4 shrink-0" aria-hidden />
               {gap > 0 ? t("loan.effHigher", { bank: fmtRate(bank) }) : t("loan.effLower", { bank: fmtRate(bank) })}
             </p>
@@ -175,5 +179,17 @@ export function EffectiveRateCheck({
       )}
       <p className="text-xs text-muted-foreground">{t("loan.effAbout")}</p>
     </div>
+  )
+}
+
+/** "Explain with AI" next to an effective-rate mismatch. Hidden when AI is off. */
+function AiExplainGap() {
+  const { t } = useTranslation()
+  const ai = useAi()
+  if (!ai.enabled) return null
+  return (
+    <Button variant="outline" size="sm" className="order-last basis-full sm:basis-auto" onClick={() => ai.ask({ focus: "field:effectiveRatePct", question: t("ai.q.gap") })}>
+      {t("ai.explainGap")}
+    </Button>
   )
 }

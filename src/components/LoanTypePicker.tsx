@@ -8,6 +8,8 @@ import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
 import { todayIso } from "@/lib/loan/engine"
 import type { LoanCategory, LoanInput } from "@/lib/loan/types"
 import { fetchMortgageRate, PRESETS, tableRate, type TypicalRate } from "@/lib/rates"
+import { useAi } from "@/components/ai/AiContext"
+import { SparklesIcon } from "lucide-react"
 
 const CATEGORIES: LoanCategory[] = ["mortgage", "startlan", "car", "consumer", "student"]
 
@@ -17,6 +19,7 @@ const CATEGORIES: LoanCategory[] = ["mortgage", "startlan", "car", "consumer", "
  */
 export function LoanTypePicker({ loan, onChange }: { loan: LoanInput; onChange: (patch: Partial<LoanInput>) => void }) {
   const { t } = useTranslation()
+  const ai = useAi()
   const category = loan.category
   // Mortgages: live SSB average. Other types: the hand-maintained table, worked out during render.
   const [ssb, setSsb] = useState<{ rate?: TypicalRate; failed: boolean }>({ failed: false })
@@ -107,6 +110,12 @@ export function LoanTypePicker({ loan, onChange }: { loan: LoanInput; onChange: 
                   {rate.noteKey && <span>· {t(rate.noteKey)}</span>}
                 </p>
               </div>
+              {ai.enabled && (category === "car" || category === "consumer") && (
+                <Button variant="ghost" size="sm" onClick={() => ai.lookupRate(category)}>
+                  <SparklesIcon data-icon="inline-start" />
+                  {t("ai.checkRate")}
+                </Button>
+              )}
               {Math.abs(loan.annualRatePct - rate.ratePct) > 1e-9 && (
                 <Button variant="outline" size="sm" onClick={() => onChange({ annualRatePct: rate.ratePct })}>
                   {t("rates.useRate", { rate: fmtRate(rate.ratePct) })}
