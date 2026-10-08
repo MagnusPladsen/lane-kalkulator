@@ -171,15 +171,27 @@ export async function handleAi(
  * Normalise what the model writes to that subset and drop the rest of markdown.
  */
 export function tidy(text: string): string {
-  return text
+  let bold = 0
+  const out = text
     .replace(/__(.+?)__/g, "**$1**")
     .replace(/^#+\s*/gm, "")
     .replace(/^[ \t]*[*•–][ \t]+/gm, "- ")
     .replace(/`([^`]*)`/g, "$1")
     .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, "$1")
+    .replace(/[ \t]+$/gm, "")
     .replace(/\n{3,}/g, "\n\n")
     .trim()
+    // A leading label adds nothing to an answer that is already short.
+    .replace(/^(?:\*\*)?(?:kort|svar|kort svar|short answer|answer|in short|krótko)(?:\*\*)?\s*:\s*/i, "")
+    // Bold only marks the key figures; past the first two it is noise.
+    .replace(/\*\*(.+?)\*\*/g, (m, inner: string) => (++bold <= 2 ? m : inner))
+  // The UI already invites a follow-up; drop a closing offer ("Vil du at jeg …?").
+  const parts = out.split(/\n\n/)
+  if (parts.length > 1 && OFFER.test(parts.at(-1)!)) parts.pop()
+  return parts.join("\n\n")
 }
+
+const OFFER = /^(?:vil du at jeg|hvis du vil|skal jeg|ønsker du at jeg|want me to|would you like me to|shall i|do you want me to|if you want, i can|chcesz, żebym|czy mam)/i
 
 function emptyScenario(): Scenario {
   return {

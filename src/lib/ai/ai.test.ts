@@ -164,6 +164,11 @@ describe("answer polish", () => {
       "Svar\nKalkulatoren får **5,46 %**, banken **5,55 %**.\n\n- gebyr 79 kr\n- kilde",
     )
   })
+  it("drops a leading label, bold past the key figures and a closing offer", () => {
+    expect(tidy("Kort: Ja.\n\n- **1 kr**, **2 kr**, **3 kr**\n\nVil du at jeg simulerer dette?")).toBe("Ja.\n\n- **1 kr**, **2 kr**, 3 kr")
+    // A single paragraph is the whole answer, so it is never dropped.
+    expect(tidy("Vil du at jeg forklarer? Effektiv rente er …")).toBe("Vil du at jeg forklarer? Effektiv rente er …")
+  })
   it("parses paragraphs, bullets and bold into safe blocks", () => {
     const b = parseReply("Ja, det lønner seg.\n\n- Du sparer **12 000 kr**\n- Ferdig i mai 2048\nSjekk med banken.")
     expect(b.map((x) => x.kind)).toEqual(["p", "ul", "p"])
