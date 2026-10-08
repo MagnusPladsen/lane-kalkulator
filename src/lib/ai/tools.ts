@@ -8,6 +8,11 @@ import type { Suggestion } from "./types.js"
 export interface ToolContext {
   scenario: Scenario
   today: string
+  /**
+   * May a suggestion change the monthly fee? Only when the user brought up fees or pasted
+   * loan text. Otherwise the fee that "matches" the bank's effective rate is a guess.
+   */
+  feeChangeAllowed?: boolean
 }
 
 export interface ToolResult {
@@ -324,6 +329,8 @@ export async function runTool(name: string, rawArgs: string, ctx: ToolContext): 
 
       case "propose_change": {
         const s = toSuggestion(args, next)
+        if (s?.kind === "loan" && s.patch.monthlyFee !== undefined && s.patch.monthlyFee !== ctx.scenario.loan.monthlyFee && !ctx.feeChangeAllowed)
+          return { output: { error: "Not shown: do not offer a fee change the user has not asked for. Mention the fee as a possible cause instead." } }
         return s ? { output: { ok: true, shown_to_user: s.label }, suggestion: s } : { output: { error: "That change is incomplete or out of range; fix the fields and try again." } }
       }
     }

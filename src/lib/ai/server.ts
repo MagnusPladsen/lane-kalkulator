@@ -118,6 +118,8 @@ export async function handleAi(
   else if (req.mode === "rates") input.push({ role: "user", content: `Typical rate for: ${req.category}` })
   for (const m of req.messages) input.push({ role: m.role, content: m.content })
 
+  const lastUser = req.messages.filter((m) => m.role === "user").at(-1)?.content ?? ""
+  const feeChangeAllowed = req.mode === "parse" || /gebyr|fee|opłat/i.test(lastUser)
   const suggestions: Suggestion[] = []
   const usage = { input: 0, cached: 0, output: 0, rounds: 0, model: deps.model }
   for (let round = 0; round < MAX_ROUNDS; round++) {
@@ -153,9 +155,9 @@ export async function handleAi(
     input.push(...toResponseInputItems(resp.output))
     for (const call of calls) {
       const result = scenario
-        ? await runTool(call.name, call.arguments, { scenario, today: deps.today })
+        ? await runTool(call.name, call.arguments, { scenario, today: deps.today, feeChangeAllowed })
         : call.name === "propose_change"
-          ? await runTool(call.name, call.arguments, { scenario: emptyScenario(), today: deps.today })
+          ? await runTool(call.name, call.arguments, { scenario: emptyScenario(), today: deps.today, feeChangeAllowed })
           : { output: { error: "No loan is filled in yet." } }
       if (result.suggestion) suggestions.push(result.suggestion)
       input.push({ type: "function_call_output", call_id: call.call_id, output: JSON.stringify(result.output) })

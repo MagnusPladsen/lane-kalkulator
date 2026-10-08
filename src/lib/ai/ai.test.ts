@@ -183,3 +183,17 @@ describe("model tier", () => {
     expect(tierOf({ mode: "rates", lang: "nb", messages: [], category: "car" })).toBe("advanced")
   })
 })
+
+describe("fee guard", () => {
+  const fee = (monthly_fee: number) =>
+    JSON.stringify({ kind: "loan_fields", label: "Sett gebyr", amount: null, from: null, to: null, rate_pct: null, loan: { principal: null, annual_rate_pct: null, term_months: null, loan_type: null, monthly_fee, setup_fee: null, effective_rate_pct: null, start_date: null, remaining_balance: null } })
+  it("does not offer a fee change the user did not ask for", async () => {
+    const r = await runTool("propose_change", fee(200), { scenario, today })
+    expect(r.suggestion).toBeUndefined()
+    expect(r.output).toHaveProperty("error")
+  })
+  it("allows it when the user brought up fees or pasted loan text", async () => {
+    const r = await runTool("propose_change", fee(200), { scenario, today, feeChangeAllowed: true })
+    expect(r.suggestion).toMatchObject({ kind: "loan", patch: { monthlyFee: 200 } })
+  })
+})
