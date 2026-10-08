@@ -1,5 +1,5 @@
-import { analyze, planEffectiveRate, todayIso } from "./loan/engine"
-import type { DayCount, LoanInput, LoanType, Scenario } from "./loan/types"
+import { analyze, planEffectiveRate, todayIso } from "./loan/engine.js"
+import type { DayCount, LoanInput, LoanType, Scenario } from "./loan/types.js"
 
 /** A loan offer as a bank presents it. */
 export interface Offer {

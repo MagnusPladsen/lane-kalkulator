@@ -1,6 +1,6 @@
-import { uid } from "../ids"
-import { addMonths, isValidIsoDate, isValidYearMonth, monthsElapsed, todayIso, yearMonthOf } from "./engine"
-import type { AfterInterestOnly, CalendarExtra, CustomPeriod, LoanIntro, LoanType, Scenario } from "./types"
+import { uid } from "../ids.js"
+import { addMonths, isValidIsoDate, isValidYearMonth, monthsElapsed, todayIso, yearMonthOf } from "./engine.js"
+import type { AfterInterestOnly, CalendarExtra, CustomPeriod, LoanIntro, LoanType, Scenario } from "./types.js"
 
 const MAX_LIST = 50
 const MAX_NAME = 80

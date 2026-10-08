@@ -13,7 +13,7 @@ import type {
   Scenario,
   ScheduleResult,
   ScheduleRow,
-} from "./types"
+} from "./types.js"
 
 const MAX_MONTHS = 1200
 const EPSILON = 0.005

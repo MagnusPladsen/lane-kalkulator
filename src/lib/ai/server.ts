@@ -1,10 +1,10 @@
 import type { Response as OpenAIResponse, ResponseCreateParamsNonStreaming, ResponseInputItem } from "openai/resources/responses/responses"
 import { toResponseInputItems } from "openai/lib/responses/ResponseInputItems"
-import { sanitizeScenario } from "../loan/sanitize"
-import type { Scenario } from "../loan/types"
-import { INSTRUCTIONS } from "./prompt"
-import { runTool, TOOL_DEFS } from "./tools"
-import type { AiErrorCode, AiRequest, AiResponse, AiSource, Suggestion } from "./types"
+import { sanitizeScenario } from "../loan/sanitize.js"
+import type { Scenario } from "../loan/types.js"
+import { INSTRUCTIONS } from "./prompt.js"
+import { runTool, TOOL_DEFS } from "./tools.js"
+import type { AiErrorCode, AiRequest, AiResponse, AiSource, Suggestion } from "./types.js"
 
 /** The part of the OpenAI client this module uses, so tests can pass a fake. */
 export interface OpenAILike {
