@@ -4,7 +4,7 @@ import { sanitizeScenario } from "../loan/sanitize.js"
 import type { Scenario } from "../loan/types.js"
 import { INSTRUCTIONS } from "./prompt.js"
 import { runTool, TOOL_DEFS } from "./tools.js"
-import type { AiErrorCode, AiRequest, AiResponse, AiSource, Suggestion } from "./types.js"
+import type { AiErrorCode, AiRequest, AiResponse, AiSource, AiTier, Suggestion } from "./types.js"
 
 /** The part of the OpenAI client this module uses, so tests can pass a fake. */
 export interface OpenAILike {
@@ -50,6 +50,17 @@ export function validateRequest(body: unknown): AiRequest {
   const scenario = s ? { ...s, loan: { ...s.loan, name: "" } } : undefined
   const focus = typeof b.focus === "string" ? b.focus.slice(0, 60) : undefined
   return { mode, lang, messages, scenario, text, category, focus }
+}
+
+/**
+ * Which model tier a request needs. A field's "Ask AI" button sends one fixed question
+ * and reading pasted text is extraction, so both go to the small model. Typed chat,
+ * follow-ups and the web rate lookup need more judgement.
+ */
+export function tierOf(req: AiRequest): AiTier {
+  if (req.mode === "parse") return "simple"
+  if (req.mode === "chat" && req.focus?.startsWith("field:") && req.messages.length === 1) return "simple"
+  return "advanced"
 }
 
 function contextMessage(req: AiRequest, today: string): ResponseInputItem {
@@ -105,7 +116,7 @@ export async function handleAi(
   for (const m of req.messages) input.push({ role: m.role, content: m.content })
 
   const suggestions: Suggestion[] = []
-  const usage = { input: 0, cached: 0, output: 0, rounds: 0 }
+  const usage = { input: 0, cached: 0, output: 0, rounds: 0, model: deps.model }
   for (let round = 0; round < MAX_ROUNDS; round++) {
     let resp: OpenAIResponse
     try {

@@ -32,12 +32,15 @@ export interface AiResponse {
   suggestions: Suggestion[]
   sources?: AiSource[]
   /** Token totals for this turn; cached shows whether the prompt prefix was reused. */
-  usage?: { input: number; cached: number; output: number; rounds: number }
+  usage?: { input: number; cached: number; output: number; rounds: number; model?: string }
 }
+
+/** simple: a field's "Ask AI" button or reading pasted text. advanced: the chat and web rate lookup. */
+export type AiTier = "simple" | "advanced"
 
 export interface AiStatus {
   enabled: boolean
-  model?: string
+  models?: Record<AiTier, string>
 }
 
 export type AiErrorCode = "disabled" | "rate_limited" | "bad_request" | "upstream" | "too_long"

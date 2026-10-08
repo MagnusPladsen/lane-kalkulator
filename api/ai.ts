@@ -1,7 +1,7 @@
 import OpenAI from "openai"
 import { DEFAULT_LIMITS, RateLimiter } from "../src/lib/ai/limits.js"
-import { AiError, handleAi, validateRequest } from "../src/lib/ai/server.js"
-import type { AiStatus } from "../src/lib/ai/types.js"
+import { AiError, handleAi, tierOf, validateRequest } from "../src/lib/ai/server.js"
+import type { AiStatus, AiTier } from "../src/lib/ai/types.js"
 
 export const config = { maxDuration: 30 }
 
@@ -10,7 +10,11 @@ const intEnv = (k: string, d: number) => {
   const n = Number(env(k))
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : d
 }
-const MODEL = env("AI_MODEL") || "gpt-6-luna"
+/** Small fast model for field buttons and pasted text; stronger model for the chat. */
+const MODELS: Record<AiTier, string> = {
+  simple: env("AI_MODEL_SIMPLE") || "gpt-6-luna",
+  advanced: env("AI_MODEL_CHAT") || "gpt-5-mini",
+}
 const limiter = new RateLimiter({
   perIpPerMinute: intEnv("AI_LIMIT_PER_MINUTE", DEFAULT_LIMITS.perIpPerMinute),
   perIpPerDay: intEnv("AI_LIMIT_PER_DAY", DEFAULT_LIMITS.perIpPerDay),
@@ -29,7 +33,7 @@ const STATUS_FOR: Record<string, number> = { disabled: 503, rate_limited: 429, b
 export default {
   async fetch(request: Request): Promise<Response> {
     const key = env("OPENAI_API_KEY")
-    if (request.method === "GET") return json({ enabled: !!key, model: key ? MODEL : undefined } satisfies AiStatus)
+    if (request.method === "GET") return json({ enabled: !!key, models: key ? MODELS : undefined } satisfies AiStatus)
     if (request.method !== "POST") return json({ error: "bad_request" }, 405)
     if (!key) return json({ error: "disabled" }, 503)
     if (Number(request.headers.get("content-length") ?? 0) > 32_000) return json({ error: "too_long" }, 413)
@@ -40,14 +44,24 @@ export default {
     try {
       const req = validateRequest(await request.json())
       const today = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Oslo" })
-      const result = await handleAi(req, {
-        client: new OpenAI({ apiKey: key }),
-        model: MODEL,
-        today,
-        // Cache check: cached_tokens should be > 0 from the second request on.
-        onUsage: (u) => console.log(JSON.stringify({ ai_usage: { input: u?.input_tokens, cached: u?.input_tokens_details?.cached_tokens, output: u?.output_tokens } })),
-      })
-      return json(result)
+      const client = new OpenAI({ apiKey: key })
+      const run = (model: string) =>
+        handleAi(req, {
+          client,
+          model,
+          today,
+          // Cache check: cached_tokens should be > 0 from the second request on.
+          onUsage: (u) => console.log(JSON.stringify({ ai_usage: { model, input: u?.input_tokens, cached: u?.input_tokens_details?.cached_tokens, output: u?.output_tokens } })),
+        })
+      const tier = tierOf(req)
+      try {
+        return json(await run(MODELS[tier]))
+      } catch (e) {
+        // If the chat model fails upstream, answer with the small model rather than not at all.
+        if (tier === "simple" || !(e instanceof AiError) || e.code !== "upstream" || MODELS.simple === MODELS.advanced) throw e
+        console.error("ai chat model failed, falling back", MODELS.advanced, e.message)
+        return json(await run(MODELS.simple))
+      }
     } catch (e) {
       const code = e instanceof AiError ? e.code : "upstream"
       if (code === "upstream") console.error("ai upstream error", e instanceof Error ? e.message : e)

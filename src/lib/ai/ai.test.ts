@@ -4,7 +4,7 @@ import { solveForTarget } from "../loan/engine"
 import type { Scenario } from "../loan/types"
 import { RateLimiter } from "./limits"
 import { INSTRUCTIONS } from "./prompt"
-import { AiError, handleAi, plain, PROMPT_CACHE_KEY, validateRequest, type OpenAILike } from "./server"
+import { AiError, handleAi, plain, PROMPT_CACHE_KEY, tierOf, validateRequest, type OpenAILike } from "./server"
 import { runTool, TOOL_DEFS, toSuggestion } from "./tools"
 
 const today = "2026-10-08"
@@ -165,5 +165,20 @@ describe("answer polish", () => {
     expect(o.principal_exceeds_interest_from).toMatch(/^\d{4}-\d{2}$/)
     const sim = (await runTool("simulate", JSON.stringify({ extra_monthly: null, extra_monthly_from: null, extra_monthly_to: null, one_off: null, one_off_month: null, new_rate_pct: null, rate_from: null, rate_to: null, interest_only_from: null, interest_only_to: null, loan_type: "serial" }), ctx)).output as { interest_change: number; after: { loan_type: string } }
     expect(sim.interest_change).toBeLessThan(0) // serial pays less interest overall
+  })
+})
+
+describe("model tier", () => {
+  const q = [{ role: "user" as const, content: "Hva betyr dette?" }]
+  it("a field's Ask AI button and pasted text use the small model", () => {
+    expect(tierOf({ mode: "chat", lang: "nb", messages: q, focus: "field:dayCount" })).toBe("simple")
+    expect(tierOf({ mode: "parse", lang: "nb", messages: [], text: "Lånebeløp 2 000 000" })).toBe("simple")
+  })
+  it("typed chat, follow-ups on a field question and the rate lookup use the chat model", () => {
+    expect(tierOf({ mode: "chat", lang: "nb", messages: q, focus: "page:calc" })).toBe("advanced")
+    expect(tierOf({ mode: "chat", lang: "nb", messages: q })).toBe("advanced")
+    const followUp = [...q, { role: "assistant" as const, content: "Det betyr ..." }, { role: "user" as const, content: "Og for meg?" }]
+    expect(tierOf({ mode: "chat", lang: "nb", messages: followUp, focus: "field:dayCount" })).toBe("advanced")
+    expect(tierOf({ mode: "rates", lang: "nb", messages: [], category: "car" })).toBe("advanced")
   })
 })
