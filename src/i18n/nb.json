@@ -239,7 +239,7 @@
     "export": "Eksporter alle",
     "deleteAll": "Slett alle",
     "privacyTitle": "Privat av natur",
-    "privacyBody": "Ingenting du skriver inn om lånene dine blir samlet inn eller sendt noe sted. De lagres bare i denne nettleserens lokale lager. Vi teller bare anonyme besøk, uten informasjonskapsler og uten lånedata. Sletter du nettstedsdata, forsvinner lånene, så bruk <0>Eksporter</0> for å ta en kopi eller flytte mellom enheter.",
+    "privacyBody": "Lånene dine lagres bare i denne nettleserens lokale lager, og vi teller bare anonyme besøk uten informasjonskapsler. AI-hjelpen er valgfri: bruker du den, sendes spørsmålet og lånetallene (aldri navnet) til OpenAI. Sletter du nettstedsdata, forsvinner lånene, så bruk <0>Eksporter</0> for å ta en kopi eller flytte mellom enheter.",
     "emptyHint": "Lagre et lån fra kalkulatoren, så dukker det opp her.",
     "saved": "Lagret {{date}}",
     "open": "Åpne",
@@ -273,7 +273,7 @@
     "imported_other": "{{count}} lån importert."
   },
   "footer": {
-    "privacy": "Lånene dine lagres bare i denne nettleseren og sendes aldri noe sted. Vi teller bare anonyme besøk, uten informasjonskapsler.",
+    "privacy": "Lånene dine lagres bare i denne nettleseren. Vi teller anonyme besøk uten informasjonskapsler. Bruker du AI-hjelpen, sendes spørsmålet og lånetallene (ikke navn) til OpenAI.",
     "estimates": "Kun anslag. Bankens tall er de som gjelder."
   },
   "storage": {
@@ -368,7 +368,13 @@
     "derivedRemaining": "Fra gjenværende løpetid",
     "derivedFee": "Regnet ut: terminbeløp minus avdrag og renter",
     "derivedBalance": "Nåværende lånebeløp",
-    "derivedName": "Fra långiver"
+    "derivedName": "Fra långiver",
+    "pasteLabel": "Eller lim inn tekst",
+    "pastePlaceholder": "Lim inn tekst fra låneavtalen, et lånetilbud eller nettbanken …",
+    "readText": "Les teksten",
+    "readWithAi": "Les med AI",
+    "aiNote": "«Les med AI» sender teksten til OpenAI. Fjern navn og kontonummer først.",
+    "fromAi": "Lest av AI"
   },
   "help": {
     "aria": "Hva betyr {{field}}?",
@@ -448,5 +454,42 @@
     "useNew": "Åpne det nye lånet i kalkulatoren",
     "moved": "flyttet",
     "needLoan": "Fyll ut lånet ditt i kalkulatoren først, så kan du sjekke om det lønner seg å bytte."
+  },
+  "ai": {
+    "short": "AI",
+    "askAbout": "Spør AI om {{field}}",
+    "open": "Spør AI",
+    "title": "Spør om lånet",
+    "privacy": "Spørsmålet og lånetallene dine (ikke navnet) sendes til OpenAI for å lage svaret. Ikke skriv inn personopplysninger.",
+    "reset": "Ny samtale",
+    "close": "Lukk",
+    "intro": "Spør om lånet eller skjemaet. Svarene regnes ut med kalkulatoren, og forslag kan du bruke med ett klikk.",
+    "starter1": "Jeg vil være ferdig innen 2040. Hva må jeg betale ekstra?",
+    "starter2": "Hva skjer hvis jeg betaler 1 000 kr ekstra i måneden?",
+    "starter3": "Lønner det seg å bytte til en bank med 0,3 prosentpoeng lavere rente?",
+    "starter4": "Hva betyr effektiv rente, og stemmer min?",
+    "apply": "Bruk i kalkulatoren",
+    "applied": "Lagt til",
+    "thinking": "Regner …",
+    "placeholder": "Skriv et spørsmål …",
+    "send": "Send",
+    "empty": "Jeg fant ikke noe svar på det. Prøv å spørre litt annerledes.",
+    "rateQuestion": "Hva er en typisk rente for {{type}} nå?",
+    "explainGap": "Forklar med AI",
+    "checkRate": "Sjekk med AI",
+    "error": {
+      "disabled": "AI-hjelpen er ikke slått på.",
+      "rate_limited": "Du har brukt opp AI-spørsmålene for nå. Prøv igjen senere.",
+      "bad_request": "Noe var galt med spørsmålet. Prøv igjen.",
+      "upstream": "AI-en svarte ikke akkurat nå. Prøv igjen om litt.",
+      "too_long": "Samtalen er blitt for lang. Start en ny samtale."
+    },
+    "q": {
+      "effective": "Hva er effektiv rente, og hvorfor stemmer eller stemmer ikke min med bankens?",
+      "dayCount": "Hva betyr renteberegning, og hvilken bør jeg velge?",
+      "remaining": "Hvor finner jeg restgjelden, og hva skjer hvis jeg lar feltet stå tomt?",
+      "intro": "Hva er forskjellen på avdragsfri og rentefri start, og hva betyr det for lånet mitt?",
+      "gap": "Effektiv rente med tallene mine stemmer ikke med bankens. Hva er det som mangler?"
+    }
   }
 }

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { HelpTip } from "@/components/HelpTip"
+import { AskAiButton } from "@/components/ai/AskAiButton"
 import { currentLang, INTL_LOCALE } from "@/i18n"
 import { fmtNumber } from "@/lib/format"
 import { parseAmount } from "@/lib/parseAmount"
@@ -25,6 +26,7 @@ export function Field({
   label,
   hint,
   help,
+  ai,
   error,
   className,
   children,
@@ -35,6 +37,8 @@ export function Field({
   hint?: React.ReactNode
   /** Plain explanation behind a "?" next to the label. */
   help?: React.ReactNode
+  /** Offers "ask AI" about this field (only shown when AI is available). */
+  ai?: { focus: string; question: string }
   error?: string
   className?: string
   optional?: boolean
@@ -55,6 +59,7 @@ export function Field({
           {label}
         </Label>
         {help && <HelpTip label={typeof label === "string" ? label : ""}>{help}</HelpTip>}
+        {ai && <AskAiButton focus={ai.focus} question={ai.question} label={typeof label === "string" ? label : ""} />}
         {optional && <span className="ml-auto text-xs text-muted-foreground">{optionalLabel}</span>}
       </div>
       <FieldContext.Provider value={value}>{children}</FieldContext.Provider>

@@ -7,7 +7,8 @@ import { fmtDate, fmtDuration, fmtMoney, fmtRate } from "@/lib/format"
 import { todayIso } from "@/lib/loan/engine"
 import type { LoanInput } from "@/lib/loan/types"
 import { parseLoanText, type ScannedLoan } from "@/lib/scan/parseLoanText"
-import { scanToLoan, type DerivedKey } from "@/lib/scan/scanToLoan"
+import { scanToLoan, type DerivedKey, type ScanProposal } from "@/lib/scan/scanToLoan"
+import { useAi } from "@/components/ai/AiContext"
 
 type Stage = { kind: "pick" } | { kind: "reading"; file: number; files: number; progress: number } | { kind: "review" } | { kind: "error" }
 
@@ -55,13 +56,48 @@ export function ScanDialog({
   const [stage, setStage] = useState<Stage>({ kind: "pick" })
   const [scan, setScan] = useState<ScannedLoan | null>(null)
   const [checked, setChecked] = useState<Set<FieldKey>>(new Set())
+  const [pasted, setPasted] = useState("")
+  const [aiProposal, setAiProposal] = useState<ScanProposal | null>(null)
+  const [aiBusy, setAiBusy] = useState(false)
+  const ai = useAi()
   const fileRef = useRef<HTMLInputElement>(null)
-  const proposal = useMemo(() => (scan ? scanToLoan(scan, todayIso()) : null), [scan])
+  const localProposal = useMemo(() => (scan ? scanToLoan(scan, todayIso()) : null), [scan])
+  const proposal = aiProposal ?? localProposal
   const found = FIELDS.filter((k) => proposal?.patch[k] !== undefined)
 
   const reset = () => {
     setStage({ kind: "pick" })
     setScan(null)
+    setAiProposal(null)
+  }
+
+  const review = (p: ScanProposal) => {
+    setChecked(new Set(FIELDS.filter((k) => p.patch[k] !== undefined)))
+    setStage({ kind: "review" })
+  }
+
+  /** Pasted text: read locally first; free and nothing leaves the browser. */
+  const readText = () => {
+    const result = parseLoanText(pasted)
+    setAiProposal(null)
+    setScan(result)
+    review(scanToLoan(result, todayIso()))
+  }
+
+  const readTextWithAi = async () => {
+    setAiBusy(true)
+    try {
+      const suggestions = await ai.parse(pasted)
+      const loan = suggestions.find((s) => s.kind === "loan")
+      setScan(null)
+      const p: ScanProposal = { patch: loan?.kind === "loan" ? loan.patch : {}, derived: {} }
+      setAiProposal(p)
+      review(p)
+    } catch {
+      setStage({ kind: "error" })
+    } finally {
+      setAiBusy(false)
+    }
   }
 
   const read = async (files: File[]) => {
@@ -186,6 +222,34 @@ export function ScanDialog({
           </div>
         )}
 
+        {stage.kind === "pick" && (
+          <div className="grid gap-2">
+            <label htmlFor="scan-text" className="text-xs tracking-wide text-muted-foreground uppercase">
+              {t("scan.pasteLabel")}
+            </label>
+            <textarea
+              id="scan-text"
+              value={pasted}
+              onChange={(e) => setPasted(e.target.value.slice(0, 6000))}
+              rows={3}
+              placeholder={t("scan.pastePlaceholder")}
+              className="min-h-20 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 sm:text-sm dark:bg-input/30"
+            />
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" disabled={!pasted.trim()} onClick={readText}>
+                {t("scan.readText")}
+              </Button>
+              {ai.enabled && (
+                <Button variant="ghost" size="sm" disabled={!pasted.trim() || aiBusy} onClick={() => void readTextWithAi()}>
+                  {aiBusy ? <LoaderCircleIcon data-icon="inline-start" className="animate-spin" /> : null}
+                  {t("scan.readWithAi")}
+                </Button>
+              )}
+            </div>
+            {ai.enabled && <p className="text-xs text-muted-foreground">{t("scan.aiNote")}</p>}
+          </div>
+        )}
+
         {stage.kind === "reading" && (
           <div role="status" className="grid place-items-center gap-3 py-6 text-sm">
             <LoaderCircleIcon className="size-6 animate-spin text-muted-foreground" aria-hidden />
@@ -209,7 +273,7 @@ export function ScanDialog({
                   {found.map((k) => {
                     const how = proposal.derived[k as DerivedKey]
                     const src = SOURCE[k] && scan?.[SOURCE[k]!]
-                    const source = how ? derivedNote[how] : src && typeof src === "object" ? src.source : undefined
+                    const source = aiProposal ? t("scan.fromAi") : how ? derivedNote[how] : src && typeof src === "object" ? src.source : undefined
                     return (
                       <li key={k}>
                         <label className="flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 has-checked:border-primary/40 has-checked:bg-accent/40">

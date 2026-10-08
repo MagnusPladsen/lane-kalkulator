@@ -241,7 +241,7 @@
     "export": "Eksportuj wszystko",
     "deleteAll": "Usuń wszystko",
     "privacyTitle": "Prywatność z założenia",
-    "privacyBody": "Nic, co wpisujesz o swoich kredytach, nie jest zbierane ani nigdzie wysyłane. Kredyty są zapisane tylko w pamięci lokalnej tej przeglądarki. Liczymy tylko anonimowe odwiedziny, bez plików cookie i bez danych kredytu. Wyczyszczenie danych strony usuwa kredyty, więc użyj <0>Eksportuj</0>, aby mieć kopię albo przenieść je na inne urządzenie.",
+    "privacyBody": "Twoje kredyty są zapisane tylko w pamięci lokalnej tej przeglądarki, a my liczymy tylko anonimowe odwiedziny bez plików cookie. Pomoc AI jest opcjonalna: jeśli z niej korzystasz, pytanie i liczby kredytu (nigdy nazwa) są wysyłane do OpenAI. Wyczyszczenie danych strony usuwa kredyty, więc użyj <0>Eksportuj</0>, aby mieć kopię albo przenieść je na inne urządzenie.",
     "emptyHint": "Zapisz kredyt w kalkulatorze, a pojawi się tutaj.",
     "saved": "Zapisano {{date}}",
     "open": "Otwórz",
@@ -277,7 +277,7 @@
     "imported_other": "Zaimportowano {{count}} kredytów."
   },
   "footer": {
-    "privacy": "Twoje kredyty są zapisane tylko w tej przeglądarce i nigdzie nie są wysyłane. Liczymy tylko anonimowe odwiedziny, bez plików cookie.",
+    "privacy": "Twoje kredyty są zapisane tylko w tej przeglądarce. Liczymy anonimowe odwiedziny bez plików cookie. Jeśli korzystasz z pomocy AI, pytanie i liczby kredytu (bez nazw) są wysyłane do OpenAI.",
     "estimates": "Tylko szacunki. Liczą się liczby z twojego banku."
   },
   "storage": {
@@ -378,7 +378,13 @@
     "derivedRemaining": "Z pozostałego okresu",
     "derivedFee": "Wyliczono: rata minus kapitał i odsetki",
     "derivedBalance": "Obecna kwota kredytu",
-    "derivedName": "Od kredytodawcy"
+    "derivedName": "Od kredytodawcy",
+    "pasteLabel": "Albo wklej tekst",
+    "pastePlaceholder": "Wklej tekst z umowy, oferty kredytu lub bankowości …",
+    "readText": "Odczytaj tekst",
+    "readWithAi": "Odczytaj z AI",
+    "aiNote": "„Odczytaj z AI” wysyła tekst do OpenAI. Najpierw usuń nazwiska i numery kont.",
+    "fromAi": "Odczytane przez AI"
   },
   "help": {
     "aria": "Co oznacza {{field}}?",
@@ -458,5 +464,42 @@
     "useNew": "Otwórz nowy kredyt w kalkulatorze",
     "moved": "przeniesiony",
     "needLoan": "Najpierw wypełnij swój kredyt w kalkulatorze, potem sprawdzisz, czy zmiana się opłaca."
+  },
+  "ai": {
+    "short": "AI",
+    "askAbout": "Zapytaj AI o {{field}}",
+    "open": "Zapytaj AI",
+    "title": "Zapytaj o kredyt",
+    "privacy": "Twoje pytanie i liczby kredytu (bez nazwy) są wysyłane do OpenAI, aby przygotować odpowiedź. Nie wpisuj danych osobowych.",
+    "reset": "Nowa rozmowa",
+    "close": "Zamknij",
+    "intro": "Zapytaj o kredyt lub formularz. Odpowiedzi są liczone kalkulatorem, a propozycje możesz zastosować jednym kliknięciem.",
+    "starter1": "Chcę skończyć do 2040. Ile muszę dopłacać?",
+    "starter2": "Co się stanie, jeśli będę dopłacać 1 000 kr miesięcznie?",
+    "starter3": "Czy opłaca się przejść do banku z oprocentowaniem niższym o 0,3 pkt?",
+    "starter4": "Czym jest RRSO i czy moje się zgadza?",
+    "apply": "Użyj w kalkulatorze",
+    "applied": "Dodano",
+    "thinking": "Liczę …",
+    "placeholder": "Zadaj pytanie …",
+    "send": "Wyślij",
+    "empty": "Nie znalazłem odpowiedzi. Spróbuj zapytać trochę inaczej.",
+    "rateQuestion": "Jakie jest teraz typowe oprocentowanie dla: {{type}}?",
+    "explainGap": "Wyjaśnij z AI",
+    "checkRate": "Sprawdź z AI",
+    "error": {
+      "disabled": "Pomoc AI nie jest włączona.",
+      "rate_limited": "Wykorzystano na razie pytania do AI. Spróbuj później.",
+      "bad_request": "Coś było nie tak z pytaniem. Spróbuj ponownie.",
+      "upstream": "AI nie odpowiedziało. Spróbuj za chwilę.",
+      "too_long": "Rozmowa jest za długa. Zacznij nową."
+    },
+    "q": {
+      "effective": "Czym jest RRSO i dlaczego moje zgadza się lub nie z bankiem?",
+      "dayCount": "Co oznacza sposób naliczania odsetek i który wybrać?",
+      "remaining": "Gdzie znajdę saldo i co jeśli zostawię pole puste?",
+      "intro": "Jaka jest różnica między okresem tylko z odsetkami a bez odsetek i co to znaczy dla mojego kredytu?",
+      "gap": "RRSO z moich danych nie zgadza się z bankiem. Czego brakuje?"
+    }
   }
 }

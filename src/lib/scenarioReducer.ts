@@ -6,6 +6,7 @@ export type Action =
   | { type: "loan"; patch: Partial<LoanInput> }
   | { type: "extra/add"; kind: CalendarExtra["kind"]; from: string }
   | { type: "extra/addAmount"; amount: number; from: string }
+  | { type: "extra/insert"; extra: CalendarExtra }
   | { type: "extra/update"; id: string; patch: Partial<Omit<CalendarExtra, "id">> }
   | { type: "extra/remove"; id: string }
   | { type: "period/add"; period: CustomPeriod }
@@ -37,6 +38,8 @@ export function scenarioReducer(state: Scenario, action: Action): Scenario {
         ...state,
         extras: [...state.extras, { id: uid(), kind: "recurring", amount: action.amount, from: action.from }],
       }
+    case "extra/insert":
+      return { ...state, extras: [...state.extras, action.extra] }
     case "extra/update":
       return {
         ...state,
