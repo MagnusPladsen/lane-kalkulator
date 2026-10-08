@@ -127,6 +127,7 @@ describe("handleAi", () => {
       expect(c.instructions).toBe(INSTRUCTIONS)
       expect(c.tools).toEqual(calls[0].tools)
       expect(c.prompt_cache_key).toBe(PROMPT_CACHE_KEY)
+      expect(c).not.toHaveProperty("prompt_cache_options")
       expect(c.store).toBe(false)
     }
     // Context goes first in the input, never in the cached instructions.

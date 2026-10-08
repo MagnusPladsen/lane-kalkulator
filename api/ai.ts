@@ -60,7 +60,8 @@ export default {
         // If the chat model fails upstream, answer with the small model rather than not at all.
         if (tier === "simple" || !(e instanceof AiError) || e.code !== "upstream" || MODELS.simple === MODELS.advanced) throw e
         console.error("ai chat model failed, falling back", MODELS.advanced, e.message)
-        return json(await run(MODELS.simple))
+        const result = await run(MODELS.simple)
+        return json({ ...result, usage: result.usage && { ...result.usage, fallbackFrom: MODELS.advanced, fallbackReason: e.detail } })
       }
     } catch (e) {
       const code = e instanceof AiError ? e.code : "upstream"
