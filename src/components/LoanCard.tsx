@@ -95,7 +95,7 @@ export function LoanCard({
         </CardAction>
       </CardHeader>
       <ScanDialog open={scanOpen} onOpenChange={setScanOpen} onApply={onChange} />
-      <CardContent className="grid gap-4">
+      <CardContent className="grid grid-cols-1 gap-4">
         <Field label={t("loan.name")} help={t("help.name")} optional optionalLabel={t("steps.optional")}>
           <FieldInput
             autoComplete="off"
@@ -167,13 +167,13 @@ export function LoanCard({
 
         <IntroTerms loan={loan} error={err("intro")} onChange={onChange} />
 
-        <Collapsible open={detailsOpen} onOpenChange={setDetailsOpen}>
+        <Collapsible open={detailsOpen} onOpenChange={setDetailsOpen} className="min-w-0">
           <CollapsibleTrigger
             className="touch-target flex min-h-9 w-full cursor-pointer items-center gap-2 rounded-lg py-1 text-left text-sm font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <ChevronDownIcon className={cn("size-4 transition-transform", detailsOpen && "rotate-180")} />
             {t("loan.more")}
-            <span className="ml-1 truncate text-xs font-normal text-muted-foreground">{t("loan.moreHint")}</span>
+            <span className="ml-1 min-w-0 truncate text-xs font-normal text-muted-foreground">{t("loan.moreHint")}</span>
           </CollapsibleTrigger>
           <CollapsibleContent className="grid gap-4 pt-3">
             <div className="grid grid-cols-2 gap-3">

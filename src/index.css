@@ -1,17 +1,18 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
-@import "@fontsource-variable/geist-mono";
-@import "@fontsource-variable/fraunces/full.css";
-@import "@fontsource-variable/fraunces/full-italic.css";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/lexend";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: 'Fraunces Variable', Georgia, serif;
-    --font-sans: 'Geist Variable', sans-serif;
-    --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+    /* Sommer: Bricolage Grotesque for headings and figures, Lexend for reading. */
+    --font-heading: 'Bricolage Grotesque Variable', 'Trebuchet MS', sans-serif;
+    --font-sans: 'Lexend Variable', Verdana, sans-serif;
+    --font-mono: 'Bricolage Grotesque Variable', 'Trebuchet MS', sans-serif;
+    --color-highlight: var(--highlight);
+    --color-highlight-foreground: var(--highlight-foreground);
     --color-chart-history: var(--chart-history);
     --color-chart-baseline: var(--chart-baseline);
     --color-chart-scenario: var(--chart-scenario);
@@ -47,64 +48,74 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Warm paper / ink. Fjord green as the single accent. */
+/*
+ * "Sommer": light mint background, white cards, deep green ink and a sun-yellow
+ * highlight for the one number that matters. Every text colour passes WCAG AA
+ * (4.5:1), form-field borders and chart lines pass 3:1, in both themes.
+ */
 :root {
-    --background: oklch(0.972 0.008 85);
-    --foreground: oklch(0.21 0.015 60);
-    --card: oklch(0.993 0.004 90);
-    --card-foreground: oklch(0.21 0.015 60);
-    --popover: oklch(0.993 0.004 90);
-    --popover-foreground: oklch(0.21 0.015 60);
-    --primary: oklch(0.43 0.085 168);
-    --primary-foreground: oklch(0.985 0.005 90);
-    --secondary: oklch(0.94 0.01 85);
-    --secondary-foreground: oklch(0.25 0.015 60);
-    --muted: oklch(0.945 0.01 85);
-    --muted-foreground: oklch(0.5 0.015 70);
-    --accent: oklch(0.93 0.02 160);
-    --accent-foreground: oklch(0.3 0.06 168);
-    --destructive: oklch(0.55 0.19 28);
-    --border: oklch(0.89 0.012 80);
-    --input: oklch(0.86 0.012 80);
-    --ring: oklch(0.55 0.08 168);
-    --chart-history: #898781;
-    --chart-baseline: #2a78d6;
-    --chart-scenario: #0e8a6a;
-    --chart-interest: #c8553d;
-    --chart-principal: #0e8a6a;
-    --chart-extra: #d9a21b;
-    --good: oklch(0.47 0.12 160);
-    --bad: oklch(0.52 0.17 30);
-    --radius: 0.75rem;
+    --background: #EEF7F1;
+    --foreground: #12322A;
+    --card: #FFFFFF;
+    --card-foreground: #12322A;
+    --popover: #FFFFFF;
+    --popover-foreground: #12322A;
+    --primary: #1B4D3E;
+    --primary-foreground: #FFFFFF;
+    --secondary: #DCEFE3;
+    --secondary-foreground: #12322A;
+    --muted: #E4F1E9;
+    --muted-foreground: #3F5A52;
+    --accent: #DCEFE3;
+    --accent-foreground: #12322A;
+    --highlight: #FFE38A;
+    --highlight-foreground: #12322A;
+    --destructive: #B42318;
+    --border: #CFE3D7;
+    --input: #6F8F82;
+    --ring: #1B4D3E;
+    --chart-history: #6B7F77;
+    --chart-baseline: #2F6FB3;
+    --chart-scenario: #1E6B3A;
+    --chart-interest: #C2410C;
+    --chart-principal: #1E6B3A;
+    --chart-extra: #A16207;
+    --good: #1E6B3A;
+    --bad: #B42318;
+    --radius: 1rem;
+    --card-shadow: 0 1px 0 #CFE3D7, 0 12px 28px -20px rgb(18 50 42 / 0.45);
 }
 
 .dark {
-    --background: oklch(0.2 0.006 160);
-    --foreground: oklch(0.94 0.008 90);
-    --card: oklch(0.235 0.007 160);
-    --card-foreground: oklch(0.94 0.008 90);
-    --popover: oklch(0.25 0.007 160);
-    --popover-foreground: oklch(0.94 0.008 90);
-    --primary: oklch(0.72 0.12 165);
-    --primary-foreground: oklch(0.18 0.03 165);
-    --secondary: oklch(0.29 0.008 160);
-    --secondary-foreground: oklch(0.94 0.008 90);
-    --muted: oklch(0.29 0.008 160);
-    --muted-foreground: oklch(0.7 0.01 90);
-    --accent: oklch(0.32 0.03 165);
-    --accent-foreground: oklch(0.85 0.08 165);
-    --destructive: oklch(0.7 0.17 25);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.6 0.1 165);
-    --chart-history: #898781;
-    --chart-baseline: #3987e5;
-    --chart-scenario: #199e70;
-    --chart-interest: #d95926;
-    --chart-principal: #199e70;
-    --chart-extra: #c98500;
-    --good: oklch(0.78 0.14 160);
-    --bad: oklch(0.75 0.16 30);
+    --background: #0F241D;
+    --foreground: #EAF5EF;
+    --card: #16302A;
+    --card-foreground: #EAF5EF;
+    --popover: #1B3831;
+    --popover-foreground: #EAF5EF;
+    --primary: #8ED1B0;
+    --primary-foreground: #0F241D;
+    --secondary: #20403A;
+    --secondary-foreground: #EAF5EF;
+    --muted: #1D3A33;
+    --muted-foreground: #A9C4B8;
+    --accent: #20403A;
+    --accent-foreground: #EAF5EF;
+    --highlight: #FFE38A;
+    --highlight-foreground: #12322A;
+    --destructive: #FF8A7A;
+    --border: rgb(234 245 239 / 0.12);
+    --input: #6D8F82;
+    --ring: #8ED1B0;
+    --chart-history: #8FA39B;
+    --chart-baseline: #6FA8F0;
+    --chart-scenario: #7FD49B;
+    --chart-interest: #F08A5D;
+    --chart-principal: #7FD49B;
+    --chart-extra: #E3B341;
+    --good: #7FD49B;
+    --bad: #FF8A7A;
+    --card-shadow: 0 1px 0 rgb(234 245 239 / 0.06), 0 12px 28px -20px rgb(0 0 0 / 0.6);
 }
 
 @layer base {
@@ -114,22 +125,25 @@
   html {
     @apply font-sans antialiased;
     color-scheme: light;
+    /* 17px base: easier reading; every rem-based size scales with it. */
+    font-size: 106.25%;
   }
   html.dark {
     color-scheme: dark;
   }
   body {
     @apply bg-background text-foreground min-h-dvh;
-    background-image:
-      radial-gradient(1200px 600px at 80% -10%, color-mix(in oklab, var(--primary) 9%, transparent), transparent 60%),
-      radial-gradient(900px 500px at -10% 110%, color-mix(in oklab, var(--chart-baseline) 6%, transparent), transparent 60%);
-    }
+    line-height: 1.55;
+  }
   h1, h2, h3 {
     @apply font-heading;
-    font-variation-settings: "opsz" 72, "SOFT" 40, "WONK" 1;
+    font-weight: 750;
+    letter-spacing: -0.02em;
   }
-  .font-heading {
-    font-variation-settings: "opsz" 72, "SOFT" 40, "WONK" 1;
+  /* Figures line up in columns. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
   }
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
@@ -142,17 +156,19 @@
   }
 }
 
-/* subtle paper grain */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Sommer surfaces: borderless cards with a soft lift, and a sun-yellow marker. */
+[data-slot="card"] {
+  border-color: transparent;
+  box-shadow: var(--card-shadow);
 }
-.dark body::before { opacity: 0.06; }
+.highlight {
+  background: var(--highlight);
+  color: var(--highlight-foreground);
+  border-radius: 0.5em;
+  padding: 0 0.18em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
 
 /*
  * Touch targets. Unlayered so it beats Tailwind's utility layer.

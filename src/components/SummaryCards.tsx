@@ -19,7 +19,7 @@ function Tile({
   const show = delta !== undefined && Math.abs(delta) >= 1
   const good = show && delta < 0
   return (
-    <div className="grid content-start gap-1 rounded-xl bg-card px-3.5 py-3 ring-1 ring-foreground/10 sm:px-4 sm:py-3.5">
+    <div className="grid content-start gap-1 rounded-2xl bg-card px-3.5 py-3 shadow-(--card-shadow) sm:px-4 sm:py-3.5">
       <p className="text-[11px] font-medium tracking-wide text-muted-foreground uppercase sm:text-xs">{label}</p>
       <p className="font-mono text-lg font-semibold tracking-tight sm:text-2xl">{value}</p>
       <div className="flex min-h-4 flex-wrap items-center gap-x-2 text-xs text-muted-foreground">

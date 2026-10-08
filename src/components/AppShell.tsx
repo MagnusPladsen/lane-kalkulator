@@ -68,13 +68,14 @@ export function AppShell({
         <a
           href={ROUTE_HREF.calc}
           data-route="calc"
-          className="flex min-w-0 items-baseline gap-2 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="flex min-w-0 items-center gap-2.5 rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
-          <span className="truncate font-heading text-xl tracking-tight italic sm:text-2xl">{t("app.title")}</span>
+          <span aria-hidden className="size-7 shrink-0 rounded-full bg-highlight shadow-[inset_0_0_0_4px_var(--primary)]" />
+          <span className="truncate font-heading text-xl font-extrabold tracking-tight sm:text-2xl">{t("app.title")}</span>
           <span className="hidden text-xs text-muted-foreground lg:inline">{t("app.tagline")}</span>
         </a>
 
-        <nav className="ml-4 hidden gap-1 sm:flex" aria-label={t("nav.label")}>
+        <nav className="ml-4 hidden gap-1 rounded-full border bg-card p-1 sm:flex" aria-label={t("nav.label")}>
           <NavLink route="calc" active={route === "calc"}>
             <CalculatorIcon /> {t("nav.calculator")}
           </NavLink>
@@ -201,8 +202,8 @@ function NavLink({ route, active, children }: { route: Route; active: boolean; c
       data-route={route}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&_svg]:size-4",
-        active ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+        "inline-flex min-h-9 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&_svg]:size-4",
+        active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground",
       )}
     >
       {children}
