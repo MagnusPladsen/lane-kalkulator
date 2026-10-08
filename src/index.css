@@ -198,11 +198,13 @@ body::before {
 
 #root { position: relative; z-index: 1; }
 
+/* Movement only, never a fade from invisible: content must count as painted at once
+   (an opacity-0 start delays Largest Contentful Paint). */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { transform: translateY(6px); }
+  to { transform: translateY(0); }
 }
-.rise { animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.rise { animation: rise 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .rise-1 { animation-delay: 60ms; }
 .rise-2 { animation-delay: 120ms; }
 .rise-3 { animation-delay: 180ms; }
