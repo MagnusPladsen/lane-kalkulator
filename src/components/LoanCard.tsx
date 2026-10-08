@@ -1,9 +1,10 @@
 import { useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
-import { ChevronDownIcon, PencilIcon } from "lucide-react"
+import { ChevronDownIcon, PencilIcon, ScanTextIcon } from "lucide-react"
+import { ScanDialog } from "@/components/ScanDialog"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Field, FieldInput, MoneyInput, NumberInput, SectionTitle, Segmented, FieldGroup, NativeSelect } from "@/components/fields"
 import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
@@ -37,6 +38,7 @@ export function LoanCard({
     loan.monthlyFee ||
     loan.setupFee
   )
+  const [scanOpen, setScanOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(hasDetails || !!errors.startDate || !!errors.remainingBalance)
 
   const summary = t("loan.summary", {
@@ -83,7 +85,14 @@ export function LoanCard({
       <CardHeader>
         <SectionTitle>{t("loan.title")}</SectionTitle>
         <p className="text-sm text-muted-foreground">{t("loan.desc")}</p>
+        <CardAction>
+          <Button variant="outline" size="sm" onClick={() => setScanOpen(true)}>
+            <ScanTextIcon data-icon="inline-start" />
+            {t("scan.open")}
+          </Button>
+        </CardAction>
       </CardHeader>
+      <ScanDialog open={scanOpen} onOpenChange={setScanOpen} onApply={onChange} />
       <CardContent className="grid gap-4">
         <Field label={t("loan.name")} optional optionalLabel={t("steps.optional")}>
           <FieldInput

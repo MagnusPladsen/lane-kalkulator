@@ -354,5 +354,29 @@
   "share": {
     "failed": "Nie udało się odczytać linku. Prawdopodobnie został ucięty lub zmieniony podczas kopiowania. Skopiuj cały link jeszcze raz.",
     "dismiss": "Zamknij"
+  },
+  "scan": {
+    "open": "Ze zrzutu ekranu",
+    "title": "Wypełnij ze zrzutu ekranu",
+    "desc": "Zrób zrzuty ekranu szczegółów kredytu w bankowości internetowej. Aplikacja odczyta tekst i zaproponuje wartości do sprawdzenia.",
+    "drop": "Upuść zrzuty ekranu tutaj albo wklej ⌘V / Ctrl+V.",
+    "choose": "Wybierz obrazy",
+    "tip": "Najlepiej działa strona ze szczegółami kredytu. Można odczytać kilka obrazów naraz.",
+    "reading": "Odczytywanie obrazu {{n}} z {{total}} …",
+    "error": "Nie udało się odczytać obrazu. Spróbuj ponownie albo wypełnij ręcznie.",
+    "nothing": "Nie znaleziono szczegółów kredytu. Spróbuj zrzutu strony ze szczegółami kredytu.",
+    "review": "Oto co znaleziono. Odznacz wartości, które się nie zgadzają.",
+    "apply_one": "Wpisz {{count}} wartość",
+    "apply_few": "Wpisz {{count}} wartości",
+    "apply_many": "Wpisz {{count}} wartości",
+    "apply_other": "Wpisz {{count}} wartości",
+    "again": "Spróbuj innych obrazów",
+    "privacy": "Obrazy są odczytywane w przeglądarce i nigdzie nie są wysyłane.",
+    "derivedDueDay": "Przesunięto na dzień płatności ({{day}}.), aby raty wypadały we właściwy dzień",
+    "derivedEndDate": "Wyliczono z daty początku i końca",
+    "derivedRemaining": "Z pozostałego okresu",
+    "derivedFee": "Wyliczono: rata minus kapitał i odsetki",
+    "derivedBalance": "Obecna kwota kredytu",
+    "derivedName": "Od kredytodawcy"
   }
 }

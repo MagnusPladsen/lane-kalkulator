@@ -1,0 +1,23 @@
+Loan details
+
+Lender EKSEMPEL KOMMUNE
+Loan number 100001
+Interest type Fixed
+Nominal interest 4.375 %
+Effective interest 4.52 %
+Type Annuity
+Next term amount 10 349,34 kr
+Current loan amount 2 380 012,40 kr
+Original loan amount 2 400 000 kr
+Mortgage amount 2 400 000 kr
+Active grace period No
+Due date 20.
+Start date 19 May 2026
+End date 20 March 2069
+Remaining repayment period 42 years 5 months
+Address Eksempelveien 1, 0001 OSLO
+Payment
+
+Account number 1234 56 78901
+KID number 000000000000
+Insurance

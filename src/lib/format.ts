@@ -35,7 +35,8 @@ export function fmtNumber(n: number): string {
 }
 
 export function fmtRate(pct: number): string {
-  return new Intl.NumberFormat(INTL_LOCALE[currentLang()], { maximumFractionDigits: 2 }).format(pct)
+  // Three decimals: rates like 4,375 % are quoted that precisely.
+  return new Intl.NumberFormat(INTL_LOCALE[currentLang()], { maximumFractionDigits: 3 }).format(pct)
 }
 
 /** "+12 300 kr" / "−12 300 kr" / "±0 kr" */

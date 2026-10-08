@@ -346,5 +346,27 @@
   "share": {
     "failed": "The share link couldn't be read. It was probably cut off or changed when it was copied. Try copying the whole link again.",
     "dismiss": "Dismiss"
+  },
+  "scan": {
+    "open": "From screenshot",
+    "title": "Fill in from a screenshot",
+    "desc": "Take screenshots of the loan details in your online bank. The app reads the text and suggests values for you to check.",
+    "drop": "Drop screenshots here, or paste with ⌘V / Ctrl+V.",
+    "choose": "Choose images",
+    "tip": "The loan details page works best. Several images can be read at once.",
+    "reading": "Reading image {{n}} of {{total}} …",
+    "error": "Couldn't read the image. Try again, or fill in by hand.",
+    "nothing": "No loan details found. Try a screenshot of the loan details page.",
+    "review": "Here's what was found. Untick anything that's wrong.",
+    "apply_one": "Fill in {{count}} value",
+    "apply_other": "Fill in {{count}} values",
+    "again": "Try other images",
+    "privacy": "Images are read in your browser and never uploaded.",
+    "derivedDueDay": "Moved to the due day ({{day}}) so payments land on the right day",
+    "derivedEndDate": "Worked out from the start and end dates",
+    "derivedRemaining": "From the remaining term",
+    "derivedFee": "Worked out: payment minus principal and interest",
+    "derivedBalance": "Current loan amount",
+    "derivedName": "From the lender"
   }
 }

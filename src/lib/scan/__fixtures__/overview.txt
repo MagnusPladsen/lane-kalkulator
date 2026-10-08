@@ -1,0 +1,9 @@
+Start loan
+
+2 380 012,40 kr
+
+Effective interest: 4.52 %
+
+Nominal interest 4.375%
+Next term amount 1034934 kr
+Due date 20.

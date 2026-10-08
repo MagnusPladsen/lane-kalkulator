@@ -3,7 +3,7 @@ import { scrubUrl } from "./analytics"
 
 describe("scrubUrl", () => {
   it("never lets a share link's loan data through", () => {
-    expect(scrubUrl("https://lane-kalkulator.pladsen.dev/#/share/eyJsb2FuIjp7InByaW5jaXBhbCI6MjU3NzQwN319")).toBe(
+    expect(scrubUrl("https://lane-kalkulator.pladsen.dev/#/share/eyJsb2FuIjp7InByaW5jaXBhbCI6MjQwMDAwMH19")).toBe(
       "https://lane-kalkulator.pladsen.dev/",
     )
   })
