@@ -35,9 +35,7 @@ export function LoanCard({
     loan.startDate ||
     loan.remainingBalance !== undefined ||
     loan.monthlyFee ||
-    loan.setupFee ||
-    loan.effectiveRatePct !== undefined ||
-    loan.name
+    loan.setupFee
   )
   const [detailsOpen, setDetailsOpen] = useState(hasDetails || !!errors.startDate || !!errors.remainingBalance)
 
@@ -63,9 +61,11 @@ export function LoanCard({
       <Card className="rise rise-1">
         <CardContent className="flex items-start gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              {loan.name || t("loan.title")}
-            </p>
+            {loan.name ? (
+              <h2 className="line-clamp-2 font-heading text-xl leading-tight font-medium break-words">{loan.name}</h2>
+            ) : (
+              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{t("loan.title")}</p>
+            )}
             <p className="mt-1 font-mono text-lg font-semibold tabular-nums">{summary}</p>
             <p className="mt-0.5 text-xs text-muted-foreground">{bits.join(" · ")}</p>
           </div>
@@ -85,6 +85,17 @@ export function LoanCard({
         <p className="text-sm text-muted-foreground">{t("loan.desc")}</p>
       </CardHeader>
       <CardContent className="grid gap-4">
+        <Field label={t("loan.name")} optional optionalLabel={t("steps.optional")}>
+          <FieldInput
+            autoComplete="off"
+            value={loan.name}
+            placeholder={t("loan.namePlaceholder")}
+            maxLength={80}
+            onChange={(e) => onChange({ name: e.target.value })}
+            className="h-10 text-base font-medium"
+          />
+        </Field>
+
         <Field label={t("loan.amount")} error={err("principal")}>
           <MoneyInput value={loan.principal} onChange={(v) => onChange({ principal: v ?? 0 })} />
         </Field>
@@ -97,27 +108,38 @@ export function LoanCard({
               suffix={t("loan.ratePa")}
             />
           </Field>
-          <Field label={t("loan.term")} error={err("termMonths")}>
-            <FieldGroup className="grid grid-cols-2 gap-2">
-              <NumberInput
-                integer
-                aria-label={`${t("loan.term")}, ${t("loan.years")}`}
-                value={Math.floor(loan.termMonths / 12)}
-                onChange={(v) => onChange({ termMonths: Math.max(0, v) * 12 + (loan.termMonths % 12) })}
-                suffix={t("loan.years")}
-              />
-              <NumberInput
-                integer
-                aria-label={`${t("loan.term")}, ${t("loan.months")}`}
-                value={loan.termMonths % 12}
-                onChange={(v) =>
-                  onChange({ termMonths: Math.floor(loan.termMonths / 12) * 12 + Math.min(11, Math.max(0, v)) })
-                }
-                suffix={t("loan.months")}
-              />
-            </FieldGroup>
+          <Field label={t("loan.bankEffective")} hint={t("loan.bankEffectiveHint")} error={err("effectiveRatePct")}>
+            <NumberInput
+              value={loan.effectiveRatePct}
+              onChange={(v) => onChange({ effectiveRatePct: v })}
+              onClear={() => onChange({ effectiveRatePct: undefined })}
+              suffix={t("loan.ratePa")}
+              placeholder="–"
+            />
           </Field>
         </div>
+        {loan.effectiveRatePct !== undefined && <EffectiveRateCheck loan={loan} valid={valid} onChange={onChange} />}
+
+        <Field label={t("loan.term")} error={err("termMonths")}>
+          <FieldGroup className="grid grid-cols-2 gap-3">
+            <NumberInput
+              integer
+              aria-label={`${t("loan.term")}, ${t("loan.years")}`}
+              value={Math.floor(loan.termMonths / 12)}
+              onChange={(v) => onChange({ termMonths: Math.max(0, v) * 12 + (loan.termMonths % 12) })}
+              suffix={t("loan.years")}
+            />
+            <NumberInput
+              integer
+              aria-label={`${t("loan.term")}, ${t("loan.months")}`}
+              value={loan.termMonths % 12}
+              onChange={(v) =>
+                onChange({ termMonths: Math.floor(loan.termMonths / 12) * 12 + Math.min(11, Math.max(0, v)) })
+              }
+              suffix={t("loan.months")}
+            />
+          </FieldGroup>
+        </Field>
 
         <Field label={t("loan.type")} hint={loan.loanType === "annuity" ? t("loan.annuityHint") : t("loan.serialHint")}>
           <Segmented
@@ -191,29 +213,6 @@ export function LoanCard({
               >
                 <MoneyInput value={loan.setupFee} allowEmpty onChange={(v) => onChange({ setupFee: v })} />
               </Field>
-              <Field
-                label={t("loan.bankEffective")}
-                optional
-                optionalLabel={t("steps.optional")}
-                hint={t("loan.bankEffectiveHint")}
-                error={err("effectiveRatePct")}
-              >
-                <NumberInput
-                  value={loan.effectiveRatePct}
-                  onChange={(v) => onChange({ effectiveRatePct: v })}
-                  onClear={() => onChange({ effectiveRatePct: undefined })}
-                  suffix="%"
-                />
-              </Field>
-              <Field label={t("loan.name")} optional optionalLabel={t("steps.optional")}>
-                <FieldInput
-                  autoComplete="off"
-                  value={loan.name}
-                  placeholder={t("loan.namePlaceholder")}
-                  maxLength={80}
-                  onChange={(e) => onChange({ name: e.target.value })}
-                />
-              </Field>
             </div>
             <Field label={t("loan.dayCount")} hint={t("loan.dayCountHint")}>
               <NativeSelect<DayCount>
@@ -226,7 +225,6 @@ export function LoanCard({
                 ]}
               />
             </Field>
-            <EffectiveRateCheck loan={loan} valid={valid} onChange={onChange} />
           </CollapsibleContent>
         </Collapsible>
 

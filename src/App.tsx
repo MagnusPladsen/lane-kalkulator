@@ -13,6 +13,8 @@ import { isPristine, loadDraft, newScenario, saveDraft, storageAvailable, useSav
 import { decodeShare, shareUrl } from "@/lib/share"
 import { scenarioReducer } from "@/lib/scenarioReducer"
 import type { Scenario } from "@/lib/loan/types"
+import { Telemetry } from "@/components/Telemetry"
+import { trackUsage } from "@/lib/analytics"
 
 const SHARE_PREFIX = "#/share/"
 
@@ -79,6 +81,7 @@ export default function App() {
 
   const copyLink = async () => {
     const url = shareUrl(scenario)
+    trackUsage("share_link_created")
     try {
       await navigator.clipboard.writeText(url)
       setCopied(true)
@@ -160,10 +163,12 @@ export default function App() {
         initialName={scenario.loan.name}
         exists={exists}
         onSave={(name) => {
+          trackUsage("loan_saved")
           dispatch({ type: "load", scenario: saved.save(scenario, name) })
           setSaveOpen(false)
         }}
         onSaveCopy={(name) => {
+          trackUsage("loan_saved")
           dispatch({ type: "load", scenario: saved.saveAsCopy(scenario, name) })
           setSaveOpen(false)
         }}
@@ -187,6 +192,7 @@ export default function App() {
         }}
       />
       <ShareFallbackDialog url={fallbackUrl} onOpenChange={(o) => !o && setFallbackUrl(null)} />
+      <Telemetry route={route} />
     </AppShell>
   )
 }
