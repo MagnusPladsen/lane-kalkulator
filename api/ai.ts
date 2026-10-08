@@ -1,7 +1,7 @@
 import OpenAI from "openai"
-import { DEFAULT_LIMITS, RateLimiter } from "../src/lib/ai/limits"
-import { AiError, handleAi, validateRequest } from "../src/lib/ai/server"
-import type { AiStatus } from "../src/lib/ai/types"
+import { DEFAULT_LIMITS, RateLimiter } from "../src/lib/ai/limits.js"
+import { AiError, handleAi, validateRequest } from "../src/lib/ai/server.js"
+import type { AiStatus } from "../src/lib/ai/types.js"
 
 export const config = { maxDuration: 30 }
 

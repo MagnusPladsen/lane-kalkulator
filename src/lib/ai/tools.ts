@@ -1,8 +1,8 @@
-import { evaluateOffer, refinance } from "../compare"
-import { addYearMonths, analyze, isValidYearMonth, monthSpan, nextPaymentMonth, planEffectiveRate, solveForTarget, solveMonthlyFee } from "../loan/engine"
-import type { Analysis, CalendarExtra, CustomPeriod, LoanCategory, LoanInput, LoanType, Scenario } from "../loan/types"
-import { fetchMortgageRate, tableRate } from "../rates"
-import type { Suggestion } from "./types"
+import { evaluateOffer, refinance } from "../compare.js"
+import { addYearMonths, analyze, isValidYearMonth, monthSpan, nextPaymentMonth, planEffectiveRate, solveForTarget, solveMonthlyFee } from "../loan/engine.js"
+import type { Analysis, CalendarExtra, CustomPeriod, LoanCategory, LoanInput, LoanType, Scenario } from "../loan/types.js"
+import { fetchMortgageRate, tableRate } from "../rates.js"
+import type { Suggestion } from "./types.js"
 
 /** Everything a tool may look at: the user's loan and today's date. */
 export interface ToolContext {

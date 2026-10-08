@@ -1,4 +1,4 @@
-import type { LoanCategory, LoanInput } from "./loan/types"
+import type { LoanCategory, LoanInput } from "./loan/types.js"
 
 export interface TypicalRate {
   /** Suggested nominal rate to fill in. */

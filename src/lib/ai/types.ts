@@ -1,4 +1,4 @@
-import type { CalendarExtra, CustomPeriod, LoanInput, Scenario } from "../loan/types"
+import type { CalendarExtra, CustomPeriod, LoanInput, Scenario } from "../loan/types.js"
 
 /** What the browser sends. Never contains the loan's name. */
 export interface AiRequest {
