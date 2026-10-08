@@ -1,5 +1,8 @@
 export type LoanType = "annuity" | "serial"
 
+/** What the loan is for; drives presets and typical-rate suggestions. */
+export type LoanCategory = "mortgage" | "startlan" | "car" | "consumer" | "student"
+
 /**
  * How interest days are counted (rentedager).
  * 30/360: every month is 1/12 of a year (often fixed-rate loans).
@@ -10,6 +13,7 @@ export type DayCount = "30/360" | "act/act" | "act/360"
 
 export interface LoanInput {
   name: string
+  category?: LoanCategory
   /** Original loan amount. */
   principal: number
   /** Nominal annual interest rate in percent, e.g. 5.4 */

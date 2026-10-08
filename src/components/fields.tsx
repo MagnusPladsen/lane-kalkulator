@@ -2,6 +2,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { HelpTip } from "@/components/HelpTip"
 import { currentLang, INTL_LOCALE } from "@/i18n"
 import { fmtNumber } from "@/lib/format"
 import { parseAmount } from "@/lib/parseAmount"
@@ -23,6 +24,7 @@ function useField() {
 export function Field({
   label,
   hint,
+  help,
   error,
   className,
   children,
@@ -31,6 +33,8 @@ export function Field({
 }: {
   label: React.ReactNode
   hint?: React.ReactNode
+  /** Plain explanation behind a "?" next to the label. */
+  help?: React.ReactNode
   error?: string
   className?: string
   optional?: boolean
@@ -46,12 +50,13 @@ export function Field({
   )
   return (
     <div className={cn("grid content-start gap-1.5", className)}>
-      <Label id={labelId} htmlFor={id} className="text-xs tracking-wide text-muted-foreground uppercase">
-        {label}
-        {optional && (
-          <span className="ml-auto font-normal tracking-normal normal-case">{optionalLabel}</span>
-        )}
-      </Label>
+      <div className="flex min-h-5 items-center gap-1">
+        <Label id={labelId} htmlFor={id} className="text-xs tracking-wide text-muted-foreground uppercase">
+          {label}
+        </Label>
+        {help && <HelpTip label={typeof label === "string" ? label : ""}>{help}</HelpTip>}
+        {optional && <span className="ml-auto text-xs text-muted-foreground">{optionalLabel}</span>}
+      </div>
       <FieldContext.Provider value={value}>{children}</FieldContext.Provider>
       {error ? (
         <p id={msgId} role="alert" className="text-xs text-destructive">

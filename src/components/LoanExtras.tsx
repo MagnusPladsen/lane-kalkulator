@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react"
+import { HelpTip } from "@/components/HelpTip"
 import { Trans, useTranslation } from "react-i18next"
 import { CircleCheckIcon, InfoIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -35,7 +36,10 @@ export function IntroTerms({
           }
         />
         <span className="grid gap-0.5">
-          <span className="text-sm font-medium">{t("loan.intro")}</span>
+          <span className="flex items-center gap-1 text-sm font-medium">
+            {t("loan.intro")}
+            <HelpTip label={t("loan.intro")}>{t("help.intro")}</HelpTip>
+          </span>
           <span className="text-xs text-muted-foreground">{t("loan.introHint")}</span>
         </span>
       </label>

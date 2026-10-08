@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react"
+import { HelpTip } from "@/components/HelpTip"
 import { Trans, useTranslation } from "react-i18next"
 import { CheckIcon, PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -37,7 +38,10 @@ export function GoalTool({
 
   return (
     <div className="grid gap-4">
-      <p className="text-sm text-muted-foreground">{t("goal.question")}</p>
+      <p className="flex items-start gap-1 text-sm text-muted-foreground">
+        <span className="flex-1">{t("goal.question")}</span>
+        <HelpTip label={t("whatif.goal")}>{t("help.goal")}</HelpTip>
+      </p>
 
       <div className="grid gap-3">
         <div className="flex items-baseline justify-between gap-2">

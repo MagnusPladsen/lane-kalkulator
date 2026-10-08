@@ -151,6 +151,7 @@ export function sanitizeScenario(raw: unknown, today: string = todayIso()): Scen
     savedAt,
     loan: {
       name: str(l.name, "", MAX_NAME),
+      category: (["mortgage", "startlan", "car", "consumer", "student"] as const).find((c) => c === l.category),
       principal,
       annualRatePct: num(l.annualRatePct, 0, 0, 100),
       termMonths: Math.round(num(l.termMonths, 300, 1, 600)),

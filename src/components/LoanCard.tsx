@@ -10,6 +10,7 @@ import { Field, FieldInput, MoneyInput, NumberInput, SectionTitle, Segmented, Fi
 import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
 import type { DayCount, LoanInput } from "@/lib/loan/types"
 import { EffectiveRateCheck, IntroTerms } from "@/components/LoanExtras"
+import { LoanTypePicker } from "@/components/LoanTypePicker"
 import type { LoanValidation } from "@/lib/scenarioReducer"
 
 export function LoanCard({
@@ -49,6 +50,7 @@ export function LoanCard({
 
   if (!editing) {
     const bits = [
+      loan.category ? t(`rates.${loan.category}`) : undefined,
       loan.loanType === "annuity" ? t("loan.annuity") : t("loan.serial"),
       loan.startDate ? `${t("loan.startDate")} ${fmtMonthYear(loan.startDate)}` : undefined,
       loan.remainingBalance !== undefined ? `${t("loan.remaining")} ${fmtMoney(loan.remainingBalance)}` : undefined,
@@ -94,7 +96,7 @@ export function LoanCard({
       </CardHeader>
       <ScanDialog open={scanOpen} onOpenChange={setScanOpen} onApply={onChange} />
       <CardContent className="grid gap-4">
-        <Field label={t("loan.name")} optional optionalLabel={t("steps.optional")}>
+        <Field label={t("loan.name")} help={t("help.name")} optional optionalLabel={t("steps.optional")}>
           <FieldInput
             autoComplete="off"
             value={loan.name}
@@ -105,19 +107,21 @@ export function LoanCard({
           />
         </Field>
 
-        <Field label={t("loan.amount")} error={err("principal")}>
+        <LoanTypePicker loan={loan} onChange={onChange} />
+
+        <Field label={t("loan.amount")} help={t("help.amount")} error={err("principal")}>
           <MoneyInput value={loan.principal} onChange={(v) => onChange({ principal: v ?? 0 })} />
         </Field>
 
         <div className="grid grid-cols-2 gap-3">
-          <Field label={t("loan.rate")} hint={t("loan.rateHint")} error={err("annualRatePct")}>
+          <Field label={t("loan.rate")} help={t("help.rate")} hint={t("loan.rateHint")} error={err("annualRatePct")}>
             <NumberInput
               value={loan.annualRatePct}
               onChange={(v) => onChange({ annualRatePct: v })}
               suffix={t("loan.ratePa")}
             />
           </Field>
-          <Field label={t("loan.bankEffective")} hint={t("loan.bankEffectiveHint")} error={err("effectiveRatePct")}>
+          <Field label={t("loan.bankEffective")} help={t("help.effective")} hint={t("loan.bankEffectiveHint")} error={err("effectiveRatePct")}>
             <NumberInput
               value={loan.effectiveRatePct}
               onChange={(v) => onChange({ effectiveRatePct: v })}
@@ -129,7 +133,7 @@ export function LoanCard({
         </div>
         {loan.effectiveRatePct !== undefined && <EffectiveRateCheck loan={loan} valid={valid} onChange={onChange} />}
 
-        <Field label={t("loan.term")} error={err("termMonths")}>
+        <Field label={t("loan.term")} help={t("help.term")} error={err("termMonths")}>
           <FieldGroup className="grid grid-cols-2 gap-3">
             <NumberInput
               integer
@@ -150,7 +154,7 @@ export function LoanCard({
           </FieldGroup>
         </Field>
 
-        <Field label={t("loan.type")} hint={loan.loanType === "annuity" ? t("loan.annuityHint") : t("loan.serialHint")}>
+        <Field label={t("loan.type")} help={t("help.type")} hint={loan.loanType === "annuity" ? t("loan.annuityHint") : t("loan.serialHint")}>
           <Segmented
             value={loan.loanType}
             onChange={(v) => onChange({ loanType: v })}
@@ -175,6 +179,7 @@ export function LoanCard({
             <div className="grid grid-cols-2 gap-3">
               <Field
                 label={t("loan.startDate")}
+                help={t("help.startDate")}
                 optional
                 optionalLabel={t("steps.optional")}
                 error={err("startDate")}
@@ -195,6 +200,7 @@ export function LoanCard({
               </Field>
               <Field
                 label={t("loan.remaining")}
+                help={t("help.remaining")}
                 optional
                 optionalLabel={t("steps.optional")}
                 error={err("remainingBalance")}
@@ -210,11 +216,12 @@ export function LoanCard({
               </Field>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <Field label={t("loan.fee")} hint={t("loan.feeHint")} error={err("monthlyFee")}>
+              <Field label={t("loan.fee")} help={t("help.fee")} hint={t("loan.feeHint")} error={err("monthlyFee")}>
                 <MoneyInput value={loan.monthlyFee} onChange={(v) => onChange({ monthlyFee: v ?? 0 })} />
               </Field>
               <Field
                 label={t("loan.setupFee")}
+                help={t("help.setupFee")}
                 optional
                 optionalLabel={t("steps.optional")}
                 hint={t("loan.setupFeeHint")}
@@ -223,7 +230,7 @@ export function LoanCard({
                 <MoneyInput value={loan.setupFee} allowEmpty onChange={(v) => onChange({ setupFee: v })} />
               </Field>
             </div>
-            <Field label={t("loan.dayCount")} hint={t("loan.dayCountHint")}>
+            <Field label={t("loan.dayCount")} help={t("help.dayCount")} hint={t("loan.dayCountHint")}>
               <NativeSelect<DayCount>
                 value={loan.dayCount ?? "30/360"}
                 onChange={(dayCount) => onChange({ dayCount })}
