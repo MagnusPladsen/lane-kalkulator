@@ -6,6 +6,7 @@ import { LoanCard } from "@/components/LoanCard"
 import { WhatIfCard, type Tool } from "@/components/whatif/WhatIfCard"
 import { Verdict } from "@/components/Verdict"
 import { SummaryCards } from "@/components/SummaryCards"
+import { LoanSentence, RateStress } from "@/components/Insights"
 import { MobileVerdictBar } from "@/components/MobileVerdictBar"
 import { BalanceChart } from "@/components/charts/BalanceChart"
 import { CumulativeChart } from "@/components/charts/CumulativeChart"
@@ -123,6 +124,18 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
                     nominalRatePct={scenario.loan.annualRatePct}
                     stale={stale}
                   />
+                  <LoanSentence a={shown} dateFor={dateFor} />
+                  {analysis && (
+                    <RateStress
+                      scenario={scenario}
+                      analysis={analysis}
+                      monthDate={monthDate}
+                      onAddPeriod={(period) => {
+                        dispatch({ type: "period/add", period })
+                        setTool("periods")
+                      }}
+                    />
+                  )}
                   <Card className={stale ? "rise rise-2 opacity-50 transition-opacity" : "rise rise-2 transition-opacity"}>
                     <CardContent>
                       <Tabs value={chartTab} onValueChange={(v) => setChartTab(v as ChartTab)}>

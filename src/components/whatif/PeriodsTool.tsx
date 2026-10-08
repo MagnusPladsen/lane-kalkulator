@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next"
+import { HelpTip } from "@/components/HelpTip"
 import { PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -40,7 +41,10 @@ export function PeriodsTool({
 
   return (
     <div className="grid gap-3">
-      <p className="text-sm text-muted-foreground">{t("periods.desc")}</p>
+      <p className="flex items-start gap-1 text-sm text-muted-foreground">
+        <span className="flex-1">{t("periods.desc")}</span>
+        <HelpTip label={t("whatif.periods")}>{t("help.periods")}</HelpTip>
+      </p>
       {periods.length === 0 && <EmptyHint>{t("periods.empty")}</EmptyHint>}
 
       {periods.map((p, i) => {
@@ -113,7 +117,7 @@ export function PeriodsTool({
       </Button>
 
       {hasInterestOnly && (
-        <Field label={t("periods.after")} className="mt-1">
+        <Field label={t("periods.after")} help={t("help.after")} className="mt-1">
           <RadioGroup
             aria-label={t("periods.after")}
             value={after}

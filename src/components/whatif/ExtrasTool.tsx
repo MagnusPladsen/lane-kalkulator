@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next"
+import { HelpTip } from "@/components/HelpTip"
 import { PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -35,7 +36,10 @@ export function ExtrasTool({
 
   return (
     <div className="grid gap-3">
-      <p className="text-sm text-muted-foreground">{t("extras.desc")}</p>
+      <p className="flex items-start gap-1 text-sm text-muted-foreground">
+        <span className="flex-1">{t("extras.desc")}</span>
+        <HelpTip label={t("whatif.extras")}>{t("help.extras")}</HelpTip>
+      </p>
       {extras.length === 0 && <EmptyHint>{t("extras.empty")}</EmptyHint>}
       {extras.map((e, i) => {
         // Judge the dates as if the amount were set, so an empty amount doesn't read as "outside".
