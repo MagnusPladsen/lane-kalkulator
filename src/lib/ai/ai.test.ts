@@ -166,6 +166,8 @@ describe("answer polish", () => {
   })
   it("drops a leading label, bold past the key figures and a closing offer", () => {
     expect(tidy("Kort: Ja.\n\n- **1 kr**, **2 kr**, **3 kr**\n\nVil du at jeg simulerer dette?")).toBe("Ja.\n\n- **1 kr**, **2 kr**, 3 kr")
+    expect(tidy("Ja.\n\nFor konkrete effekter må jeg simulere endringen; vil du at jeg gjør det?")).toBe("Ja.")
+    expect(tidy("Ja.\n\nSjekk med banken om vilkårene.")).toBe("Ja.\n\nSjekk med banken om vilkårene.")
     // A single paragraph is the whole answer, so it is never dropped.
     expect(tidy("Vil du at jeg forklarer? Effektiv rente er …")).toBe("Vil du at jeg forklarer? Effektiv rente er …")
   })

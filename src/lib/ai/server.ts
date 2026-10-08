@@ -191,7 +191,9 @@ export function tidy(text: string): string {
   return parts.join("\n\n")
 }
 
-const OFFER = /^(?:vil du at jeg|hvis du vil|skal jeg|ønsker du at jeg|want me to|would you like me to|shall i|do you want me to|if you want, i can|chcesz, żebym|czy mam)/i
+/** A closing paragraph that only offers more: it opens with an offer or ends asking one. */
+const OFFER =
+  /^(?:vil du at jeg|hvis du vil|skal jeg|ønsker du at jeg|want me to|would you like me to|shall i|do you want me to|if you want, i can|chcesz, żebym|czy mam)|(?:vil du at jeg|skal jeg|ønsker du at jeg|want me to|would you like me to|shall i|do you want me to|chcesz, żebym|czy mam)[^.!?\n]*\?\s*$/i
 
 function emptyScenario(): Scenario {
   return {
