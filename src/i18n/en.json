@@ -38,7 +38,7 @@
   "loan": {
     "title": "The loan",
     "desc": "What you borrowed and on what terms.",
-    "name": "Name",
+    "name": "Loan name",
     "namePlaceholder": "My mortgage",
     "amount": "Loan amount",
     "rate": "Nominal rate",
@@ -61,14 +61,14 @@
     "estimateSerial": "Roughly <0>{{amount}}</0> per month at the start.",
     "summary": "{{amount}} · {{rate}} % · {{term}}",
     "more": "More details",
-    "moreHint": "start date, balance, fees, effective rate, name",
+    "moreHint": "start date, balance, fees, day count",
     "editLoan": "Edit the loan",
     "rateHint": "The floating (nominal) rate, not the effective rate.",
     "feeHint": "The fee on each bill (termingebyr). On your invoice or loan agreement, often 0–75 kr.",
     "setupFee": "Setup fee",
     "setupFeeHint": "One-off fee when the loan was taken out. Include the registration fee (tinglysingsgebyr) if the bank counts it in the effective rate.",
-    "bankEffective": "Effective rate from the bank",
-    "bankEffectiveHint": "Only used to check that the fees add up.",
+    "bankEffective": "Effective rate",
+    "bankEffectiveHint": "From the bank. Optional, used to check the fees.",
     "effCalc": "Effective rate with these numbers: <0>{{rate}} %</0>",
     "effMatch": "Matches the bank.",
     "effHigher": "The bank says {{bank}} %. The gap is usually fees that are missing, most often the monthly fee.",
@@ -210,7 +210,7 @@
   },
   "save": {
     "title": "Save this loan",
-    "desc": "Kept in this browser only. Nothing leaves your machine.",
+    "desc": "Kept in this browser only. Your loan data never leaves your machine.",
     "name": "Name",
     "update": "Update",
     "save": "Save",
@@ -238,7 +238,7 @@
     "export": "Export all",
     "deleteAll": "Delete all",
     "privacyTitle": "Private by design",
-    "privacyBody": "Nothing you type is collected, tracked or sent anywhere. Loans are stored only in this browser's local storage. Clearing site data removes them, so use <0>Export</0> to keep a backup or move between devices.",
+    "privacyBody": "Nothing you type about your loans is collected or sent anywhere. Loans are stored only in this browser's local storage. We only count anonymous visits, without cookies and without any loan data. Clearing site data removes your loans, so use <0>Export</0> to keep a backup or move between devices.",
     "emptyHint": "Save a loan from the calculator and it shows up here.",
     "saved": "Saved {{date}}",
     "open": "Open",
@@ -272,7 +272,7 @@
     "imported_other": "{{count}} loans imported."
   },
   "footer": {
-    "privacy": "Nothing is collected or sent anywhere. Your loans live only in this browser.",
+    "privacy": "Your loans are stored only in this browser and never sent anywhere. We only count anonymous visits, without cookies.",
     "estimates": "Estimates only. Your bank's numbers are the ones that count."
   },
   "storage": {

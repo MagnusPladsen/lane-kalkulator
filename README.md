@@ -6,7 +6,7 @@ A loan calculator that answers the questions most bank tools dodge:
 - **What if I need a break, or get a better rate for a while?** Add a period with a start and end month: interest only when money is tight, or a different rate such as 0 % or a fixed-rate deal. See what it really costs or saves.
 - **What does it take to be done by a given year?** The goal tool works out the extra payment needed.
 
-Everything runs in the browser. Nothing is collected or sent anywhere. Saved loans live in `localStorage`; export them as JSON if you want a backup.
+Everything runs in the browser. Loan data is never collected or sent anywhere: saved loans live in `localStorage`, and you can export them as JSON for a backup. The site counts anonymous visits with Vercel Web Analytics and Speed Insights, without cookies. Every URL is reduced to the page ("/" or "/loans") before it is sent, so share links, which carry loan details in the URL, never reach analytics.
 
 ## Features
 

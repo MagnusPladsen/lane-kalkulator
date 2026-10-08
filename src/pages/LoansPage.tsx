@@ -8,6 +8,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog"
 import { analyze, todayIso } from "@/lib/loan/engine"
 import { fmtDate, fmtDateTime, fmtDuration, fmtMoney, fmtRate } from "@/lib/format"
 import { downloadText, exportJson, ImportError, parseImport } from "@/lib/share"
+import { trackUsage } from "@/lib/analytics"
 import type { Scenario } from "@/lib/loan/types"
 
 export function LoansPage({
@@ -52,6 +53,7 @@ export function LoansPage({
       const parsed = parseImport(await f.text())
       if (parsed.length === 0) throw new ImportError("empty")
       setImportedCount(onImport(parsed))
+      trackUsage("loans_imported")
       setImportError(null)
     } catch (e) {
       setImportError(t(`loans.importError.${e instanceof ImportError ? e.message : "notExport"}`))
@@ -83,7 +85,10 @@ export function LoansPage({
           <Button
             variant="outline"
             disabled={items.length === 0}
-            onClick={() => downloadText(`lanekalkulator-${today}.json`, exportJson(items))}
+            onClick={() => {
+              downloadText(`lanekalkulator-${today}.json`, exportJson(items))
+              trackUsage("loans_exported")
+            }}
           >
             <DownloadIcon data-icon="inline-start" /> {t("loans.export")}
           </Button>

@@ -38,7 +38,7 @@
   "loan": {
     "title": "Kredyt",
     "desc": "Ile pożyczyłeś i na jakich warunkach.",
-    "name": "Nazwa",
+    "name": "Nazwa kredytu",
     "namePlaceholder": "Mój kredyt hipoteczny",
     "amount": "Kwota kredytu",
     "rate": "Oprocentowanie nominalne",
@@ -61,14 +61,14 @@
     "estimateSerial": "Około <0>{{amount}}</0> miesięcznie na początku.",
     "summary": "{{amount}} · {{rate}} % · {{term}}",
     "more": "Więcej szczegółów",
-    "moreHint": "data startu, saldo, opłaty, RRSO, nazwa",
+    "moreHint": "data startu, saldo, opłaty, naliczanie odsetek",
     "editLoan": "Edytuj kredyt",
     "rateHint": "Zmienne (nominalne) oprocentowanie, nie RRSO.",
     "feeHint": "Opłata za każdą ratę. Na fakturze lub w umowie, często 0–75 kr.",
     "setupFee": "Prowizja za udzielenie",
     "setupFeeHint": "Jednorazowa opłata przy udzieleniu kredytu. Dolicz opłatę za wpis do rejestru (tinglysingsgebyr), jeśli bank wlicza ją do RRSO.",
-    "bankEffective": "RRSO z banku",
-    "bankEffectiveHint": "Służy tylko do sprawdzenia, czy opłaty się zgadzają.",
+    "bankEffective": "RRSO",
+    "bankEffectiveHint": "Z banku. Opcjonalnie, do sprawdzenia opłat.",
     "effCalc": "RRSO przy tych danych: <0>{{rate}} %</0>",
     "effMatch": "Zgadza się z bankiem.",
     "effHigher": "Bank podaje {{bank}} %. Różnica to zwykle brakujące opłaty, najczęściej opłata miesięczna.",
@@ -210,7 +210,7 @@
   },
   "save": {
     "title": "Zapisz ten kredyt",
-    "desc": "Tylko w tej przeglądarce. Nic nie opuszcza twojego komputera.",
+    "desc": "Tylko w tej przeglądarce. Dane kredytu nigdy nie opuszczają twojego komputera.",
     "name": "Nazwa",
     "update": "Aktualizuj",
     "save": "Zapisz",
@@ -240,7 +240,7 @@
     "export": "Eksportuj wszystko",
     "deleteAll": "Usuń wszystko",
     "privacyTitle": "Prywatność z założenia",
-    "privacyBody": "Nic, co wpisujesz, nie jest zbierane, śledzone ani nigdzie wysyłane. Kredyty są zapisane tylko w pamięci lokalnej tej przeglądarki. Wyczyszczenie danych strony je usuwa, więc użyj <0>Eksportuj</0>, aby mieć kopię albo przenieść je na inne urządzenie.",
+    "privacyBody": "Nic, co wpisujesz o swoich kredytach, nie jest zbierane ani nigdzie wysyłane. Kredyty są zapisane tylko w pamięci lokalnej tej przeglądarki. Liczymy tylko anonimowe odwiedziny, bez plików cookie i bez danych kredytu. Wyczyszczenie danych strony usuwa kredyty, więc użyj <0>Eksportuj</0>, aby mieć kopię albo przenieść je na inne urządzenie.",
     "emptyHint": "Zapisz kredyt w kalkulatorze, a pojawi się tutaj.",
     "saved": "Zapisano {{date}}",
     "open": "Otwórz",
@@ -276,7 +276,7 @@
     "imported_other": "Zaimportowano {{count}} kredytów."
   },
   "footer": {
-    "privacy": "Nic nie jest zbierane ani nigdzie wysyłane. Twoje kredyty istnieją tylko w tej przeglądarce.",
+    "privacy": "Twoje kredyty są zapisane tylko w tej przeglądarce i nigdzie nie są wysyłane. Liczymy tylko anonimowe odwiedziny, bez plików cookie.",
     "estimates": "Tylko szacunki. Liczą się liczby z twojego banku."
   },
   "storage": {

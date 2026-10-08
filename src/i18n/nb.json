@@ -38,7 +38,7 @@
   "loan": {
     "title": "Lånet",
     "desc": "Hva du har lånt og på hvilke vilkår.",
-    "name": "Navn",
+    "name": "Navn på lånet",
     "namePlaceholder": "Boliglånet",
     "amount": "Lånebeløp",
     "rate": "Nominell rente",
@@ -61,14 +61,14 @@
     "estimateSerial": "Omtrent <0>{{amount}}</0> per måned i starten.",
     "summary": "{{amount}} · {{rate}} % · {{term}}",
     "more": "Flere detaljer",
-    "moreHint": "startdato, restgjeld, gebyrer, effektiv rente, navn",
+    "moreHint": "startdato, restgjeld, gebyrer, renteberegning",
     "editLoan": "Endre lånet",
     "rateHint": "Den flytende (nominelle) renten, ikke den effektive.",
     "feeHint": "Termingebyret. Står på fakturaen eller i låneavtalen, ofte 0–75 kr.",
     "setupFee": "Etableringsgebyr",
     "setupFeeHint": "Engangsgebyr da lånet ble tatt opp. Ta med tinglysingsgebyret hvis banken regner det inn i effektiv rente.",
-    "bankEffective": "Effektiv rente fra banken",
-    "bankEffectiveHint": "Brukes bare til å sjekke at gebyrene stemmer.",
+    "bankEffective": "Effektiv rente",
+    "bankEffectiveHint": "Fra banken. Valgfritt, brukes til å sjekke gebyrene.",
     "effCalc": "Effektiv rente med disse tallene: <0>{{rate}} %</0>",
     "effMatch": "Stemmer med banken.",
     "effHigher": "Banken oppgir {{bank}} %. Forskjellen er som regel gebyrer som mangler, oftest termingebyret.",
@@ -210,7 +210,7 @@
   },
   "save": {
     "title": "Lagre dette lånet",
-    "desc": "Lagres bare i denne nettleseren. Ingenting forlater maskinen din.",
+    "desc": "Lagres bare i denne nettleseren. Lånedataene forlater aldri maskinen din.",
     "name": "Navn",
     "update": "Oppdater",
     "save": "Lagre",
@@ -238,7 +238,7 @@
     "export": "Eksporter alle",
     "deleteAll": "Slett alle",
     "privacyTitle": "Privat av natur",
-    "privacyBody": "Ingenting du skriver inn blir samlet, sporet eller sendt noe sted. Lånene lagres bare i denne nettleserens lokale lager. Sletter du nettstedsdata, forsvinner de, så bruk <0>Eksporter</0> for å ta en kopi eller flytte mellom enheter.",
+    "privacyBody": "Ingenting du skriver inn om lånene dine blir samlet inn eller sendt noe sted. De lagres bare i denne nettleserens lokale lager. Vi teller bare anonyme besøk, uten informasjonskapsler og uten lånedata. Sletter du nettstedsdata, forsvinner lånene, så bruk <0>Eksporter</0> for å ta en kopi eller flytte mellom enheter.",
     "emptyHint": "Lagre et lån fra kalkulatoren, så dukker det opp her.",
     "saved": "Lagret {{date}}",
     "open": "Åpne",
@@ -272,7 +272,7 @@
     "imported_other": "{{count}} lån importert."
   },
   "footer": {
-    "privacy": "Ingenting samles inn eller sendes noe sted. Lånene dine finnes bare i denne nettleseren.",
+    "privacy": "Lånene dine lagres bare i denne nettleseren og sendes aldri noe sted. Vi teller bare anonyme besøk, uten informasjonskapsler.",
     "estimates": "Kun anslag. Bankens tall er de som gjelder."
   },
   "storage": {
