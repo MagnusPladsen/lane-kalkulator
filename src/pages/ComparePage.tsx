@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
+import { Faq } from "@/components/Faq"
+import { COMPARE_FAQ } from "@/lib/faq"
 import { useTranslation } from "react-i18next"
 import { ArrowRightIcon, TrophyIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -107,6 +109,7 @@ export function ComparePage({
           <SwitchCheck scenario={scenario} sw={sw} setSw={setSw} onUseLoan={onUseLoan} />
         </TabsContent>
       </Tabs>
+      <Faq ids={COMPARE_FAQ} titleKey="faq.compareTitle" />
     </div>
   )
 }

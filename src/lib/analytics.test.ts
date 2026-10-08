@@ -8,7 +8,9 @@ describe("scrubUrl", () => {
     )
   })
   it("keeps only which page it was", () => {
-    expect(scrubUrl("https://lane-kalkulator.pladsen.dev/#/loans")).toBe("https://lane-kalkulator.pladsen.dev/loans")
+    expect(scrubUrl("https://lane-kalkulator.pladsen.dev/#/loans")).toBe("https://lane-kalkulator.pladsen.dev/mine-lan")
+    expect(scrubUrl("https://lane-kalkulator.pladsen.dev/sammenlign?x=1")).toBe("https://lane-kalkulator.pladsen.dev/sammenlign")
+    expect(scrubUrl("https://lane-kalkulator.pladsen.dev/noe-annet/2555951")).toBe("https://lane-kalkulator.pladsen.dev/")
     expect(scrubUrl("https://lane-kalkulator.pladsen.dev/?utm=x#/")).toBe("https://lane-kalkulator.pladsen.dev/")
   })
   it("returns a bare path for anything unparseable", () => {

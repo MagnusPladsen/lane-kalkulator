@@ -331,7 +331,7 @@
     "applied": "Lagt til under «Betal ekstra»."
   },
   "a11y": {
-    "mainHeading": "Lånekalkulator",
+    "mainHeading": "Lånekalkulator: se hva ekstra nedbetaling, avdragsfrihet og renteendringer gjør med lånet ditt",
     "results": "Resultater",
     "moreMenu": "Flere valg",
     "status": "Status"
@@ -490,6 +490,52 @@
       "remaining": "Hvor finner jeg restgjelden, og hva skjer hvis jeg lar feltet stå tomt?",
       "intro": "Hva er forskjellen på avdragsfri og rentefri start, og hva betyr det for lånet mitt?",
       "gap": "Effektiv rente med tallene mine stemmer ikke med bankens. Hva er det som mangler?"
+    }
+  },
+  "faq": {
+    "title": "Spørsmål og svar om lån",
+    "compareTitle": "Slik sammenligner du lånetilbud",
+    "items": {
+      "rates": {
+        "q": "Hva er forskjellen på nominell og effektiv rente?",
+        "a": "Nominell rente er renten banken regner av restgjelden din. Effektiv rente tar også med gebyrer og at renten trekkes hver måned, og viser hva lånet faktisk koster per år. Bruk effektiv rente når du sammenligner tilbud, og skriv inn begge i kalkulatoren, så sjekker den at gebyrene stemmer."
+      },
+      "extra": {
+        "q": "Lønner det seg å betale ekstra på lånet?",
+        "a": "Hver ekstra krone går rett på restgjelden, så du slipper renten på den resten av lånetiden. Kalkulatoren viser hvor mye du sparer i renter og hvor mye tidligere lånet blir nedbetalt, både for et fast beløp hver måned og for et engangsbeløp. Ha gjerne en buffer på sparekonto før du betaler ekstra."
+      },
+      "interestOnly": {
+        "q": "Hva betyr avdragsfrihet?",
+        "a": "I en avdragsfri periode betaler du bare renter og gebyr. Restgjelden synker ikke, så lånet blir dyrere totalt, eller terminbeløpet blir høyere etterpå. Legg inn perioden under «Perioder» for å se hva den koster deg."
+      },
+      "type": {
+        "q": "Annuitetslån eller serielån – hva er forskjellen?",
+        "a": "Et annuitetslån har likt terminbeløp hele tiden, med mest renter i starten. Et serielån har likt avdrag, så terminbeløpet starter høyere og synker, og du betaler mindre renter totalt. Bytt lånetype i kalkulatoren for å se forskjellen på ditt lån."
+      },
+      "finishBy": {
+        "q": "Hvor mye må jeg betale for å bli ferdig med lånet før et bestemt år?",
+        "a": "Velg «Ferdig innen» og et år. Kalkulatoren finner hvor mye du må betale ekstra hver måned, eller som et engangsbeløp, for å bli ferdig da."
+      },
+      "startlan": {
+        "q": "Hva er startlån?",
+        "a": "Startlån gis av kommunen til deg som ikke får nok boliglån i banken. Det har ofte lang nedbetalingstid, opptil 50 år, og kan ha en periode uten avdrag. Velg «Startlån» som lånetype for å få vanlige vilkår fylt inn."
+      },
+      "method": {
+        "q": "Hvordan regner kalkulatoren?",
+        "a": "Den regner måned for måned slik bankene gjør: annuitet eller serie, renter etter faktiske dager (365/365) eller like måneder (30/360), termingebyr og etableringsgebyr. Tallene er anslag. Det er bankens tall som gjelder."
+      },
+      "privacy": {
+        "q": "Lagres lånet mitt hos dere?",
+        "a": "Nei. Det du skriver inn lagres bare i din egen nettleser, uten konto eller innlogging. Vi teller anonyme besøk uten informasjonskapsler. Bruker du «Spør AI», sendes spørsmålet og lånetallene, men ikke navnet på lånet, til OpenAI for å lage svaret."
+      },
+      "compareHow": {
+        "q": "Hvordan sammenligner jeg to lånetilbud?",
+        "a": "Se på hva lånet koster totalt, ikke bare renten. Et tilbud med lavere rente kan bli dyrere hvis gebyrene er høyere. Fyll inn beløp, rente, løpetid og gebyrer for begge tilbudene, så viser siden totalkostnad, terminbeløp og effektiv rente side om side."
+      },
+      "switch": {
+        "q": "Når lønner det seg å bytte bank?",
+        "a": "Det lønner seg når renten du sparer er større enn det byttet koster, som etableringsgebyr og tinglysing. Under «Bytte bank?» ser du hvor mye du sparer i alt, og hvor mange måneder det tar før byttekostnaden er tjent inn."
+      }
     }
   }
 }

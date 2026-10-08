@@ -78,6 +78,8 @@ export function saveDraft(s: Scenario): void {
 }
 
 export function storageAvailable(): boolean {
+  // Prerendering has no browser storage; the real check runs again in the browser.
+  if (typeof window === "undefined") return true
   try {
     const k = "__lk_probe__"
     localStorage.setItem(k, "1")
@@ -186,7 +188,7 @@ export function readTheme(): Theme {
   } catch {
     /* ignore */
   }
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  return typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light"
 }
 
 export function useTheme() {

@@ -42,8 +42,7 @@ export function decodeShare(hash: string): Scenario | undefined {
 }
 
 export function shareUrl(s: Scenario): string {
-  const base = `${location.origin}${location.pathname}`
-  return `${base}#/share/${encodeShare(s)}`
+  return `${location.origin}/#/share/${encodeShare(s)}`
 }
 
 export function exportJson(items: Scenario[]): string {
