@@ -43,6 +43,21 @@ export function AiProvider({
   const [draft, setDraft] = useState("")
   // Latest loan for requests, kept out of render so callbacks stay stable.
   const scenarioRef = useRef(scenario)
+  const listRef = useRef<HTMLDivElement>(null)
+  // Keep the conversation in view: after a question, show the bottom (question + "thinking");
+  // when an answer lands, show its first line so a long answer is read from the top.
+  useEffect(() => {
+    const list = listRef.current
+    if (!open || !list) return
+    const smooth = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    const last = msgs.at(-1)
+    if (last?.role === "assistant" && !busy) {
+      const el = list.querySelector<HTMLElement>(`[data-msg="${msgs.length - 1}"]`)
+      if (el) list.scrollTo({ top: el.getBoundingClientRect().top - list.getBoundingClientRect().top + list.scrollTop - 12, behavior: smooth })
+    } else {
+      list.scrollTo({ top: list.scrollHeight, behavior: smooth })
+    }
+  }, [msgs, busy, open])
   useEffect(() => {
     scenarioRef.current = scenario
   }, [scenario])
@@ -151,7 +166,7 @@ export function AiProvider({
             </Button>
           </header>
 
-          <div className="flex-1 space-y-3 overflow-y-auto p-3" aria-live="polite">
+          <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto p-3" aria-live="polite">
             {msgs.length === 0 && (
               <div className="grid gap-2">
                 <p className="text-sm text-muted-foreground">{t("ai.intro")}</p>
@@ -168,7 +183,7 @@ export function AiProvider({
               </div>
             )}
             {msgs.map((m, i) => (
-              <div key={i} className={cn("grid gap-2", m.role === "user" && "justify-items-end")}>
+              <div key={i} data-msg={i} className={cn("grid scroll-mt-3 gap-2", m.role === "user" && "justify-items-end")}>
                 <div
                   className={cn(
                     "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",

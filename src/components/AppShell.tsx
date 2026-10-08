@@ -26,7 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ROUTE_HREF, type Route } from "@/hooks/useHashRoute"
+import { ROUTE_HREF, type Route } from "@/hooks/useRoute"
 import { LANGUAGES, setLang, currentLang, type Lang } from "@/i18n"
 import type { Theme } from "@/lib/storage"
 
@@ -67,6 +67,7 @@ export function AppShell({
       <header className="flex items-center gap-2 py-3 sm:gap-3 sm:py-5">
         <a
           href={ROUTE_HREF.calc}
+          data-route="calc"
           className="flex min-w-0 items-baseline gap-2 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <span className="truncate font-heading text-xl tracking-tight italic sm:text-2xl">{t("app.title")}</span>
@@ -74,13 +75,13 @@ export function AppShell({
         </a>
 
         <nav className="ml-4 hidden gap-1 sm:flex" aria-label={t("nav.label")}>
-          <NavLink href={ROUTE_HREF.calc} active={route === "calc"}>
+          <NavLink route="calc" active={route === "calc"}>
             <CalculatorIcon /> {t("nav.calculator")}
           </NavLink>
-          <NavLink href={ROUTE_HREF.compare} active={route === "compare"}>
+          <NavLink route="compare" active={route === "compare"}>
             <ScaleIcon /> {t("nav.compare")}
           </NavLink>
-          <NavLink href={ROUTE_HREF.loans} active={route === "loans"}>
+          <NavLink route="loans" active={route === "loans"}>
             <FolderIcon /> {t("nav.loans")}
             {savedCount > 0 && <CountPill n={savedCount} />}
           </NavLink>
@@ -164,13 +165,13 @@ export function AppShell({
           aria-label={t("nav.label")}
           className="grid grid-cols-3 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
         >
-          <TabLink href={ROUTE_HREF.calc} active={route === "calc"}>
+          <TabLink route="calc" active={route === "calc"}>
             <CalculatorIcon /> {t("nav.calculator")}
           </TabLink>
-          <TabLink href={ROUTE_HREF.compare} active={route === "compare"}>
+          <TabLink route="compare" active={route === "compare"}>
             <ScaleIcon /> {t("nav.compare")}
           </TabLink>
-          <TabLink href={ROUTE_HREF.loans} active={route === "loans"}>
+          <TabLink route="loans" active={route === "loans"}>
             <span className="relative">
               <FolderIcon />
               {savedCount > 0 && (
@@ -193,10 +194,11 @@ function CountPill({ n }: { n: number }) {
   )
 }
 
-function NavLink({ href, active, children }: { href: string; active: boolean; children: ReactNode }) {
+function NavLink({ route, active, children }: { route: Route; active: boolean; children: ReactNode }) {
   return (
     <a
-      href={href}
+      href={ROUTE_HREF[route]}
+      data-route={route}
       aria-current={active ? "page" : undefined}
       className={cn(
         "inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&_svg]:size-4",
@@ -208,10 +210,11 @@ function NavLink({ href, active, children }: { href: string; active: boolean; ch
   )
 }
 
-function TabLink({ href, active, children }: { href: string; active: boolean; children: ReactNode }) {
+function TabLink({ route, active, children }: { route: Route; active: boolean; children: ReactNode }) {
   return (
     <a
-      href={href}
+      href={ROUTE_HREF[route]}
+      data-route={route}
       aria-current={active ? "page" : undefined}
       className={cn(
         "flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium outline-none focus-visible:bg-muted [&_svg]:size-5",

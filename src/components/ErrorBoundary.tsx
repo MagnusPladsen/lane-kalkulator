@@ -39,8 +39,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
             className="rounded-lg border px-4 py-2 text-sm font-medium"
             onClick={() => {
               clearDraft()
-              location.hash = "#/"
-              location.reload()
+              location.assign("/")
             }}
           >
             {t("error.reset")}

@@ -8,10 +8,10 @@ import { Verdict } from "@/components/Verdict"
 import { SummaryCards } from "@/components/SummaryCards"
 import { LoanSentence, RateStress } from "@/components/Insights"
 import { MobileVerdictBar } from "@/components/MobileVerdictBar"
-import { BalanceChart } from "@/components/charts/BalanceChart"
-import { CumulativeChart } from "@/components/charts/CumulativeChart"
-import { YearlyChart } from "@/components/charts/YearlyChart"
+import { BalanceChart, CumulativeChart, YearlyChart } from "@/components/charts/lazy"
 import { ScheduleTable } from "@/components/ScheduleTable"
+import { Faq } from "@/components/Faq"
+import { CALC_FAQ } from "@/lib/faq"
 import { addMonths, analyze, todayIso } from "@/lib/loan/engine"
 import { balanceSeries, cumulativeSeries, yearlySeries } from "@/lib/chartData"
 import { validateLoan, type Action } from "@/lib/scenarioReducer"
@@ -178,6 +178,8 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
           )}
         </section>
       </div>
+
+      <Faq ids={CALC_FAQ} />
 
       {shown && (
         <div className="fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 sm:hidden">

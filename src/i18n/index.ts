@@ -1,8 +1,6 @@
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import nb from "./nb.json"
-import en from "./en.json"
-import pl from "./pl.json"
 
 export const LANGUAGES = ["nb", "en", "pl"] as const
 export type Lang = (typeof LANGUAGES)[number]
@@ -23,11 +21,14 @@ function storedLang(): Lang {
 }
 
 void i18n.use(initReactI18next).init({
-  resources: { nb: { translation: nb }, en: { translation: en }, pl: { translation: pl } },
-  lng: storedLang(),
+  // Norwegian ships with the page; English and Polish load when chosen.
+  resources: { nb: { translation: nb } },
+  lng: "nb",
   fallbackLng: "nb",
   interpolation: { escapeValue: false },
   returnNull: false,
+  // Resources are bundled, so start synchronously: the first render never waits.
+  initAsync: false,
 })
 
 export function currentLang(): Lang {
@@ -35,8 +36,32 @@ export function currentLang(): Lang {
   return l === "en" || l === "pl" ? l : "nb"
 }
 
+const LOADERS: Record<Exclude<Lang, "nb">, () => Promise<{ default: Record<string, unknown> }>> = {
+  en: () => import("./en.json"),
+  pl: () => import("./pl.json"),
+}
+
+async function ensureLang(l: Lang): Promise<void> {
+  if (l === "nb" || i18n.hasResourceBundle(l, "translation")) return
+  const { default: res } = await LOADERS[l]()
+  i18n.addResourceBundle(l, "translation", res, true, true)
+}
+
+/** Loads and switches to the stored language, if not Norwegian. Await before the first render. */
+export async function initLang(): Promise<void> {
+  const l = storedLang()
+  if (l === "nb") return
+  try {
+    await ensureLang(l)
+    await i18n.changeLanguage(l)
+    document.documentElement.lang = l
+  } catch {
+    /* stay on Norwegian if the file cannot load */
+  }
+}
+
 export function setLang(l: Lang): void {
-  void i18n.changeLanguage(l)
+  void ensureLang(l).then(() => i18n.changeLanguage(l))
   document.documentElement.lang = l
   try {
     localStorage.setItem(LANG_KEY, l)
@@ -45,6 +70,6 @@ export function setLang(l: Lang): void {
   }
 }
 
-document.documentElement.lang = currentLang()
+if (typeof document !== "undefined") document.documentElement.lang = currentLang()
 
 export default i18n

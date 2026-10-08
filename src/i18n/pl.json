@@ -339,7 +339,7 @@
     "applied": "Dodano w „Nadpłać”."
   },
   "a11y": {
-    "mainHeading": "Kalkulator kredytowy",
+    "mainHeading": "Kalkulator kredytowy: zobacz, co nadpłaty, okresy bez spłaty kapitału i zmiany stóp robią z Twoim kredytem",
     "results": "Wyniki",
     "moreMenu": "Więcej opcji",
     "status": "Status"
@@ -500,6 +500,52 @@
       "remaining": "Gdzie znajdę saldo i co jeśli zostawię pole puste?",
       "intro": "Jaka jest różnica między okresem tylko z odsetkami a bez odsetek i co to znaczy dla mojego kredytu?",
       "gap": "RRSO z moich danych nie zgadza się z bankiem. Czego brakuje?"
+    }
+  },
+  "faq": {
+    "title": "Pytania i odpowiedzi o kredytach",
+    "compareTitle": "Jak porównać oferty kredytu",
+    "items": {
+      "rates": {
+        "q": "Czym różni się oprocentowanie nominalne od efektywnego?",
+        "a": "Oprocentowanie nominalne to stawka, którą bank nalicza od salda. Oprocentowanie efektywne uwzględnia też opłaty i miesięczną kapitalizację i pokazuje rzeczywisty roczny koszt kredytu. Porównuj oferty według oprocentowania efektywnego i wpisz obie stawki w kalkulatorze, aby sprawdził, czy opłaty się zgadzają."
+      },
+      "extra": {
+        "q": "Czy warto nadpłacać kredyt?",
+        "a": "Każda dodatkowa korona trafia prosto na saldo, więc nie płacisz od niej odsetek do końca kredytu. Kalkulator pokazuje, ile zaoszczędzisz na odsetkach i o ile wcześniej spłacisz kredyt, przy stałej miesięcznej kwocie lub jednorazowej wpłacie. Przed nadpłatą warto mieć oszczędności na czarną godzinę."
+      },
+      "interestOnly": {
+        "q": "Co oznacza okres bez spłaty kapitału?",
+        "a": "W tym okresie płacisz tylko odsetki i opłaty. Saldo się nie zmniejsza, więc kredyt kosztuje łącznie więcej albo rata jest potem wyższa. Dodaj okres w zakładce „Okresy”, aby zobaczyć jego koszt."
+      },
+      "type": {
+        "q": "Rata równa czy malejąca – jaka jest różnica?",
+        "a": "Przy racie równej (annuitet) płacisz co miesiąc tyle samo, na początku głównie odsetki. Przy racie malejącej spłacasz co miesiąc tyle samo kapitału, więc raty zaczynają się wyżej i maleją, a odsetek płacisz łącznie mniej. Zmień typ kredytu w kalkulatorze, aby zobaczyć różnicę dla swojego kredytu."
+      },
+      "finishBy": {
+        "q": "Ile muszę płacić, aby spłacić kredyt do określonego roku?",
+        "a": "Wybierz „Spłać do” i rok. Kalkulator obliczy dodatkową miesięczną kwotę albo jednorazową wpłatę potrzebną, aby spłacić kredyt do tego czasu."
+      },
+      "startlan": {
+        "q": "Czym jest startlån?",
+        "a": "Startlån to kredyt od gminy dla osób, które nie mogą pożyczyć wystarczająco w banku. Często ma długi okres spłaty, do 50 lat, i może zaczynać się okresem bez spłaty kapitału. Wybierz „Startlån” jako typ kredytu, aby uzupełnić typowe warunki."
+      },
+      "method": {
+        "q": "Jak liczy kalkulator?",
+        "a": "Liczy miesiąc po miesiącu tak jak banki: rata równa lub malejąca, odsetki według rzeczywistej liczby dni (365/365) lub równych miesięcy (30/360), opłata miesięczna i prowizja. Wyniki są szacunkowe. Wiążące są wyliczenia banku."
+      },
+      "privacy": {
+        "q": "Czy przechowujecie mój kredyt?",
+        "a": "Nie. Wszystko, co wpiszesz, zostaje w Twojej przeglądarce, bez konta i logowania. Liczymy anonimowe wizyty bez plików cookie. Jeśli użyjesz „Zapytaj AI”, pytanie i liczby kredytu, ale nie jego nazwa, trafiają do OpenAI, aby przygotować odpowiedź."
+      },
+      "compareHow": {
+        "q": "Jak porównać dwie oferty kredytu?",
+        "a": "Patrz na łączny koszt, nie tylko na oprocentowanie. Oferta z niższym oprocentowaniem może kosztować więcej, jeśli ma wyższe opłaty. Wpisz kwotę, oprocentowanie, okres i opłaty obu ofert, a strona pokaże łączny koszt, ratę i oprocentowanie efektywne obok siebie."
+      },
+      "switch": {
+        "q": "Kiedy opłaca się zmienić bank?",
+        "a": "Opłaca się, gdy oszczędność na odsetkach jest większa niż koszt zmiany, np. prowizja i wpis do rejestru. W zakładce „Zmienić bank?” zobaczysz łączną oszczędność i po ilu miesiącach koszt się zwróci."
+      }
     }
   }
 }

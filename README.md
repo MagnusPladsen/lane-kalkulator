@@ -26,7 +26,7 @@ Vite, React 19, TypeScript, Tailwind v4, shadcn/ui (Base UI), Recharts, Vitest. 
 ```sh
 bun install
 bun run dev        # http://localhost:5173
-bun run build
+bun run build      # client build, server build, then prerendered HTML per page
 bunx vitest run    # engine tests
 bun run lint
 ```
@@ -41,7 +41,9 @@ bun run lint
 | `src/lib/storage.ts` | localStorage persistence (draft, saved loans, theme). |
 | `src/lib/share.ts` | Share-link encoding and JSON export/import. |
 | `src/lib/chartData.ts` | Turns an `Analysis` into chart series. |
-| `src/pages/` | `CalculatorPage`, `LoansPage`. |
+| `src/pages/` | `CalculatorPage`, `ComparePage`, `LoansPage` (the last two load on demand). |
+| `src/hooks/useRoute.ts` | Path routing: `/`, `/sammenlign`, `/mine-lan`. Old `#/compare` links are upgraded. |
+| `src/lib/seo.ts`, `scripts/prerender.mjs`, `src/entry-server.ts` | Per-page title, description and canonical URL; build-time prerendering with JSON-LD. |
 | `src/components/` | Form panels, verdict, stat tiles, charts, schedule table, dialogs. |
 | `docs/superpowers/specs/` | Design spec. |
 

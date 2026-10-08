@@ -331,7 +331,7 @@
     "applied": "Added under \"Pay extra\"."
   },
   "a11y": {
-    "mainHeading": "Loan calculator",
+    "mainHeading": "Loan calculator: see what extra payments, interest-only periods and rate changes do to your loan",
     "results": "Results",
     "moreMenu": "More options",
     "status": "Status"
@@ -490,6 +490,52 @@
       "remaining": "Where do I find the remaining balance, and what happens if I leave it empty?",
       "intro": "What's the difference between an interest-only and an interest-free start, and what does it mean for my loan?",
       "gap": "The effective rate from my numbers doesn't match the bank's. What's missing?"
+    }
+  },
+  "faq": {
+    "title": "Loan questions and answers",
+    "compareTitle": "How to compare loan offers",
+    "items": {
+      "rates": {
+        "q": "What is the difference between the nominal and the effective rate?",
+        "a": "The nominal rate is what the bank charges on your balance. The effective rate also includes fees and monthly compounding, and shows what the loan really costs per year. Compare offers on the effective rate, and enter both in the calculator so it can check that the fees add up."
+      },
+      "extra": {
+        "q": "Is it worth paying extra on my loan?",
+        "a": "Every extra krone goes straight to the balance, so you stop paying interest on it for the rest of the loan. The calculator shows how much interest you save and how much sooner the loan is paid off, for a monthly amount or a one-off payment. Keep a savings buffer before paying extra."
+      },
+      "interestOnly": {
+        "q": "What does an interest-only period mean?",
+        "a": "During an interest-only period you pay only interest and fees. The balance does not go down, so the loan costs more in total or the payment is higher afterwards. Add the period under \"Periods\" to see what it costs you."
+      },
+      "type": {
+        "q": "Annuity or serial loan: what is the difference?",
+        "a": "An annuity loan has the same payment every month, with mostly interest at first. A serial loan repays the same principal every month, so payments start higher and fall, and you pay less interest in total. Switch the loan type in the calculator to see the difference for your loan."
+      },
+      "finishBy": {
+        "q": "How much must I pay to finish my loan by a certain year?",
+        "a": "Choose \"Done by\" and a year. The calculator works out the extra monthly amount, or the one-off payment, that finishes the loan by then."
+      },
+      "startlan": {
+        "q": "What is a startlån?",
+        "a": "A startlån is a loan from the municipality for people who cannot borrow enough from a bank. It often runs for a long time, up to 50 years, and may start with a period without repayments. Choose \"Startlån\" as the loan type to fill in the usual terms."
+      },
+      "method": {
+        "q": "How does the calculator work?",
+        "a": "It works month by month the way banks do: annuity or serial, interest on actual days (365/365) or equal months (30/360), monthly fee and setup fee. The figures are estimates. Your bank's figures are the ones that count."
+      },
+      "privacy": {
+        "q": "Do you store my loan?",
+        "a": "No. What you enter stays in your own browser, with no account or sign-in. We count anonymous visits without cookies. If you use \"Ask AI\", your question and the loan figures, but not the loan's name, are sent to OpenAI to write the answer."
+      },
+      "compareHow": {
+        "q": "How do I compare two loan offers?",
+        "a": "Look at the total cost, not just the rate. An offer with a lower rate can cost more if its fees are higher. Enter amount, rate, term and fees for both offers, and the page shows total cost, payment and effective rate side by side."
+      },
+      "switch": {
+        "q": "When does it pay to switch banks?",
+        "a": "It pays when the interest you save is more than the switch costs, such as setup and registration fees. Under \"Switch bank?\" you see the total saving and how many months it takes to earn back the cost."
+      }
     }
   }
 }
