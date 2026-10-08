@@ -150,7 +150,7 @@ export async function handleAi(
     usage.output += resp.usage?.output_tokens ?? 0
     const calls = (resp.output ?? []).filter((i) => i.type === "function_call")
     if (calls.length === 0) {
-      return { reply: plain(resp.output_text?.trim() ?? ""), suggestions: suggestions.slice(0, 3), sources: sourcesOf(resp), usage }
+      return { reply: tidy(resp.output_text?.trim() ?? ""), suggestions: suggestions.slice(0, 3), sources: sourcesOf(resp), usage }
     }
     input.push(...toResponseInputItems(resp.output))
     for (const call of calls) {
@@ -166,9 +166,19 @@ export async function handleAi(
   return { reply: "", suggestions: suggestions.slice(0, 3), usage }
 }
 
-/** The UI shows plain text; drop markdown emphasis the model may still add. */
-export function plain(text: string): string {
-  return text.replace(/\*\*(.+?)\*\*/g, "$1").replace(/__(.+?)__/g, "$1").replace(/^#+\s*/gm, "")
+/**
+ * The chat bubble understands paragraphs, "- " bullets and **bold** (see format.ts).
+ * Normalise what the model writes to that subset and drop the rest of markdown.
+ */
+export function tidy(text: string): string {
+  return text
+    .replace(/__(.+?)__/g, "**$1**")
+    .replace(/^#+\s*/gm, "")
+    .replace(/^[ \t]*[*•–][ \t]+/gm, "- ")
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, "$1")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim()
 }
 
 function emptyScenario(): Scenario {
