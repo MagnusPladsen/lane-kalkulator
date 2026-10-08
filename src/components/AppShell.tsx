@@ -10,6 +10,7 @@ import {
   PlusIcon,
   ShieldCheckIcon,
   SunIcon,
+  ScaleIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -75,6 +76,9 @@ export function AppShell({
         <nav className="ml-4 hidden gap-1 sm:flex" aria-label={t("nav.label")}>
           <NavLink href={ROUTE_HREF.calc} active={route === "calc"}>
             <CalculatorIcon /> {t("nav.calculator")}
+          </NavLink>
+          <NavLink href={ROUTE_HREF.compare} active={route === "compare"}>
+            <ScaleIcon /> {t("nav.compare")}
           </NavLink>
           <NavLink href={ROUTE_HREF.loans} active={route === "loans"}>
             <FolderIcon /> {t("nav.loans")}
@@ -158,10 +162,13 @@ export function AppShell({
       <div className="fixed inset-x-0 bottom-0 z-40 sm:hidden">
         <nav
           aria-label={t("nav.label")}
-          className="grid grid-cols-2 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+          className="grid grid-cols-3 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
         >
           <TabLink href={ROUTE_HREF.calc} active={route === "calc"}>
             <CalculatorIcon /> {t("nav.calculator")}
+          </TabLink>
+          <TabLink href={ROUTE_HREF.compare} active={route === "compare"}>
+            <ScaleIcon /> {t("nav.compare")}
           </TabLink>
           <TabLink href={ROUTE_HREF.loans} active={route === "loans"}>
             <span className="relative">

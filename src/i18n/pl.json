@@ -7,7 +7,8 @@
   "nav": {
     "calculator": "Kalkulator",
     "loans": "Moje kredyty",
-    "label": "Strony"
+    "label": "Strony",
+    "compare": "Porównaj"
   },
   "actions": {
     "share": "Udostępnij",
@@ -427,5 +428,35 @@
     "stressHint": "Wybierz o ile punktów procentowych, aby zobaczyć, co to dla ciebie znaczy.",
     "stressResult": "Przy {{rate}} % rata wynosi {{payment}}, o {{delta}} więcej miesięcznie. Kredyt kosztuje łącznie {{cost}} więcej.",
     "stressAdd": "Dodaj jako okres"
+  },
+  "compare": {
+    "title": "Porównaj",
+    "desc": "Porównaj dwie oferty kredytu albo sprawdź, czy opłaca się przenieść kredyt do innego banku.",
+    "tabOffers": "Dwie oferty",
+    "tabSwitch": "Zmienić bank?",
+    "offerA": "Oferta A",
+    "offerB": "Oferta B",
+    "bank": "Bank lub nazwa",
+    "fees": "Opłaty łącznie",
+    "verdict": "{{name}} jest łącznie tańsza o {{total}}, a na początku o {{monthly}} miesięcznie.",
+    "same": "Oferty kosztują łącznie tyle samo.",
+    "use": "Otwórz {{name}} w kalkulatorze",
+    "reset": "Pobierz z kalkulatora",
+    "today": "Twój kredyt dziś",
+    "todayDesc": "Z kalkulatora. Zmień kredyt tam, aby zaktualizować.",
+    "left": "Pozostało",
+    "newOffer": "Nowa oferta",
+    "switchCost": "Koszt zmiany",
+    "switchCostHelp": "Prowizja w nowym banku plus opłata za wpis (tinglysing) i ewentualna opłata za spłatę obecnego kredytu. Często 1 500–4 000 kr.",
+    "newTerm": "Nowy okres",
+    "newTermHint": "Tak jak dziś: {{term}}. Dłuższy okres obniża ratę, ale często kosztuje więcej łącznie.",
+    "switchYes": "Zmiana oszczędza łącznie {{total}}. Koszt zmiany zwróci się po {{months}} miesiącach ({{date}}).",
+    "switchNo": "Zmiana się nie opłaca: kosztuje łącznie {{total}} więcej.",
+    "paymentNow": "Rata dziś",
+    "paymentNew": "Nowa rata",
+    "perMonth": "Miesięcznie",
+    "useNew": "Otwórz nowy kredyt w kalkulatorze",
+    "moved": "przeniesiony",
+    "needLoan": "Najpierw wypełnij swój kredyt w kalkulatorze, potem sprawdzisz, czy zmiana się opłaca."
   }
 }

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 
-export type Route = "calc" | "loans"
+export type Route = "calc" | "compare" | "loans"
 
 function parse(): Route {
-  return /^#\/loans\/?$/.test(location.hash) ? "loans" : "calc"
+  if (/^#\/loans\/?$/.test(location.hash)) return "loans"
+  if (/^#\/compare\/?$/.test(location.hash)) return "compare"
+  return "calc"
 }
 
-export const ROUTE_HREF: Record<Route, string> = { calc: "#/", loans: "#/loans" }
+export const ROUTE_HREF: Record<Route, string> = { calc: "#/", compare: "#/compare", loans: "#/loans" }
 
 export function useHashRoute(): Route {
   const [route, setRoute] = useState<Route>(parse)
