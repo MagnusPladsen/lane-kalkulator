@@ -4,7 +4,8 @@ import { solveForTarget } from "../loan/engine"
 import type { Scenario } from "../loan/types"
 import { RateLimiter } from "./limits"
 import { INSTRUCTIONS } from "./prompt"
-import { AiError, handleAi, plain, PROMPT_CACHE_KEY, tierOf, validateRequest, type OpenAILike } from "./server"
+import { AiError, handleAi, PROMPT_CACHE_KEY, tidy, tierOf, validateRequest, type OpenAILike } from "./server"
+import { keepTogether, parseReply } from "./format"
 import { runTool, TOOL_DEFS, toSuggestion } from "./tools"
 
 const today = "2026-10-08"
@@ -158,8 +159,26 @@ describe("RateLimiter", () => {
 })
 
 describe("answer polish", () => {
-  it("strips markdown emphasis the UI would show literally", () => {
-    expect(plain("Kalkulatoren får **5,46 %**, banken __5,55 %__.")).toBe("Kalkulatoren får 5,46 %, banken 5,55 %.")
+  it("keeps bold and bullets, drops the markdown the bubble cannot show", () => {
+    expect(tidy("## Svar\nKalkulatoren får **5,46 %**, banken __5,55 %__.\n\n\n* gebyr `79 kr`\n• [kilde](https://ssb.no)")).toBe(
+      "Svar\nKalkulatoren får **5,46 %**, banken **5,55 %**.\n\n- gebyr 79 kr\n- kilde",
+    )
+  })
+  it("parses paragraphs, bullets and bold into safe blocks", () => {
+    const b = parseReply("Ja, det lønner seg.\n\n- Du sparer **12 000 kr**\n- Ferdig i mai 2048\nSjekk med banken.")
+    expect(b.map((x) => x.kind)).toEqual(["p", "ul", "p"])
+    expect(b[1]).toEqual({
+      kind: "ul",
+      items: [
+        [{ text: "Du sparer ", bold: false }, { text: "12\u00a0000\u00a0kr", bold: true }],
+        [{ text: "Ferdig i mai\u00a02048", bold: false }],
+      ],
+    })
+    expect(parseReply("<b>x</b> **ok")).toEqual([{ kind: "p", spans: [{ text: "<b>x</b> ok", bold: false }] }])
+  })
+  it("never lets a number split across lines", () => {
+    expect(keepTogether("restgjeld 2 555 952 kr og 4,63 % fra nov. 2026")).toBe("restgjeld 2\u00a0555\u00a0952\u00a0kr og 4,63\u00a0% fra nov.\u00a02026")
+    expect(keepTogether("i 3 måneder, 25 år")).toBe("i 3\u00a0måneder, 25\u00a0år")
   })
   it("overview says when principal overtakes interest, and simulate can switch loan type", async () => {
     const o = (await runTool("get_loan_overview", "{}", ctx)).output as { principal_exceeds_interest_from: string }

@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { currentLang } from "@/i18n"
 import { aiStatus, AiRequestError, askAi, shareableScenario } from "@/lib/ai/client"
+import { keepTogether } from "@/lib/ai/format"
+import { AiMessage } from "./AiMessage"
 import type { AiRequest, AiSource, Suggestion } from "@/lib/ai/types"
 import type { Scenario } from "@/lib/loan/types"
 import { AiContext, type AiApi } from "./AiContext"
@@ -167,19 +169,19 @@ export function AiProvider({
             )}
             {msgs.map((m, i) => (
               <div key={i} className={cn("grid gap-2", m.role === "user" && "justify-items-end")}>
-                <p
+                <div
                   className={cn(
-                    "max-w-[90%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap",
-                    m.role === "user" ? "bg-primary text-primary-foreground" : m.error ? "bg-destructive/10 text-destructive" : "bg-muted",
+                    "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                    m.role === "user" ? "bg-primary whitespace-pre-wrap text-primary-foreground" : m.error ? "bg-destructive/10 text-destructive" : "bg-muted",
                   )}
                 >
-                  {m.content}
-                </p>
+                  {m.role === "assistant" && !m.error ? <AiMessage text={m.content} /> : m.content}
+                </div>
                 {m.suggestions?.map((s, j) => {
                   const done = m.applied?.includes(j)
                   return (
                     <div key={j} className="flex max-w-[90%] items-center gap-2 rounded-xl border bg-background p-2">
-                      <span className="min-w-0 flex-1 text-sm">{s.label}</span>
+                      <span className="min-w-0 flex-1 text-sm">{keepTogether(s.label)}</span>
                       <Button
                         size="sm"
                         variant={done ? "outline" : "default"}
