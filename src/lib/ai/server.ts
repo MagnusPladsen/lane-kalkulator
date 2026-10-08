@@ -118,8 +118,8 @@ export async function handleAi(
   else if (req.mode === "rates") input.push({ role: "user", content: `Typical rate for: ${req.category}` })
   for (const m of req.messages) input.push({ role: m.role, content: m.content })
 
-  const lastUser = req.messages.filter((m) => m.role === "user").at(-1)?.content ?? ""
-  const feeChangeAllowed = req.mode === "parse" || /gebyr|fee|opłat/i.test(lastUser)
+  // Fees came up in the conversation (the user asked, or said yes to an earlier offer).
+  const feeChangeAllowed = req.mode === "parse" || req.messages.some((m) => /gebyr|fee|opłat/i.test(m.content))
   const suggestions: Suggestion[] = []
   const usage = { input: 0, cached: 0, output: 0, rounds: 0, model: deps.model }
   for (let round = 0; round < MAX_ROUNDS; round++) {
