@@ -32,7 +32,7 @@ export interface AiResponse {
   suggestions: Suggestion[]
   sources?: AiSource[]
   /** Token totals for this turn; cached shows whether the prompt prefix was reused. */
-  usage?: { input: number; cached: number; output: number; rounds: number; model?: string }
+  usage?: { input: number; cached: number; output: number; rounds: number; model?: string; fallbackFrom?: string; fallbackReason?: string }
 }
 
 /** simple: a field's "Ask AI" button or reading pasted text. advanced: the chat and web rate lookup. */

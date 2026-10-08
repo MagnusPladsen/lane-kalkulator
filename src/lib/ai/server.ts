@@ -13,9 +13,12 @@ export interface OpenAILike {
 
 export class AiError extends Error {
   readonly code: AiErrorCode
-  constructor(code: AiErrorCode, message: string = code) {
+  /** For upstream errors: OpenAI's short error code and parameter, safe to show. */
+  readonly detail?: string
+  constructor(code: AiErrorCode, message: string = code, detail?: string) {
     super(message)
     this.code = code
+    this.detail = detail
   }
 }
 
@@ -129,11 +132,14 @@ export async function handleAi(
         include: ["reasoning.encrypted_content"],
         reasoning: { effort: "low" },
         max_output_tokens: 1_500,
+        // Caching is automatic for a shared prefix; the key keeps our requests together.
+        // No TTL option: newer models default to 30 min and older ones (gpt-5-mini) reject it.
         prompt_cache_key: PROMPT_CACHE_KEY,
-        prompt_cache_options: { ttl: "30m" },
       })
     } catch (e) {
-      throw new AiError("upstream", e instanceof Error ? e.message : "upstream")
+      const err = e as { status?: number; code?: string | null; param?: string | null }
+      const detail = [err.status, err.code, err.param].filter((x) => x !== undefined && x !== null && x !== "").join(" ") || undefined
+      throw new AiError("upstream", e instanceof Error ? e.message : "upstream", detail)
     }
     deps.onUsage?.(resp.usage)
     usage.rounds++
