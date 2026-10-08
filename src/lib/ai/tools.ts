@@ -50,6 +50,7 @@ export const TOOL_DEFS = [
       rate_to: { type: ["string", "null"], description: "Last month YYYY-MM, or null for the rest of the loan." },
       interest_only_from: MONTH,
       interest_only_to: { type: ["string", "null"], description: "Last interest-only month YYYY-MM." },
+      loan_type: { type: ["string", "null"], enum: ["annuity", "serial", null], description: "Try the loan as annuity or serial instead." },
     }),
     strict: true,
   },
@@ -149,9 +150,12 @@ const num = (v: unknown, min: number, max: number): number | undefined =>
 const month = (v: unknown): string | undefined => (isValidYearMonth(v) ? v : undefined)
 const round = (n: number) => Math.round(n)
 
-function overview(a: Analysis, s: Scenario) {
+/** Key facts of a run. `next` is the calendar month of the first forward payment. */
+function overview(a: Analysis, s: Scenario, next: string) {
   const r = a.scenario.rows[0]
+  const turn = a.scenario.rows.findIndex((x) => !x.interestOnly && x.principal > x.interest)
   return {
+    principal_exceeds_interest_from: turn < 0 ? null : turn === 0 ? "already" : addYearMonths(next, turn),
     monthly_payment: r ? round(r.interest + r.principal + r.fee) : 0,
     next_payment_split: r ? { interest: round(r.interest), principal: round(r.principal), fee: round(r.fee) } : null,
     balance_today: round(a.startingBalance),
@@ -184,7 +188,7 @@ export async function runTool(name: string, rawArgs: string, ctx: ToolContext): 
     const next = anchorOf(ctx, base)
     switch (name) {
       case "get_loan_overview":
-        return { output: { ...overview(base, ctx.scenario), today: ctx.today, next_payment_month: next } }
+        return { output: { ...overview(base, ctx.scenario, next), today: ctx.today, next_payment_month: next } }
 
       case "simulate": {
         const extras: CalendarExtra[] = [...ctx.scenario.extras]
@@ -201,11 +205,13 @@ export async function runTool(name: string, rawArgs: string, ctx: ToolContext): 
         const ioFrom = month(args.interest_only_from)
         const ioTo = month(args.interest_only_to)
         if (ioFrom && ioTo) periods.push({ id: "sim-i", kind: "interest-only", from: ioFrom, to: ioTo, annualRatePct: 0 })
-        const after = analyze({ ...ctx.scenario, extras, periods }, ctx.today)
+        const loanType: LoanType | undefined = args.loan_type === "serial" ? "serial" : args.loan_type === "annuity" ? "annuity" : undefined
+        const simLoan = loanType ? { ...ctx.scenario.loan, loanType } : ctx.scenario.loan
+        const after = analyze({ ...ctx.scenario, loan: simLoan, extras, periods }, ctx.today)
         return {
           output: {
-            before: overview(base, ctx.scenario),
-            after: overview(after, ctx.scenario),
+            before: overview(base, ctx.scenario, next),
+            after: overview(after, { ...ctx.scenario, loan: simLoan }, next),
             interest_change: round(after.lifetime.scenario.interest - base.lifetime.scenario.interest),
             cost_change: round(after.lifetime.scenario.paid - base.lifetime.scenario.paid),
             months_change: after.scenario.months - base.scenario.months,

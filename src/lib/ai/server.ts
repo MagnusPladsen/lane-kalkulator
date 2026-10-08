@@ -105,6 +105,7 @@ export async function handleAi(
   for (const m of req.messages) input.push({ role: m.role, content: m.content })
 
   const suggestions: Suggestion[] = []
+  const usage = { input: 0, cached: 0, output: 0, rounds: 0 }
   for (let round = 0; round < MAX_ROUNDS; round++) {
     let resp: OpenAIResponse
     try {
@@ -124,9 +125,13 @@ export async function handleAi(
       throw new AiError("upstream", e instanceof Error ? e.message : "upstream")
     }
     deps.onUsage?.(resp.usage)
+    usage.rounds++
+    usage.input += resp.usage?.input_tokens ?? 0
+    usage.cached += resp.usage?.input_tokens_details?.cached_tokens ?? 0
+    usage.output += resp.usage?.output_tokens ?? 0
     const calls = (resp.output ?? []).filter((i) => i.type === "function_call")
     if (calls.length === 0) {
-      return { reply: resp.output_text?.trim() ?? "", suggestions: suggestions.slice(0, 3), sources: sourcesOf(resp) }
+      return { reply: plain(resp.output_text?.trim() ?? ""), suggestions: suggestions.slice(0, 3), sources: sourcesOf(resp), usage }
     }
     input.push(...toResponseInputItems(resp.output))
     for (const call of calls) {
@@ -139,7 +144,12 @@ export async function handleAi(
       input.push({ type: "function_call_output", call_id: call.call_id, output: JSON.stringify(result.output) })
     }
   }
-  return { reply: "", suggestions: suggestions.slice(0, 3) }
+  return { reply: "", suggestions: suggestions.slice(0, 3), usage }
+}
+
+/** The UI shows plain text; drop markdown emphasis the model may still add. */
+export function plain(text: string): string {
+  return text.replace(/\*\*(.+?)\*\*/g, "$1").replace(/__(.+?)__/g, "$1").replace(/^#+\s*/gm, "")
 }
 
 function emptyScenario(): Scenario {

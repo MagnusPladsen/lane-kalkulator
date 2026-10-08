@@ -4,7 +4,7 @@ import { solveForTarget } from "../loan/engine"
 import type { Scenario } from "../loan/types"
 import { RateLimiter } from "./limits"
 import { INSTRUCTIONS } from "./prompt"
-import { AiError, handleAi, PROMPT_CACHE_KEY, validateRequest, type OpenAILike } from "./server"
+import { AiError, handleAi, plain, PROMPT_CACHE_KEY, validateRequest, type OpenAILike } from "./server"
 import { runTool, TOOL_DEFS, toSuggestion } from "./tools"
 
 const today = "2026-10-08"
@@ -153,5 +153,17 @@ describe("RateLimiter", () => {
     expect(rl.take("b", t0 + 122_000).ok).toBe(true) // 4th globally
     expect(rl.take("c", t0 + 122_000).ok).toBe(false) // global cap
     expect(rl.take("a", Date.parse("2026-10-09T00:00:01Z")).ok).toBe(true)
+  })
+})
+
+describe("answer polish", () => {
+  it("strips markdown emphasis the UI would show literally", () => {
+    expect(plain("Kalkulatoren får **5,46 %**, banken __5,55 %__.")).toBe("Kalkulatoren får 5,46 %, banken 5,55 %.")
+  })
+  it("overview says when principal overtakes interest, and simulate can switch loan type", async () => {
+    const o = (await runTool("get_loan_overview", "{}", ctx)).output as { principal_exceeds_interest_from: string }
+    expect(o.principal_exceeds_interest_from).toMatch(/^\d{4}-\d{2}$/)
+    const sim = (await runTool("simulate", JSON.stringify({ extra_monthly: null, extra_monthly_from: null, extra_monthly_to: null, one_off: null, one_off_month: null, new_rate_pct: null, rate_from: null, rate_to: null, interest_only_from: null, interest_only_to: null, loan_type: "serial" }), ctx)).output as { interest_change: number; after: { loan_type: string } }
+    expect(sim.interest_change).toBeLessThan(0) // serial pays less interest overall
   })
 })

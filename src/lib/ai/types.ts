@@ -31,6 +31,8 @@ export interface AiResponse {
   reply: string
   suggestions: Suggestion[]
   sources?: AiSource[]
+  /** Token totals for this turn; cached shows whether the prompt prefix was reused. */
+  usage?: { input: number; cached: number; output: number; rounds: number }
 }
 
 export interface AiStatus {
