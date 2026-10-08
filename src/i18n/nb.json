@@ -346,5 +346,27 @@
   "share": {
     "failed": "Delingslenken kunne ikke leses. Den ble trolig kuttet eller endret da den ble kopiert. Prøv å kopiere hele lenken på nytt.",
     "dismiss": "Lukk"
+  },
+  "scan": {
+    "open": "Fra skjermbilde",
+    "title": "Fyll ut fra skjermbilde",
+    "desc": "Ta skjermbilder av lånedetaljene i nettbanken. Appen leser teksten og foreslår verdier du kan sjekke.",
+    "drop": "Slipp skjermbilder her, eller lim inn med ⌘V / Ctrl+V.",
+    "choose": "Velg bilder",
+    "tip": "Siden med lånedetaljer gir best resultat. Flere bilder kan leses samtidig.",
+    "reading": "Leser bilde {{n}} av {{total}} …",
+    "error": "Klarte ikke å lese bildet. Prøv igjen, eller fyll ut for hånd.",
+    "nothing": "Fant ingen lånedetaljer. Prøv et skjermbilde av siden med lånedetaljer.",
+    "review": "Dette ble funnet. Fjern haken for verdier som ikke stemmer.",
+    "apply_one": "Fyll inn {{count}} verdi",
+    "apply_other": "Fyll inn {{count}} verdier",
+    "again": "Prøv andre bilder",
+    "privacy": "Bildene leses i nettleseren din og lastes ikke opp noe sted.",
+    "derivedDueDay": "Flyttet til forfallsdagen ({{day}}.) så betalingene treffer riktig dag",
+    "derivedEndDate": "Regnet ut fra start- og sluttdato",
+    "derivedRemaining": "Fra gjenværende løpetid",
+    "derivedFee": "Regnet ut: terminbeløp minus avdrag og renter",
+    "derivedBalance": "Nåværende lånebeløp",
+    "derivedName": "Fra långiver"
   }
 }
