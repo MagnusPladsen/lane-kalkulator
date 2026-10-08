@@ -9,11 +9,11 @@ import type { Analysis } from "@/lib/loan/types"
 export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolean; stale?: boolean }>(
   function Verdict({ a, hasChanges, stale }, ref) {
     const { t } = useTranslation()
-    const { mood, headline, costText } = useVerdictText(a, hasChanges)
+    const { mood, headline, figure, costText } = useVerdictText(a, hasChanges)
 
     if (a.paidOff) {
       return (
-        <section ref={ref} className="rise rounded-xl bg-card px-5 py-5 ring-1 ring-foreground/10">
+        <section ref={ref} className="rise rounded-2xl bg-card px-5 py-5 shadow-(--card-shadow)">
           <p className="flex items-center gap-2 font-heading text-2xl sm:text-3xl" aria-live="polite">
             <PartyPopperIcon className="size-6 text-good" aria-hidden />
             {t("verdict.paidOffTitle")}
@@ -60,16 +60,16 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
       <section
         ref={ref}
         className={cn(
-          "rise relative overflow-hidden rounded-xl px-5 py-5 ring-1 transition-opacity",
-          mood === "good" && "bg-good/10 ring-good/35",
-          mood === "bad" && "bg-bad/10 ring-bad/35",
-          mood === "neutral" && "bg-card ring-foreground/10",
+          "rise relative overflow-hidden rounded-2xl px-5 py-5 shadow-(--card-shadow) transition-opacity",
+          mood === "good" && "bg-card",
+          mood === "bad" && "bg-card ring-2 ring-bad/40",
+          mood === "neutral" && "bg-card",
           stale && "opacity-50",
         )}
       >
         <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{t("verdict.withChanges")}</p>
-        <p className="mt-1 font-heading text-3xl leading-none text-balance sm:text-4xl" aria-live="polite" aria-atomic>
-          {headline}
+        <p className="mt-1 font-heading text-3xl leading-tight font-extrabold tracking-tight text-balance sm:text-4xl" aria-live="polite" aria-atomic>
+          <Highlighted text={headline} mark={mood === "good" ? figure : undefined} />
         </p>
         <p className="mt-2 text-sm">{sub}</p>
         {costText && (
@@ -95,3 +95,16 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
     )
   },
 )
+
+/** Puts the sun-yellow marker behind the headline's key figure (good news only). */
+function Highlighted({ text = "", mark }: { text?: string; mark?: string }) {
+  const at = mark ? text.indexOf(mark) : -1
+  if (!mark || at < 0) return <>{text}</>
+  return (
+    <>
+      {text.slice(0, at)}
+      <span className="highlight">{mark}</span>
+      {text.slice(at + mark.length)}
+    </>
+  )
+}

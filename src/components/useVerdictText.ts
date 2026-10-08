@@ -11,17 +11,19 @@ export function useVerdictText(a: Analysis, hasChanges: boolean) {
   const cost = a.delta.totalCost
   const noEffect = Math.abs(cost) < 1 && months === 0
   const mood: Mood = !hasChanges || noEffect ? "neutral" : cost < 0 ? "good" : "bad"
+  /** The figure the headline is about, so the UI can mark it. */
+  const figure = !hasChanges || noEffect ? undefined : months !== 0 ? fmtDuration(months, t) : fmtMoney(Math.abs(cost))
   const headline = !hasChanges
     ? undefined
     : noEffect
       ? t("verdict.noEffect")
       : months < 0
-        ? t("verdict.earlier", { duration: fmtDuration(months, t) })
+        ? t("verdict.earlier", { duration: figure })
         : months > 0
-          ? t("verdict.later", { duration: fmtDuration(months, t) })
+          ? t("verdict.later", { duration: figure })
           : cost < 0
-            ? t("verdict.cheaperSameDate", { amount: fmtMoney(-cost) })
-            : t("verdict.dearerSameDate", { amount: fmtMoney(cost) })
+            ? t("verdict.cheaperSameDate", { amount: figure })
+            : t("verdict.dearerSameDate", { amount: figure })
   const costText = noEffect ? undefined : `${cost < 0 ? "−" : "+"}${fmtMoney(Math.abs(cost))}`
-  return { mood, headline, costText }
+  return { mood, headline, figure, costText }
 }

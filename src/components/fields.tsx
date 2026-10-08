@@ -53,9 +53,9 @@ export function Field({
     [id, labelId, msgId, error, hint],
   )
   return (
-    <div className={cn("grid content-start gap-1.5", className)}>
-      <div className="flex min-h-5 items-center gap-1">
-        <Label id={labelId} htmlFor={id} className="text-xs tracking-wide text-muted-foreground uppercase">
+    <div className={cn("grid min-w-0 content-start gap-1.5", className)}>
+      <div className="flex min-h-5 min-w-0 flex-wrap items-center gap-x-1 gap-y-0.5">
+        <Label id={labelId} htmlFor={id} className="min-w-0 text-xs tracking-wide text-muted-foreground uppercase hyphens-auto [overflow-wrap:anywhere]">
           {label}
         </Label>
         {help && <HelpTip label={typeof label === "string" ? label : ""}>{help}</HelpTip>}
@@ -271,7 +271,7 @@ export function Segmented<T extends string>({
       aria-label={ariaLabel}
       aria-labelledby={ariaLabel ? undefined : f?.labelId}
       aria-describedby={f?.describedBy}
-      className={cn("grid w-full rounded-lg bg-muted p-[3px] text-sm", className)}
+      className={cn("grid w-full rounded-full bg-muted p-1 text-sm", className)}
       style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
       onKeyDown={(e) => {
         if (e.key === "ArrowRight" || e.key === "ArrowDown") move(idx + 1)
@@ -297,9 +297,9 @@ export function Segmented<T extends string>({
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(o.value)}
             className={cn(
-              "min-h-8 cursor-pointer rounded-md px-2 font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+              "min-h-8 cursor-pointer rounded-full px-3 font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
               active
-                ? "bg-background text-foreground shadow-sm dark:bg-input/40"
+                ? "bg-primary text-primary-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
