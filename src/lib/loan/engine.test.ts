@@ -688,9 +688,23 @@ describe("day count (rentedager)", () => {
   it("every day count still ends on the agreed term", () => {
     for (const dc of ["30/360", "act/act", "act/360"] as const) {
       const a = analyze(loan(dc), "2026-01-01")
-      expect(Math.abs(a.scenario.months - 300)).toBeLessThanOrEqual(1)
+      expect(a.scenario.months).toBeLessThanOrEqual(300)
+      expect(a.scenario.months).toBeGreaterThanOrEqual(299)
       expect(a.scenario.rows.at(-1)!.balance).toBeCloseTo(0, 2)
     }
+  })
+  it("a day-count remainder is settled in the last planned payment, not a month later", () => {
+    const s = base({ principal: 3_000_000, annualRatePct: 5.3, termMonths: 300, startDate: "2023-05-15", dayCount: "act/act" })
+    const plain = analyze(s, "2026-10-08")
+    expect(plain.scenario.payoffDate).toBe("2048-05-15")
+    const last = plain.scenario.rows.at(-1)!
+    const before = plain.scenario.rows.at(-2)!
+    expect(last.principal + last.interest).toBeGreaterThan(before.principal + before.interest)
+    expect(last.principal + last.interest - (before.principal + before.interest)).toBeLessThan(5_000)
+    // A higher rate re-prices over the same end date, so it must not end the loan earlier.
+    const dearer = analyze({ ...s, periods: [{ id: "p", kind: "rate", from: "2026-10", to: "2048-12", annualRatePct: 7.3 }] }, "2026-10-08")
+    expect(dearer.scenario.payoffDate).toBe(plain.scenario.payoffDate)
+    expect(dearer.delta.months).toBe(0)
   })
   it("act/360 costs more than act/act, which is close to 30/360 over the life of the loan", () => {
     const i = (dc?: "30/360" | "act/act" | "act/360") => analyze(loan(dc), "2026-01-01").lifetime.scenario.interest

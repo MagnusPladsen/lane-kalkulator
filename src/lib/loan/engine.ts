@@ -364,6 +364,9 @@ export function buildSchedule(o: BuildScheduleOptions): ScheduleResult {
     let principal = 0
     if (!isIo) {
       principal = annuity ? Math.max(0, basePayment - interest) : serialPrincipal
+      // Actual-day interest drifts a little from the rate / 12 pricing. Like a bank, settle
+      // that small remainder in the last planned payment instead of adding a month for it.
+      if (month === plannedEnd && balance - principal < (annuity ? basePayment : serialPrincipal)) principal = balance
       principal = Math.min(principal, balance)
     }
     const extra = Math.min(extraForMonth(o.extras, month), Math.max(0, balance - principal))
