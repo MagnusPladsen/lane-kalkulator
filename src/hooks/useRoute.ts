@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { applyRouteMeta } from "@/lib/seo"
 
-export type Route = "calc" | "compare" | "loans"
+export type Route = "calc" | "compare" | "loans" | "rates"
 
 /** Real paths so each page can be indexed. Share links stay in the hash, which never reaches a server. */
-export const ROUTE_HREF: Record<Route, string> = { calc: "/", compare: "/sammenlign", loans: "/mine-lan" }
+export const ROUTE_HREF: Record<Route, string> = { calc: "/", compare: "/sammenlign", loans: "/mine-lan", rates: "/renter" }
 
 const EVENT = "lane-kalkulator:navigate"
 
@@ -15,6 +15,7 @@ export function routeOf(pathname: string, hash = ""): Route {
   const p = pathname.replace(/\/+$/, "") || "/"
   if (p === ROUTE_HREF.compare) return "compare"
   if (p === ROUTE_HREF.loans) return "loans"
+  if (p === ROUTE_HREF.rates) return "rates"
   return "calc"
 }
 

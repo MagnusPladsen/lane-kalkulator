@@ -419,7 +419,8 @@
     "noteMortgage": "average for new mortgages, floating",
     "noteStartlan": "the municipality may add a small margin",
     "noteCar": "electric cars often lower",
-    "noteConsumer": "effective rate often 13–20 %"
+    "noteConsumer": "effective rate often 13–20 %",
+    "pageLink": "Mortgage rates now"
   },
   "insight": {
     "split": "Of your next payment of {{payment}}, {{interest}} goes to interest, {{principal}} to principal and {{fee}} to fees.",
@@ -628,5 +629,33 @@
     "best": "Saves the most",
     "saves": "You save <0>{{amount}}</0> in interest and are debt-free <1>{{date}}</1>.",
     "was": "was {{date}}"
+  },
+  "ratesPage": {
+    "title": "Mortgage rates now",
+    "lede": "The average rate on new repayment mortgages to households in Norway, from Statistics Norway (SSB). New figures come once a month.",
+    "loading": "Fetching figures from SSB …",
+    "failed": "Couldn't fetch the figures from SSB right now. Try again later.",
+    "floatingNow": "Floating rate, average for new loans",
+    "asOf": "{{month}}",
+    "change1": "{{pp}} percentage points from the month before",
+    "change12": "{{pp}} over 12 months",
+    "chartTitle": "How rates have moved",
+    "range": "Period",
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years",
+    "seriesLabel": "Show rates",
+    "series": {
+      "floating": "Floating",
+      "fixed1to3": "Fixed 1–3 yrs",
+      "fixed3to5": "Fixed 3–5 yrs",
+      "fixedOver5": "Fixed over 5 yrs"
+    },
+    "meaningTitle": "What does the average mean for you?",
+    "meaning1": "The average is the rate people actually got on new mortgages that month. Your own rate may be lower or higher, depending among other things on how much you borrow compared with the home's value, and on the bank.",
+    "meaning2": "If your rate is well above the average, it may pay to ask your bank for a better offer or compare other banks.",
+    "cta": "Work out your own loan",
+    "source": "Source:",
+    "license": "The figures are licensed under CC BY 4.0.",
+    "fixedTitle": "Fixed rate, average for new loans"
   }
 }

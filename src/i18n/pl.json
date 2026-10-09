@@ -429,7 +429,8 @@
     "noteMortgage": "średnia dla nowych hipotek, zmienna",
     "noteStartlan": "gmina może doliczyć niewielką marżę",
     "noteCar": "auta elektryczne często taniej",
-    "noteConsumer": "RRSO często 13–20 %"
+    "noteConsumer": "RRSO często 13–20 %",
+    "pageLink": "Oprocentowanie kredytów teraz"
   },
   "insight": {
     "split": "Z następnej raty {{payment}} na odsetki idzie {{interest}}, na kapitał {{principal}}, a na opłaty {{fee}}.",
@@ -640,5 +641,35 @@
     "best": "Oszczędza najwięcej",
     "saves": "Oszczędzasz <0>{{amount}}</0> na odsetkach i jesteś bez długów <1>{{date}}</1>.",
     "was": "było {{date}}"
+  },
+  "ratesPage": {
+    "title": "Oprocentowanie kredytów hipotecznych teraz",
+    "lede": "Średnie oprocentowanie nowych kredytów hipotecznych dla gospodarstw domowych w Norwegii, według Urzędu Statystycznego (SSB). Nowe dane co miesiąc.",
+    "loading": "Pobieramy dane z SSB …",
+    "failed": "Nie udało się teraz pobrać danych z SSB. Spróbuj później.",
+    "floatingNow": "Zmienne oprocentowanie, średnia dla nowych kredytów",
+    "asOf": "{{month}}",
+    "change1": "{{pp}} pkt proc. względem poprzedniego miesiąca",
+    "change12": "{{pp}} w ciągu 12 miesięcy",
+    "chartTitle": "Jak zmieniało się oprocentowanie",
+    "range": "Okres",
+    "years_one": "{{count}} rok",
+    "years_few": "{{count}} lata",
+    "years_many": "{{count}} lat",
+    "years_other": "{{count}} lat",
+    "seriesLabel": "Pokaż oprocentowanie",
+    "series": {
+      "floating": "Zmienne",
+      "fixed1to3": "Stałe 1–3 lata",
+      "fixed3to5": "Stałe 3–5 lat",
+      "fixedOver5": "Stałe ponad 5 lat"
+    },
+    "meaningTitle": "Co średnia oznacza dla Ciebie?",
+    "meaning1": "Średnia to oprocentowanie, jakie ludzie faktycznie dostali na nowe kredyty hipoteczne w danym miesiącu. Twoje może być niższe lub wyższe, m.in. zależnie od tego, ile pożyczasz w stosunku do wartości mieszkania, i od banku.",
+    "meaning2": "Jeśli Twoje oprocentowanie jest wyraźnie wyższe od średniej, warto poprosić bank o lepszą ofertę albo porównać inne banki.",
+    "cta": "Policz swój kredyt",
+    "source": "Źródło:",
+    "license": "Dane są udostępnione na licencji CC BY 4.0.",
+    "fixedTitle": "Stałe oprocentowanie, średnia dla nowych kredytów"
   }
 }
