@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Field, FieldGroup, FieldInput, MoneyInput, NumberInput, SectionTitle, Segmented } from "@/components/fields"
+import { Field, FieldGroup, FieldInput, FieldRow, MoneyInput, NumberInput, SectionTitle, Segmented } from "@/components/fields"
 import { evaluateOffer, offerLoan, refinance, type Offer } from "@/lib/compare"
 import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
 import { addMonths, analyze, todayIso } from "@/lib/loan/engine"
@@ -129,7 +129,7 @@ function OfferForm({ offer, onChange, title }: { offer: Offer; onChange: (o: Off
         <Field label={t("loan.amount")} help={t("help.amount")}>
           <MoneyInput value={offer.principal} onChange={(v) => set({ principal: v ?? 0 })} />
         </Field>
-        <div className="grid grid-cols-2 gap-3">
+        <FieldRow>
           <Field label={t("loan.rate")} help={t("help.rate")}>
             <NumberInput value={offer.annualRatePct} onChange={(v) => set({ annualRatePct: v })} suffix="%" />
           </Field>
@@ -144,7 +144,7 @@ function OfferForm({ offer, onChange, title }: { offer: Offer; onChange: (o: Off
               />
             </FieldGroup>
           </Field>
-        </div>
+        </FieldRow>
         <Field label={t("loan.type")} help={t("help.type")}>
           <Segmented<LoanType>
             value={offer.loanType}
@@ -155,14 +155,14 @@ function OfferForm({ offer, onChange, title }: { offer: Offer; onChange: (o: Off
             ]}
           />
         </Field>
-        <div className="grid grid-cols-2 gap-3">
+        <FieldRow>
           <Field label={t("loan.fee")} help={t("help.fee")}>
             <MoneyInput value={offer.monthlyFee} onChange={(v) => set({ monthlyFee: v ?? 0 })} />
           </Field>
           <Field label={t("loan.setupFee")} help={t("help.setupFee")}>
             <MoneyInput value={offer.setupFee} onChange={(v) => set({ setupFee: v ?? 0 })} />
           </Field>
-        </div>
+        </FieldRow>
       </CardContent>
     </Card>
   )
@@ -326,14 +326,14 @@ function SwitchCheck({
           <SectionTitle>{t("compare.newOffer")}</SectionTitle>
         </CardHeader>
         <CardContent className="grid gap-3">
-          <div className="grid grid-cols-2 gap-3">
+          <FieldRow>
             <Field label={t("loan.rate")} help={t("help.rate")}>
               <NumberInput value={sw.annualRatePct} onChange={(v) => set({ annualRatePct: v })} suffix="%" />
             </Field>
             <Field label={t("loan.fee")} help={t("help.fee")}>
               <MoneyInput value={sw.monthlyFee} onChange={(v) => set({ monthlyFee: v ?? 0 })} />
             </Field>
-          </div>
+          </FieldRow>
           <Field label={t("compare.switchCost")} help={t("compare.switchCostHelp")}>
             <MoneyInput value={sw.switchCost} onChange={(v) => set({ switchCost: v ?? 0 })} />
           </Field>

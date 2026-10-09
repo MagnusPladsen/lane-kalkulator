@@ -503,7 +503,8 @@
       "remaining": "Hvor finner jeg restgjelden, og hva skjer hvis jeg lar feltet stå tomt?",
       "intro": "Hva er forskjellen på avdragsfri og rentefri start, og hva betyr det for lånet mitt?",
       "gap": "Effektiv rente med tallene mine stemmer ikke med bankens. Hva er det som mangler?"
-    }
+    },
+    "askLink": "Spør AI"
   },
   "faq": {
     "title": "Spørsmål og svar om lån",
@@ -562,7 +563,8 @@
       "title": "Hva slags lån er det?",
       "desc": "Velg typen, så viser vi vanlige vilkår og en typisk rente akkurat nå.",
       "scan": "Har du et skjermbilde fra nettbanken? Da kan vi fylle ut for deg.",
-      "filled": "Vi har fylt inn vanlige tall for denne lånetypen. Du endrer dem i neste steg."
+      "filled": "Vi har fylt inn vanlige tall for denne lånetypen. Du endrer dem i neste steg.",
+      "namePlaceholder": "Valgfritt, f.eks. Boliglånet"
     },
     "money": {
       "short": "Beløp",

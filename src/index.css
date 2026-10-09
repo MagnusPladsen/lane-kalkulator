@@ -230,3 +230,9 @@
 @media (prefers-reduced-motion: reduce) {
   .rise { animation: none; }
 }
+
+/* During loan setup on phones the floating AI button would cover the step buttons;
+   the fields offer "Spør AI" links instead. */
+@media (max-width: 1023px) {
+  body[data-setup] .ai-launcher { display: none; }
+}

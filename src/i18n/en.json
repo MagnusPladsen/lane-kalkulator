@@ -503,7 +503,8 @@
       "remaining": "Where do I find the remaining balance, and what happens if I leave it empty?",
       "intro": "What's the difference between an interest-only and an interest-free start, and what does it mean for my loan?",
       "gap": "The effective rate from my numbers doesn't match the bank's. What's missing?"
-    }
+    },
+    "askLink": "Ask AI"
   },
   "faq": {
     "title": "Loan questions and answers",
@@ -562,7 +563,8 @@
       "title": "What kind of loan is it?",
       "desc": "Pick the type and we show the usual terms and a typical rate right now.",
       "scan": "Have a screenshot from your online bank? We can fill this in for you.",
-      "filled": "We've filled in usual figures for this loan type. You change them in the next step."
+      "filled": "We've filled in usual figures for this loan type. You change them in the next step.",
+      "namePlaceholder": "Optional, e.g. Mortgage"
     },
     "money": {
       "short": "Amount",

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
@@ -39,6 +39,14 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
   const [editing, setEditing] = useState(() => isPristine(scenario) || !validation.ok)
   // A brand-new loan gets the full step-by-step setup; later edits can finish from any step.
   const [fresh, setFresh] = useState(() => isPristine(scenario))
+  // Lets CSS keep the floating AI button out of the way of the setup steps on phones.
+  useEffect(() => {
+    if (!editing) return
+    document.body.dataset.setup = ""
+    return () => {
+      delete document.body.dataset.setup
+    }
+  }, [editing])
   const [tool, setTool] = useState<Tool>("extras")
   const [chartTab, setChartTab] = useState<ChartTab>("balance")
   const [openYears, setOpenYears] = useState<Set<string>>(() => new Set())

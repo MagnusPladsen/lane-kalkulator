@@ -13,6 +13,8 @@ interface FieldContextValue {
   labelId: string
   describedBy?: string
   invalid: boolean
+  /** "Valgfritt" for optional fields, shown inside the empty input instead of beside the label. */
+  placeholder?: string
 }
 
 const FieldContext = React.createContext<FieldContextValue | null>(null)
@@ -49,8 +51,17 @@ export function Field({
   const labelId = `${id}-label`
   const msgId = `${id}-msg`
   const value = React.useMemo(
-    () => ({ id, labelId, describedBy: error || hint ? msgId : undefined, invalid: !!error }),
-    [id, labelId, msgId, error, hint],
+    () => ({
+      id,
+      labelId,
+      describedBy: error || hint ? msgId : undefined,
+      invalid: !!error,
+      placeholder: optional && optionalLabel ? optionalLabel.charAt(0).toUpperCase() + optionalLabel.slice(1) : undefined,
+    }),
+    [id, labelId, msgId, error, hint, optional, optionalLabel],
+  )
+  const askAi = ai && (
+    <AskAiButton focus={ai.focus} question={ai.question} label={typeof label === "string" ? label : ""} variant="link" />
   )
   return (
     <div className={cn("grid min-w-0 content-start gap-1.5", className)}>
@@ -59,17 +70,17 @@ export function Field({
           {label}
         </Label>
         {help && <HelpTip label={typeof label === "string" ? label : ""}>{help}</HelpTip>}
-        {ai && <AskAiButton focus={ai.focus} question={ai.question} label={typeof label === "string" ? label : ""} />}
-        {optional && <span className="ml-auto text-xs text-muted-foreground">{optionalLabel}</span>}
       </div>
       <FieldContext.Provider value={value}>{children}</FieldContext.Provider>
       {error ? (
         <p id={msgId} role="alert" className="text-xs text-destructive">
           {error}
         </p>
-      ) : hint ? (
-        <p id={msgId} className="text-xs text-muted-foreground">
+      ) : hint || askAi ? (
+        <p id={hint ? msgId : undefined} className="text-xs text-muted-foreground">
           {hint}
+          {hint && askAi && " "}
+          {askAi}
         </p>
       ) : null}
     </div>
@@ -85,6 +96,7 @@ export function FieldInput(props: React.ComponentProps<typeof Input>) {
       aria-describedby={f?.describedBy}
       aria-invalid={f?.invalid || undefined}
       {...props}
+      placeholder={props.placeholder ?? f?.placeholder}
     />
   )
 }
@@ -136,7 +148,7 @@ export function MoneyInput({
         inputMode="decimal"
         autoComplete="off"
         disabled={disabled}
-        placeholder={placeholder}
+        placeholder={placeholder ?? f?.placeholder}
         value={display}
         onFocus={(e) => {
           setRaw(value === undefined || !Number.isFinite(value) ? "" : String(Math.round(value)))
@@ -208,7 +220,7 @@ export function NumberInput({
         aria-invalid={f?.invalid || undefined}
         inputMode={integer ? "numeric" : "decimal"}
         autoComplete="off"
-        placeholder={placeholder}
+        placeholder={placeholder ?? f?.placeholder}
         value={display}
         onFocus={(e) => {
           setText(value !== undefined && Number.isFinite(value) ? fmtDecimal(value) : "")
@@ -424,5 +436,17 @@ export function NativeSelect<T extends string>({
         </option>
       ))}
     </select>
+  )
+}
+
+/**
+ * Two fields side by side when there is room, stacked when the space is tight (narrow
+ * phones). Measures its own width, so it works the same in a side column or a full page.
+ */
+export function FieldRow({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className="@container">
+      <div className={cn("grid grid-cols-1 gap-3 @[20rem]:grid-cols-2", className)}>{children}</div>
+    </div>
   )
 }

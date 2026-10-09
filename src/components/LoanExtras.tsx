@@ -6,7 +6,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { CircleCheckIcon, InfoIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
-import { Field, FieldGroup, NumberInput, Segmented } from "@/components/fields"
+import { Field, FieldGroup, FieldRow, NumberInput, Segmented } from "@/components/fields"
 import { fmtMoney, fmtRate } from "@/lib/format"
 import { planEffectiveRate, solveMonthlyFee } from "@/lib/loan/engine"
 import type { LoanInput, PeriodKind } from "@/lib/loan/types"
@@ -58,7 +58,7 @@ export function IntroTerms({
               { value: "rate", label: t("periods.otherRate") },
             ]}
           />
-          <div className="grid grid-cols-2 gap-3">
+          <FieldRow>
             <Field label={t("loan.introLength")} error={error}>
               <FieldGroup className="grid grid-cols-2 gap-2">
                 <NumberInput
@@ -86,7 +86,7 @@ export function IntroTerms({
                 />
               </Field>
             )}
-          </div>
+          </FieldRow>
         </>
       )}
     </div>
