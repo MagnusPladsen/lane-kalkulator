@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { applyRouteMeta } from "@/lib/seo"
+import type { LoanCategory } from "@/lib/loan/types"
 
 export type Route = "calc" | "compare" | "loans" | "rates"
 
@@ -8,11 +9,46 @@ export const ROUTE_HREF: Record<Route, string> = { calc: "/", compare: "/sammenl
 
 const EVENT = "lane-kalkulator:navigate"
 
+/** Search-friendly calculator pages per loan type: the same calculator, starting from that type. */
+export const TYPE_PATH: Record<LoanCategory, string> = {
+  mortgage: "/boliglan",
+  startlan: "/startlan",
+  car: "/billan",
+  consumer: "/forbrukslan",
+  student: "/studielan",
+}
+/** The calculator in English and Polish, for search; the in-app language switch still works everywhere. */
+export const LANG_PATH = { en: "/en", pl: "/pl" } as const
+export type PathLang = keyof typeof LANG_PATH
+
+const clean = (pathname: string) => pathname.replace(/\/+$/, "") || "/"
+
+export function categoryOfPath(pathname: string): LoanCategory | undefined {
+  const p = clean(pathname)
+  return (Object.keys(TYPE_PATH) as LoanCategory[]).find((c) => TYPE_PATH[c] === p)
+}
+
+export function langOfPath(pathname: string): PathLang | undefined {
+  const p = clean(pathname)
+  return (Object.keys(LANG_PATH) as PathLang[]).find((l) => LANG_PATH[l] === p)
+}
+
+let serverPath = "/"
+/** Prerendering only: which address to render without a browser location. */
+export function setServerPath(p: string): void {
+  serverPath = p
+}
+
+/** The current path, in the browser or while prerendering. */
+export function currentPath(): string {
+  return typeof location === "undefined" ? serverPath : location.pathname
+}
+
 /** The route for a path, also accepting the old hash routes ("#/compare", "#/loans"). */
 export function routeOf(pathname: string, hash = ""): Route {
   if (/^#\/loans\/?$/.test(hash)) return "loans"
   if (/^#\/compare\/?$/.test(hash)) return "compare"
-  const p = pathname.replace(/\/+$/, "") || "/"
+  const p = clean(pathname)
   if (p === ROUTE_HREF.compare) return "compare"
   if (p === ROUTE_HREF.loans) return "loans"
   if (p === ROUTE_HREF.rates) return "rates"
@@ -20,14 +56,8 @@ export function routeOf(pathname: string, hash = ""): Route {
 }
 
 function current(): Route {
-  if (typeof location === "undefined") return serverRoute
+  if (typeof location === "undefined") return routeOf(serverPath)
   return routeOf(location.pathname, location.hash)
-}
-
-let serverRoute: Route = "calc"
-/** Prerendering only: which page to render without a browser location. */
-export function setServerRoute(r: Route): void {
-  serverRoute = r
 }
 
 export function useRoute(): Route {

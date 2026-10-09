@@ -13,6 +13,7 @@ import { BalanceChart, CumulativeChart, YearlyChart } from "@/components/charts/
 import { ScheduleTable } from "@/components/ScheduleTable"
 import { Faq } from "@/components/Faq"
 import { CALC_FAQ } from "@/lib/faq"
+import { categoryOfPath, currentPath } from "@/hooks/useRoute"
 import { PrintPlan } from "@/components/PrintPlan"
 import { Button } from "@/components/ui/button"
 import { DownloadIcon, PrinterIcon } from "lucide-react"
@@ -29,6 +30,8 @@ type ChartTab = "balance" | "yearly" | "interest" | "table"
 export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dispatch: (a: Action) => void }) {
   const { t } = useTranslation()
   const today = todayIso()
+  // On a loan-type page (/billan …) the heading and intro speak about that type.
+  const pageType = categoryOfPath(currentPath())
   const validation = useMemo(() => validateLoan(scenario.loan), [scenario.loan])
   const analysis = useMemo(
     () => (validation.ok ? analyze(scenario, today) : undefined),
@@ -107,7 +110,7 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
 
   return (
     <>
-      <h1 className="sr-only">{t("a11y.mainHeading")}</h1>
+      <h1 className="sr-only">{pageType ? t(`typePages.${pageType}.h1`) : t("a11y.mainHeading")}</h1>
       <div className="grid gap-4 lg:grid-cols-[400px_minmax(0,1fr)] lg:items-start lg:gap-6">
         {/* Desktop: once set up, the inputs stay in view while the results scroll. */}
         <div
@@ -245,6 +248,14 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
         </section>
       </div>
 
+      {pageType && (
+        <section aria-labelledby="type-intro" className="mt-10 grid max-w-prose gap-2">
+          <h2 id="type-intro" className="font-heading text-2xl">
+            {t(`typePages.${pageType}.introTitle`)}
+          </h2>
+          <p className="leading-relaxed text-muted-foreground">{t(`typePages.${pageType}.intro`)}</p>
+        </section>
+      )}
       <Faq ids={CALC_FAQ} />
       {shown && <PrintPlan scenario={scenario} a={shown} dateFor={dateFor} />}
 

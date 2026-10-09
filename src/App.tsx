@@ -7,7 +7,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog"
 import { SaveDialog } from "@/components/SaveDialog"
 import { ShareFallbackDialog } from "@/components/ShareFallbackDialog"
 import { CalculatorPage } from "@/pages/CalculatorPage"
-import { go, useRoute } from "@/hooks/useRoute"
+import { categoryOfPath, currentPath, go, useRoute } from "@/hooks/useRoute"
 import { ComparePage, LoansPage, RatesPage } from "@/pages/lazy"
 import { isPristine, loadDraft, newScenario, saveDraft, storageAvailable, useSavedScenarios, useTheme } from "@/lib/storage"
 import { decodeShare, shareUrl } from "@/lib/share"
@@ -39,7 +39,12 @@ export default function App() {
   const { t } = useTranslation()
   const route = useRoute()
   const { theme, toggle } = useTheme()
-  const [scenario, dispatch] = useReducer(scenarioReducer, undefined, loadDraft)
+  // A loan-type page (/billan …) starts a new visitor from that type; a loan in progress wins.
+  const [scenario, dispatch] = useReducer(scenarioReducer, undefined, () => {
+    const draft = loadDraft()
+    const category = categoryOfPath(currentPath())
+    return category && isPristine(draft) && draft.loan.category !== category ? newScenario(category) : draft
+  })
   const saved = useSavedScenarios()
   const [saveOpen, setSaveOpen] = useState(false)
   const [copied, setCopied] = useState(false)

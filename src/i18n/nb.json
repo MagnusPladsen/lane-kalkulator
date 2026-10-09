@@ -279,7 +279,8 @@
   },
   "footer": {
     "privacy": "Lånene dine lagres bare i denne nettleseren. Vi teller anonyme besøk uten informasjonskapsler. Bruker du AI-hjelpen, sendes spørsmålet og lånetallene (ikke navn) til OpenAI.",
-    "estimates": "Kun anslag. Bankens tall er de som gjelder."
+    "estimates": "Kun anslag. Bankens tall er de som gjelder.",
+    "calculators": "Kalkulatorer"
   },
   "storage": {
     "off": "Denne nettleseren blokkerer lokal lagring, så lagring er av. Kalkulatoren virker likevel.",
@@ -657,5 +658,32 @@
     "source": "Kilde:",
     "license": "Tallene er lisensiert under CC BY 4.0.",
     "fixedTitle": "Fast rente, snitt for nye lån"
+  },
+  "typePages": {
+    "mortgage": {
+      "h1": "Boliglånskalkulator: se hva boliglånet koster og hva ekstra nedbetaling sparer",
+      "introTitle": "Om boliglån",
+      "intro": "Et boliglån har pant i boligen og går ofte over 25–30 år, så selv små endringer i rente eller ekstra innbetalinger gir store utslag over tid. Fyll inn lånet ditt, så ser du terminbeløp, totale renter og hva det betyr å betale litt ekstra hver måned."
+    },
+    "startlan": {
+      "h1": "Startlån-kalkulator: regn på startlån fra kommunen",
+      "introTitle": "Om startlån",
+      "intro": "Startlån gis av kommunen til deg som ikke får nok lån i vanlig bank. Lånet går ofte over lang tid, opptil 50 år, og kan ha en periode uten avdrag i starten. Her ser du hva lånet koster, og hvor mye du sparer på å betale ned raskere."
+    },
+    "car": {
+      "h1": "Billånskalkulator: hva koster billånet, og hva sparer du på å betale ekstra?",
+      "introTitle": "Om billån",
+      "intro": "Et billån har som regel pant i bilen og går over noen få år, ofte fem. Renten er høyere enn på boliglån, så ekstra innbetalinger merkes raskt. Se hva terminbeløpet blir, hva lånet koster totalt, og hvor mye tidligere du blir ferdig."
+    },
+    "consumer": {
+      "h1": "Forbrukslånkalkulator: se hva forbrukslånet egentlig koster",
+      "introTitle": "Om forbrukslån",
+      "intro": "Forbrukslån er lån uten sikkerhet, og renten er derfor mye høyere enn på boliglån. Det gjør det ekstra lønnsomt å betale ned raskt. Fyll inn lånet ditt og se hva det koster totalt, og hvor mye du sparer på å betale litt mer hver måned."
+    },
+    "student": {
+      "h1": "Studielånkalkulator: regn på nedbetalingen av studielånet",
+      "introTitle": "Om studielån",
+      "intro": "Studielånet fra Lånekassen betales vanligvis ned over mange år. Renten er ofte lavere enn på andre lån, men ekstra innbetalinger gir likevel lavere totalkostnad og kortere nedbetaling. Se hva som skjer med lånet ditt."
+    }
   }
 }

@@ -3,4 +3,11 @@
   <url><loc>https://lane-kalkulator.pladsen.dev/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>https://lane-kalkulator.pladsen.dev/sammenlign</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://lane-kalkulator.pladsen.dev/renter</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lane-kalkulator.pladsen.dev/boliglan</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lane-kalkulator.pladsen.dev/startlan</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lane-kalkulator.pladsen.dev/billan</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lane-kalkulator.pladsen.dev/forbrukslan</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lane-kalkulator.pladsen.dev/studielan</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lane-kalkulator.pladsen.dev/en</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lane-kalkulator.pladsen.dev/pl</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
