@@ -32,3 +32,12 @@ void Promise.all([initLang(), preloadRoute(routeOf(location.pathname, location.h
     createRoot(root).render(app)
   }
 })
+
+// Offline support (production only). The worker never touches the AI or analytics.
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {
+      /* offline mode is a bonus; the app works without it */
+    })
+  })
+}
