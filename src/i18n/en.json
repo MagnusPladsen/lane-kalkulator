@@ -609,5 +609,24 @@
     "balanceEnd": "Balance at year end",
     "month": "Month",
     "ratePct": "Rate %"
+  },
+  "all": {
+    "title": "All your loans",
+    "desc_one": "One loan as it stands today.",
+    "desc_other": "{{count}} loans together, as they stand today.",
+    "debt": "Owed today",
+    "monthly": "Paid each month",
+    "interestLeft": "Interest left",
+    "debtFree": "Debt-free",
+    "extraTitle": "Where should extra money go?",
+    "extraDesc": "Put the extra on one loan at a time. When it is paid off, both its payment and the extra move to the next loan.",
+    "extraAmount": "Extra each month",
+    "avalanche": "Highest rate first",
+    "avalancheDesc": "Pays the least interest in total.",
+    "snowball": "Smallest loan first",
+    "snowballDesc": "Quick wins, and fewer loans to keep track of sooner.",
+    "best": "Saves the most",
+    "saves": "You save <0>{{amount}}</0> in interest and are debt-free <1>{{date}}</1>.",
+    "was": "was {{date}}"
   }
 }

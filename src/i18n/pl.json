@@ -619,5 +619,26 @@
     "balanceEnd": "Saldo na koniec roku",
     "month": "Miesiąc",
     "ratePct": "Oprocentowanie %"
+  },
+  "all": {
+    "title": "Wszystkie Twoje kredyty",
+    "desc_one": "Jeden kredyt w obecnym stanie.",
+    "desc_few": "{{count}} kredyty razem, w obecnym stanie.",
+    "desc_many": "{{count}} kredytów razem, w obecnym stanie.",
+    "desc_other": "{{count}} kredytów razem, w obecnym stanie.",
+    "debt": "Dług dziś",
+    "monthly": "Płacisz miesięcznie",
+    "interestLeft": "Pozostałe odsetki",
+    "debtFree": "Bez długów",
+    "extraTitle": "Gdzie skierować dodatkowe pieniądze?",
+    "extraDesc": "Nadpłacaj jeden kredyt naraz. Gdy zostanie spłacony, jego rata i nadpłata przechodzą na następny kredyt.",
+    "extraAmount": "Nadpłata co miesiąc",
+    "avalanche": "Najwyższe oprocentowanie najpierw",
+    "avalancheDesc": "Najmniej odsetek łącznie.",
+    "snowball": "Najmniejszy kredyt najpierw",
+    "snowballDesc": "Szybkie sukcesy i wcześniej mniej kredytów do pilnowania.",
+    "best": "Oszczędza najwięcej",
+    "saves": "Oszczędzasz <0>{{amount}}</0> na odsetkach i jesteś bez długów <1>{{date}}</1>.",
+    "was": "było {{date}}"
   }
 }

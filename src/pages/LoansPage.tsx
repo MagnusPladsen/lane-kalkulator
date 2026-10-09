@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ConfirmDialog } from "@/components/ConfirmDialog"
+import { AllLoans } from "@/components/AllLoans"
 import { analyze, todayIso } from "@/lib/loan/engine"
 import { fmtDate, fmtDateTime, fmtDuration, fmtMoney, fmtRate } from "@/lib/format"
 import { downloadText, exportJson, ImportError, parseImport } from "@/lib/share"
@@ -118,6 +119,8 @@ export function LoansPage({
           </p>
         </div>
       </div>
+
+      <AllLoans items={items} />
 
       {sorted.length === 0 ? (
         <Card className="rise rise-2">
