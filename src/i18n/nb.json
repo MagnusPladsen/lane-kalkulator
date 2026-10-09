@@ -156,7 +156,8 @@
     "totalCost": "Total kostnad",
     "paidOffTitle": "Dette lånet er nedbetalt",
     "paidOffBody": "Ut fra startdato og restgjeld er det ingenting igjen å betale.",
-    "truncated": "Planen stopper etter 100 år. Dette går ikke opp, reduser pausene."
+    "truncated": "Planen stopper etter 100 år. Dette går ikke opp, reduser pausene.",
+    "setup": "Fyll inn lånet ditt, så ser du her hva det koster."
   },
   "tiles": {
     "monthly": "Terminbeløp",
@@ -536,6 +537,40 @@
         "q": "Når lønner det seg å bytte bank?",
         "a": "Det lønner seg når renten du sparer er større enn det byttet koster, som etableringsgebyr og tinglysing. Under «Bytte bank?» ser du hvor mye du sparer i alt, og hvor mange måneder det tar før byttekostnaden er tjent inn."
       }
+    }
+  },
+  "wizard": {
+    "progress": "Steg i oppsettet",
+    "stepOf": "Steg {{n}} av {{total}}",
+    "back": "Tilbake",
+    "next": "Neste",
+    "finish": "Se resultatet",
+    "type": {
+      "short": "Lån",
+      "title": "Hva slags lån er det?",
+      "desc": "Velg typen, så viser vi vanlige vilkår og en typisk rente akkurat nå.",
+      "scan": "Har du et skjermbilde fra nettbanken? Da kan vi fylle ut for deg."
+    },
+    "money": {
+      "short": "Beløp",
+      "title": "Beløp og rente",
+      "desc": "Hvor mye du lånte, og renten banken tar.",
+      "amountHint": "Beløpet da lånet ble tatt opp. Restgjeld i dag kommer i siste steg.",
+      "effToggle": "Har du effektiv rente fra banken også?"
+    },
+    "time": {
+      "short": "Nedbetaling",
+      "title": "Hvor lenge, og hvordan?",
+      "desc": "Løpetiden og hvordan lånet betales ned."
+    },
+    "now": {
+      "short": "I dag",
+      "title": "Har du allerede lånet?",
+      "desc": "Da kan vi vise hvor du er i dag. Er lånet nytt eller bare et tilbud, går du rett videre.",
+      "yes": "Ja, det er i gang",
+      "no": "Nei, det er nytt",
+      "advanced": "Avansert",
+      "advancedHint": "renteberegning"
     }
   }
 }

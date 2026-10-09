@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { ExternalLinkIcon } from "lucide-react"
+import { CarIcon, ExternalLinkIcon, GraduationCapIcon, HouseIcon, KeyRoundIcon, ShoppingBagIcon, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { HelpTip } from "@/components/HelpTip"
@@ -12,12 +12,28 @@ import { useAi } from "@/components/ai/AiContext"
 import { SparklesIcon } from "lucide-react"
 
 const CATEGORIES: LoanCategory[] = ["mortgage", "startlan", "car", "consumer", "student"]
+const ICONS: Record<LoanCategory, LucideIcon> = {
+  mortgage: HouseIcon,
+  startlan: KeyRoundIcon,
+  car: CarIcon,
+  consumer: ShoppingBagIcon,
+  student: GraduationCapIcon,
+}
 
 /**
  * Loan type chips. Picking one shows what is usual for that kind of loan and a typical
  * rate right now, each applied only when the user presses its button.
  */
-export function LoanTypePicker({ loan, onChange }: { loan: LoanInput; onChange: (patch: Partial<LoanInput>) => void }) {
+export function LoanTypePicker({
+  loan,
+  onChange,
+  variant = "chips",
+}: {
+  loan: LoanInput
+  onChange: (patch: Partial<LoanInput>) => void
+  /** "tiles": large buttons with icons, for the setup steps. */
+  variant?: "chips" | "tiles"
+}) {
   const { t } = useTranslation()
   const ai = useAi()
   const category = loan.category
@@ -53,23 +69,47 @@ export function LoanTypePicker({ loan, onChange }: { loan: LoanInput; onChange: 
         </span>
         <HelpTip label={t("rates.category")}>{t("help.category")}</HelpTip>
       </div>
-      <div role="radiogroup" aria-labelledby="loan-category-label" className="flex flex-wrap gap-1.5">
-        {CATEGORIES.map((c) => (
-          <button
-            key={c}
-            type="button"
-            role="radio"
-            aria-checked={category === c}
-            onClick={() => onChange({ category: category === c ? undefined : c })}
-            className={cn(
-              "min-h-8 cursor-pointer rounded-full border px-3 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [@media(pointer:coarse)]:min-h-10",
-              category === c ? "border-primary bg-primary text-primary-foreground" : "hover:bg-muted",
-            )}
-          >
-            {t(`rates.${c}`)}
-          </button>
-        ))}
-      </div>
+      {variant === "tiles" ? (
+        <div role="radiogroup" aria-labelledby="loan-category-label" className="grid grid-cols-2 gap-2">
+          {CATEGORIES.map((c) => {
+            const Icon = ICONS[c]
+            return (
+              <button
+                key={c}
+                type="button"
+                role="radio"
+                aria-checked={category === c}
+                onClick={() => onChange({ category: category === c ? undefined : c })}
+                className={cn(
+                  "flex min-h-14 cursor-pointer items-center gap-2.5 rounded-2xl border px-3 py-2.5 text-left text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                  category === c ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-muted",
+                )}
+              >
+                <Icon className="size-5 shrink-0" aria-hidden />
+                {t(`rates.${c}`)}
+              </button>
+            )
+          })}
+        </div>
+      ) : (
+        <div role="radiogroup" aria-labelledby="loan-category-label" className="flex flex-wrap gap-1.5">
+          {CATEGORIES.map((c) => (
+            <button
+              key={c}
+              type="button"
+              role="radio"
+              aria-checked={category === c}
+              onClick={() => onChange({ category: category === c ? undefined : c })}
+              className={cn(
+                "min-h-8 cursor-pointer rounded-full border px-3 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [@media(pointer:coarse)]:min-h-10",
+                category === c ? "border-primary bg-primary text-primary-foreground" : "hover:bg-muted",
+              )}
+            >
+              {t(`rates.${c}`)}
+            </button>
+          ))}
+        </div>
+      )}
 
       {category && preset && (
         <div className="grid gap-2 rounded-xl border bg-background/50 p-3 text-sm">

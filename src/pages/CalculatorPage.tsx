@@ -36,6 +36,8 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
   const stale = !analysis && !!lastGood
 
   const [editing, setEditing] = useState(() => isPristine(scenario) || !validation.ok)
+  // A brand-new loan gets the full step-by-step setup; later edits can finish from any step.
+  const [fresh, setFresh] = useState(() => isPristine(scenario))
   const [tool, setTool] = useState<Tool>("extras")
   const [chartTab, setChartTab] = useState<ChartTab>("balance")
   const [openYears, setOpenYears] = useState<Set<string>>(() => new Set())
@@ -84,19 +86,31 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
             valid={validation.ok}
             firstPayment={firstPayment}
             editing={editing}
-            onEditingChange={setEditing}
+            fresh={fresh}
+            onEditingChange={(e) => {
+              setEditing(e)
+              if (e) return
+              setFresh(false)
+              // On narrow screens the result is below the form: take the user there.
+              if (window.matchMedia("(max-width: 1023px)").matches) {
+                const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                requestAnimationFrame(() => verdictRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }))
+              }
+            }}
             onChange={(patch) => dispatch({ type: "loan", patch })}
           />
-          <WhatIfCard
-            scenario={scenario}
-            analysis={analysis}
-            today={today}
-            monthDate={monthDate}
-            maxMonth={maxMonth}
-            tool={tool}
-            onToolChange={setTool}
-            dispatch={dispatch}
-          />
+          {!editing && (
+            <WhatIfCard
+              scenario={scenario}
+              analysis={analysis}
+              today={today}
+              monthDate={monthDate}
+              maxMonth={maxMonth}
+              tool={tool}
+              onToolChange={setTool}
+              dispatch={dispatch}
+            />
+          )}
         </div>
 
         <section aria-labelledby="results-heading" className="grid gap-3 sm:gap-4">
@@ -114,7 +128,7 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
                   {t("invalid.stale")}
                 </p>
               )}
-              <Verdict ref={verdictRef} a={shown} hasChanges={hasChanges} stale={stale} />
+              <Verdict ref={verdictRef} a={shown} hasChanges={hasChanges} stale={stale} setup={editing} />
               {!shown.paidOff && (
                 <>
                   <SummaryCards

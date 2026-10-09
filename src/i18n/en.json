@@ -156,7 +156,8 @@
     "totalCost": "Total cost",
     "paidOffTitle": "This loan is paid off",
     "paidOffBody": "Given the start date and remaining balance there is nothing left to pay.",
-    "truncated": "The plan stops after 100 years. This doesn't add up, shorten the pauses."
+    "truncated": "The plan stops after 100 years. This doesn't add up, shorten the pauses.",
+    "setup": "Fill in your loan and you'll see what it costs here."
   },
   "tiles": {
     "monthly": "Monthly payment",
@@ -536,6 +537,40 @@
         "q": "When does it pay to switch banks?",
         "a": "It pays when the interest you save is more than the switch costs, such as setup and registration fees. Under \"Switch bank?\" you see the total saving and how many months it takes to earn back the cost."
       }
+    }
+  },
+  "wizard": {
+    "progress": "Setup steps",
+    "stepOf": "Step {{n}} of {{total}}",
+    "back": "Back",
+    "next": "Next",
+    "finish": "See the result",
+    "type": {
+      "short": "Loan",
+      "title": "What kind of loan is it?",
+      "desc": "Pick the type and we show the usual terms and a typical rate right now.",
+      "scan": "Have a screenshot from your online bank? We can fill this in for you."
+    },
+    "money": {
+      "short": "Amount",
+      "title": "Amount and rate",
+      "desc": "How much you borrowed, and the rate the bank charges.",
+      "amountHint": "The amount when the loan was taken out. Today's balance comes in the last step.",
+      "effToggle": "Do you also have the effective rate from the bank?"
+    },
+    "time": {
+      "short": "Repayment",
+      "title": "How long, and how?",
+      "desc": "The term and how the loan is paid down."
+    },
+    "now": {
+      "short": "Today",
+      "title": "Do you already have the loan?",
+      "desc": "Then we can show where you are today. If the loan is new or just an offer, carry on.",
+      "yes": "Yes, it's running",
+      "no": "No, it's new",
+      "advanced": "Advanced",
+      "advancedHint": "interest day count"
     }
   }
 }

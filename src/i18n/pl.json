@@ -156,7 +156,8 @@
     "totalCost": "Koszt całkowity",
     "paidOffTitle": "Ten kredyt jest spłacony",
     "paidOffBody": "Przy tej dacie rozpoczęcia i pozostałym kapitale nie ma już nic do zapłaty.",
-    "truncated": "Plan urywa się po 100 latach. To się nie spina, skróć przerwy."
+    "truncated": "Plan urywa się po 100 latach. To się nie spina, skróć przerwy.",
+    "setup": "Wpisz swój kredyt, a tutaj zobaczysz, ile kosztuje."
   },
   "tiles": {
     "monthly": "Rata miesięczna",
@@ -546,6 +547,40 @@
         "q": "Kiedy opłaca się zmienić bank?",
         "a": "Opłaca się, gdy oszczędność na odsetkach jest większa niż koszt zmiany, np. prowizja i wpis do rejestru. W zakładce „Zmienić bank?” zobaczysz łączną oszczędność i po ilu miesiącach koszt się zwróci."
       }
+    }
+  },
+  "wizard": {
+    "progress": "Kroki konfiguracji",
+    "stepOf": "Krok {{n}} z {{total}}",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "finish": "Zobacz wynik",
+    "type": {
+      "short": "Kredyt",
+      "title": "Jaki to kredyt?",
+      "desc": "Wybierz rodzaj, a pokażemy typowe warunki i aktualne oprocentowanie.",
+      "scan": "Masz zrzut ekranu z bankowości internetowej? Uzupełnimy to za Ciebie."
+    },
+    "money": {
+      "short": "Kwota",
+      "title": "Kwota i oprocentowanie",
+      "desc": "Ile pożyczyłeś i jakie oprocentowanie nalicza bank.",
+      "amountHint": "Kwota z dnia zaciągnięcia kredytu. Dzisiejsze saldo podasz w ostatnim kroku.",
+      "effToggle": "Masz też oprocentowanie efektywne z banku?"
+    },
+    "time": {
+      "short": "Spłata",
+      "title": "Jak długo i w jaki sposób?",
+      "desc": "Okres kredytu i sposób spłaty."
+    },
+    "now": {
+      "short": "Dziś",
+      "title": "Czy masz już ten kredyt?",
+      "desc": "Wtedy pokażemy, gdzie jesteś dziś. Jeśli kredyt jest nowy albo to tylko oferta, przejdź dalej.",
+      "yes": "Tak, już spłacam",
+      "no": "Nie, jest nowy",
+      "advanced": "Zaawansowane",
+      "advancedHint": "naliczanie odsetek"
     }
   }
 }

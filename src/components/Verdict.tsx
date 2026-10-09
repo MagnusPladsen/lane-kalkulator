@@ -6,8 +6,8 @@ import { fmtDuration, fmtMoney } from "@/lib/format"
 import { useVerdictText } from "./useVerdictText"
 import type { Analysis } from "@/lib/loan/types"
 
-export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolean; stale?: boolean }>(
-  function Verdict({ a, hasChanges, stale }, ref) {
+export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolean; stale?: boolean; setup?: boolean }>(
+  function Verdict({ a, hasChanges, stale, setup }, ref) {
     const { t } = useTranslation()
     const { mood, headline, figure, costText } = useVerdictText(a, hasChanges)
 
@@ -25,8 +25,8 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
 
     if (!hasChanges) {
       return (
-        <section ref={ref} className="rise rounded-xl border border-dashed bg-card/60 px-5 py-5">
-          <p className="font-heading text-xl leading-snug text-balance sm:text-2xl">{t("verdict.noChanges")}</p>
+        <section ref={ref} className="rise rounded-2xl bg-card px-5 py-5 shadow-(--card-shadow)">
+          <p className="font-heading text-xl leading-snug text-balance sm:text-2xl">{setup ? t("verdict.setup") : t("verdict.noChanges")}</p>
           <p className="mt-1.5 text-sm text-muted-foreground">
             <Trans
               i18nKey="verdict.planSoFar"
