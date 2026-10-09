@@ -1,7 +1,8 @@
 // Writes one ready HTML file per page after `vite build`: the rendered app inside #root,
 // the page's own title, description, canonical URL and social tags, and JSON-LD.
 // Run by `bun run build`; needs dist/ (client) and dist-ssr/ (server entry).
-import { readFileSync, writeFileSync } from "node:fs"
+import { readdirSync, readFileSync, writeFileSync } from "node:fs"
+import { createHash } from "node:crypto"
 
 const {
   render,
@@ -140,3 +141,16 @@ let notFound = readFileSync("dist/index.html", "utf8")
 notFound = notFound.replace(/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, follow" />')
 writeFileSync("dist/404.html", notFound)
 console.log("wrote dist/404.html")
+
+// Offline: a service worker that stores the pages above plus the built code, styles and
+// Latin fonts. Its build id changes whenever any of those files change.
+const assets = readdirSync("dist/assets")
+  .filter((f) => /\.(js|css)$/.test(f) || /(latin|latin-ext)-wght-normal-.*\.woff2$/.test(f))
+  .map((f) => `/assets/${f}`)
+const precache = [...pages.filter((p) => p.meta.index).map((p) => p.path), ...assets]
+const build = createHash("sha256").update(precache.join("|") + readFileSync("dist/index.html", "utf8")).digest("hex").slice(0, 12)
+const sw = readFileSync(new URL("./sw.template.js", import.meta.url), "utf8")
+  .replace('"__BUILD__"', JSON.stringify(build))
+  .replace("__PRECACHE__", JSON.stringify(precache))
+writeFileSync("dist/sw.js", sw)
+console.log(`wrote dist/sw.js (${precache.length} files, build ${build})`)
