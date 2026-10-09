@@ -279,7 +279,8 @@
   },
   "footer": {
     "privacy": "Your loans are stored only in this browser. We count anonymous visits without cookies. If you use the AI help, your question and loan figures (not names) are sent to OpenAI.",
-    "estimates": "Estimates only. Your bank's numbers are the ones that count."
+    "estimates": "Estimates only. Your bank's numbers are the ones that count.",
+    "calculators": "Calculators"
   },
   "storage": {
     "off": "This browser blocks local storage, so saving is off. The calculator still works.",
@@ -657,5 +658,32 @@
     "source": "Source:",
     "license": "The figures are licensed under CC BY 4.0.",
     "fixedTitle": "Fixed rate, average for new loans"
+  },
+  "typePages": {
+    "mortgage": {
+      "h1": "Mortgage calculator: see what your mortgage costs and what extra payments save",
+      "introTitle": "About mortgages",
+      "intro": "A mortgage is secured on your home and often runs for 25–30 years, so even small changes in rate or extra payments add up over time. Enter your loan to see the payment, total interest and what paying a little extra each month does."
+    },
+    "startlan": {
+      "h1": "Startlån calculator: work out a municipal starter loan",
+      "introTitle": "About startlån",
+      "intro": "A startlån is a loan from the municipality for people who cannot borrow enough from a bank. It often runs for a long time, up to 50 years, and may start without repayments. See what the loan costs and how much you save by paying it down faster."
+    },
+    "car": {
+      "h1": "Car loan calculator: what does the car loan cost, and what do extra payments save?",
+      "introTitle": "About car loans",
+      "intro": "A car loan is usually secured on the car and runs for a few years, often five. The rate is higher than on a mortgage, so extra payments show quickly. See the payment, the total cost and how much sooner you are done."
+    },
+    "consumer": {
+      "h1": "Consumer loan calculator: see what a consumer loan really costs",
+      "introTitle": "About consumer loans",
+      "intro": "Consumer loans are unsecured, so the rate is much higher than on a mortgage. That makes paying them down quickly especially worthwhile. Enter your loan to see the total cost and how much you save by paying a little more each month."
+    },
+    "student": {
+      "h1": "Student loan calculator: work out your student loan repayment",
+      "introTitle": "About student loans",
+      "intro": "Student loans from Lånekassen are usually repaid over many years. The rate is often lower than on other loans, but extra payments still lower the total cost and shorten the loan. See what happens to yours."
+    }
   }
 }

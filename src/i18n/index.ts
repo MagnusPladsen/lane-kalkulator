@@ -48,8 +48,15 @@ async function ensureLang(l: Lang): Promise<void> {
 }
 
 /** Loads and switches to the stored language, if not Norwegian. Await before the first render. */
+/** /en and /pl are the calculator in that language for search; the address wins over the saved choice. */
+function pathLang(): Lang | undefined {
+  if (typeof location === "undefined") return undefined
+  const p = location.pathname.replace(/\/+$/, "")
+  return p === "/en" ? "en" : p === "/pl" ? "pl" : undefined
+}
+
 export async function initLang(): Promise<void> {
-  const l = storedLang()
+  const l = pathLang() ?? storedLang()
   if (l === "nb") return
   try {
     await ensureLang(l)

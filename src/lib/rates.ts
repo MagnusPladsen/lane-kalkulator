@@ -24,6 +24,29 @@ export const PRESETS: Record<LoanCategory, Pick<LoanInput, "loanType" | "termMon
   student: { loanType: "annuity", termMonths: 240, monthlyFee: 0, dayCount: "act/act" },
 }
 
+/** A sensible starting amount per loan type for a brand-new loan; the user replaces it. */
+export const TYPICAL_AMOUNT: Record<LoanCategory, number> = {
+  mortgage: 3_000_000,
+  startlan: 2_500_000,
+  car: 400_000,
+  consumer: 100_000,
+  student: 300_000,
+}
+
+/**
+ * What a brand-new loan of this type starts with: usual terms, a typical amount and, where a
+ * typical rate is known (not mortgages, whose rate comes live from SSB), that rate.
+ */
+export function startLoanFor(category: LoanCategory, today: string): Partial<LoanInput> {
+  const typical = category === "mortgage" ? undefined : tableRate(category, today)
+  return {
+    category,
+    ...PRESETS[category],
+    principal: TYPICAL_AMOUNT[category],
+    ...(typical ? { annualRatePct: typical.ratePct } : {}),
+  }
+}
+
 /**
  * Hand-maintained typical rates for loan types with no live official feed.
  * Update now and then; each row says where the number came from and when.

@@ -283,7 +283,8 @@
   },
   "footer": {
     "privacy": "Twoje kredyty są zapisane tylko w tej przeglądarce. Liczymy anonimowe odwiedziny bez plików cookie. Jeśli korzystasz z pomocy AI, pytanie i liczby kredytu (bez nazw) są wysyłane do OpenAI.",
-    "estimates": "Tylko szacunki. Liczą się liczby z twojego banku."
+    "estimates": "Tylko szacunki. Liczą się liczby z twojego banku.",
+    "calculators": "Kalkulatory"
   },
   "storage": {
     "off": "Ta przeglądarka blokuje pamięć lokalną, więc zapisywanie jest wyłączone. Kalkulator nadal działa.",
@@ -671,5 +672,32 @@
     "source": "Źródło:",
     "license": "Dane są udostępnione na licencji CC BY 4.0.",
     "fixedTitle": "Stałe oprocentowanie, średnia dla nowych kredytów"
+  },
+  "typePages": {
+    "mortgage": {
+      "h1": "Kalkulator kredytu hipotecznego: ile kosztuje kredyt i ile oszczędzą nadpłaty",
+      "introTitle": "O kredycie hipotecznym",
+      "intro": "Kredyt hipoteczny jest zabezpieczony na mieszkaniu i często trwa 25–30 lat, więc nawet małe zmiany oprocentowania czy nadpłaty dają duży efekt. Wpisz swój kredyt, a zobaczysz ratę, łączne odsetki i efekt niewielkiej nadpłaty co miesiąc."
+    },
+    "startlan": {
+      "h1": "Kalkulator startlån: policz kredyt startowy z gminy",
+      "introTitle": "O startlån",
+      "intro": "Startlån to kredyt z gminy dla osób, które nie mogą pożyczyć wystarczająco w banku. Często trwa długo, do 50 lat, i może zaczynać się okresem bez spłaty kapitału. Zobacz, ile kosztuje i ile oszczędzisz, spłacając szybciej."
+    },
+    "car": {
+      "h1": "Kalkulator kredytu samochodowego: ile kosztuje i ile oszczędzą nadpłaty?",
+      "introTitle": "O kredycie samochodowym",
+      "intro": "Kredyt samochodowy jest zwykle zabezpieczony na aucie i trwa kilka lat, często pięć. Oprocentowanie jest wyższe niż przy kredycie hipotecznym, więc nadpłaty szybko widać. Zobacz ratę, łączny koszt i o ile wcześniej skończysz."
+    },
+    "consumer": {
+      "h1": "Kalkulator kredytu konsumpcyjnego: ile naprawdę kosztuje",
+      "introTitle": "O kredycie konsumpcyjnym",
+      "intro": "Kredyty konsumpcyjne nie mają zabezpieczenia, więc oprocentowanie jest dużo wyższe niż przy kredycie hipotecznym. Dlatego szybka spłata szczególnie się opłaca. Wpisz swój kredyt i zobacz łączny koszt oraz oszczędność z niewielkiej nadpłaty."
+    },
+    "student": {
+      "h1": "Kalkulator kredytu studenckiego: policz spłatę",
+      "introTitle": "O kredycie studenckim",
+      "intro": "Kredyt studencki z Lånekassen spłaca się zwykle przez wiele lat. Oprocentowanie bywa niższe niż przy innych kredytach, ale nadpłaty i tak obniżają łączny koszt i skracają spłatę. Zobacz, co stanie się z Twoim."
+    }
   }
 }

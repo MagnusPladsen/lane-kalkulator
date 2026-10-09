@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react"
 import { uid } from "./ids"
 import { sanitizeScenario } from "./loan/sanitize"
-import type { Scenario } from "./loan/types"
+import type { LoanCategory, Scenario } from "./loan/types"
+import { todayIso } from "./loan/engine"
+import { startLoanFor } from "./rates"
 
 const DRAFT_KEY = "lane-kalkulator:draft"
 const LIST_KEY = "lane-kalkulator:scenarios"
@@ -44,7 +46,8 @@ function write<T>(key: string, data: T): boolean {
   }
 }
 
-export function newScenario(): Scenario {
+/** A fresh loan; with a type (a loan-type page), it starts from that type's usual terms. */
+export function newScenario(category?: LoanCategory): Scenario {
   return {
     id: uid(),
     savedAt: new Date().toISOString(),
@@ -56,6 +59,7 @@ export function newScenario(): Scenario {
       loanType: "annuity",
       monthlyFee: 0,
       dayCount: "act/act",
+      ...(category ? startLoanFor(category, todayIso()) : {}),
     },
     extras: [],
     periods: [],
@@ -65,8 +69,17 @@ export function newScenario(): Scenario {
 
 /** True when the draft is still the untouched default (safe to replace without asking). */
 export function isPristine(s: Scenario): boolean {
-  const d = newScenario()
-  return JSON.stringify({ ...s, id: "", savedAt: "" }) === JSON.stringify({ ...d, id: "", savedAt: "" })
+  const d = newScenario(s.loan.category)
+  return canonical({ ...s, id: "", savedAt: "" }) === canonical({ ...d, id: "", savedAt: "" })
+}
+
+/** JSON with keys sorted and undefined dropped, so field order never makes two equal loans differ. */
+function canonical(v: unknown): string {
+  return JSON.stringify(v, (_k, x: unknown) =>
+    x && typeof x === "object" && !Array.isArray(x)
+      ? Object.fromEntries(Object.entries(x as Record<string, unknown>).filter(([, y]) => y !== undefined).sort(([a], [b]) => (a < b ? -1 : 1)))
+      : x,
+  )
 }
 
 export function loadDraft(): Scenario {

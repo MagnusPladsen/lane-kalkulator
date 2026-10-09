@@ -3,7 +3,20 @@
 // Run by `bun run build`; needs dist/ (client) and dist-ssr/ (server entry).
 import { readFileSync, writeFileSync } from "node:fs"
 
-const { render, ROUTE_META, SITE_NAME, SITE_URL, CALC_FAQ, COMPARE_FAQ, fetchRateHistory, setRateSnapshot } = await import(
+const {
+  render,
+  ROUTE_META,
+  TYPE_META,
+  LANG_META,
+  TYPE_PATH,
+  LANG_PATH,
+  SITE_NAME,
+  SITE_URL,
+  CALC_FAQ,
+  COMPARE_FAQ,
+  fetchRateHistory,
+  setRateSnapshot,
+} = await import(
   "../dist-ssr/entry-server.js"
 )
 
@@ -57,16 +70,46 @@ const dataset = rates && {
   inLanguage: "nb",
 }
 
+const appFor = (description, url, inLanguage = "nb") => ({ ...app, description, url, inLanguage })
+// The calculator exists in three languages; each version lists the others for search engines.
+const langAlternates = [
+  ["nb", SITE_URL + "/"],
+  ["en", SITE_URL + LANG_PATH.en],
+  ["pl", SITE_URL + LANG_PATH.pl],
+  ["x-default", SITE_URL + "/"],
+]
+const meta = (m) => ({ title: m.title, description: m.description, index: m.index ?? true })
+
 const pages = [
-  { route: "calc", file: "dist/index.html", ld: [app, faq(CALC_FAQ)] },
-  { route: "compare", file: "dist/sammenlign.html", ld: [faq(COMPARE_FAQ)] },
-  { route: "rates", file: "dist/renter.html", ld: dataset ? [dataset] : [], data: rates && { id: "rate-snapshot", value: rates } },
-  { route: "loans", file: "dist/mine-lan.html", ld: [] },
+  { path: "/", file: "dist/index.html", meta: meta(ROUTE_META.calc), ld: [app, faq(CALC_FAQ)], alternates: langAlternates },
+  { path: "/sammenlign", file: "dist/sammenlign.html", meta: meta(ROUTE_META.compare), ld: [faq(COMPARE_FAQ)] },
+  {
+    path: "/renter",
+    file: "dist/renter.html",
+    meta: meta(ROUTE_META.rates),
+    ld: dataset ? [dataset] : [],
+    data: rates && { id: "rate-snapshot", value: rates },
+  },
+  { path: "/mine-lan", file: "dist/mine-lan.html", meta: meta(ROUTE_META.loans), ld: [] },
+  ...Object.entries(TYPE_PATH).map(([category, path]) => ({
+    path,
+    file: `dist${path}.html`,
+    meta: meta(TYPE_META[category]),
+    ld: [appFor(TYPE_META[category].description, SITE_URL + path)],
+  })),
+  ...Object.entries(LANG_PATH).map(([lang, path]) => ({
+    path,
+    file: `dist${path}.html`,
+    meta: meta(LANG_META[lang]),
+    lang,
+    locale: LANG_META[lang].locale,
+    ld: [appFor(LANG_META[lang].description, SITE_URL + path, lang)],
+    alternates: langAlternates,
+  })),
 ]
 
-for (const { route, file, ld, data } of pages) {
-  const m = ROUTE_META[route]
-  const url = SITE_URL + m.path
+for (const { path, file, meta: m, ld, data, lang, locale, alternates } of pages) {
+  const url = SITE_URL + path
   let html = template
   html = setTag(html, /<title>[^<]*<\/title>/, `<title>${esc(m.title)}</title>`)
   html = setTag(html, /<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(m.description)}" />`)
@@ -75,13 +118,21 @@ for (const { route, file, ld, data } of pages) {
   html = setTag(html, /<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url}" />`)
   html = setTag(html, /<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(m.title)}" />`)
   html = setTag(html, /<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(m.description)}" />`)
-  if (ld.length) html = html.replace("</head>", `    ${ld.map(jsonLd).join("\n    ")}\n  </head>`)
+  if (lang) {
+    html = setTag(html, /<html lang="nb">/, `<html lang="${lang}">`)
+    html = setTag(html, /<meta property="og:locale" content="[^"]*" \/>/, `<meta property="og:locale" content="${locale}" />`)
+  }
+  const head = [
+    ...(alternates ?? []).map(([hl, href]) => `<link rel="alternate" hreflang="${hl}" href="${href}" />`),
+    ...ld.map(jsonLd),
+  ]
+  if (head.length) html = html.replace("</head>", `    ${head.join("\n    ")}\n  </head>`)
   const embedded = data
     ? `\n    <script id="${data.id}" type="application/json">${JSON.stringify(data.value).replace(/</g, "\\u003c")}</script>`
     : ""
-  html = setTag(html, /<div id="root"><\/div>/, `<div id="root">${await render(route)}</div>${embedded}`)
+  html = setTag(html, /<div id="root"><\/div>/, `<div id="root">${await render(path)}</div>${embedded}`)
   writeFileSync(file, html)
-  console.log(`prerendered ${m.path} -> ${file} (${Math.round(html.length / 1024)} kB)`)
+  console.log(`prerendered ${path} -> ${file} (${Math.round(html.length / 1024)} kB)`)
 }
 
 // Unknown addresses get a real 404 status with the calculator shown, never indexed.

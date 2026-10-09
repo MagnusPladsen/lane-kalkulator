@@ -27,7 +27,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { go, ROUTE_HREF, type Route } from "@/hooks/useRoute"
+import { go, LANG_PATH, ROUTE_HREF, TYPE_PATH, type Route } from "@/hooks/useRoute"
+import type { LoanCategory } from "@/lib/loan/types"
 import { LANGUAGES, setLang, currentLang, type Lang } from "@/i18n"
 import type { Theme } from "@/lib/storage"
 
@@ -165,6 +166,21 @@ export function AppShell({
           {t("rates.pageLink")}
         </a>
         <span className="sm:ml-auto">{t("footer.estimates")}</span>
+        {/* Plain links (full page loads) so each page opens with its own starting loan and language. */}
+        <nav aria-label={t("footer.calculators")} className="flex basis-full flex-wrap gap-x-3 gap-y-1">
+          <span>{t("footer.calculators")}:</span>
+          {(Object.keys(TYPE_PATH) as LoanCategory[]).map((c) => (
+            <a key={c} href={TYPE_PATH[c]} className="underline-offset-2 hover:underline">
+              {t(`rates.${c}`)}
+            </a>
+          ))}
+          <a href={LANG_PATH.en} hrefLang="en" lang="en" className="underline-offset-2 hover:underline">
+            English
+          </a>
+          <a href={LANG_PATH.pl} hrefLang="pl" lang="pl" className="underline-offset-2 hover:underline">
+            Polski
+          </a>
+        </nav>
       </footer>
 
       {/* Phone navigation: thumb-reachable, always visible. */}

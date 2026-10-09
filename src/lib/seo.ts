@@ -1,4 +1,5 @@
 import type { Route } from "@/hooks/useRoute"
+import type { LoanCategory } from "@/lib/loan/types"
 
 export const SITE_URL = "https://lane-kalkulator.pladsen.dev"
 export const SITE_NAME = "Lånekalkulator"
@@ -58,4 +59,49 @@ export function applyRouteMeta(route: Route): void {
   setMeta('meta[property="og:title"]', "content", m.title)
   setMeta('meta[property="og:description"]', "content", m.description)
   setMeta('meta[name="robots"]', "content", m.index ? "index, follow" : "noindex, follow")
+}
+
+/** Search titles and descriptions for the loan-type pages (/billan …), in Norwegian. */
+export const TYPE_META: Record<LoanCategory, { title: string; description: string }> = {
+  mortgage: {
+    title: "Boliglånskalkulator – terminbeløp, renter og ekstra nedbetaling",
+    description:
+      "Regn på boliglånet: terminbeløp, totale renter og hva ekstra innbetalinger, avdragsfrihet og renteendringer gjør. Gratis, og lånet blir i nettleseren din.",
+  },
+  startlan: {
+    title: "Startlån-kalkulator – regn på startlån fra kommunen",
+    description:
+      "Se hva startlånet koster med opptil 50 års nedbetaling, avdragsfri start og ekstra innbetalinger. Gratis kalkulator, lånet blir i nettleseren din.",
+  },
+  car: {
+    title: "Billånskalkulator – hva koster billånet?",
+    description:
+      "Regn ut terminbeløp og totalkostnad for billånet, og se hvor mye du sparer på ekstra innbetalinger. Gratis, og lånet blir i nettleseren din.",
+  },
+  consumer: {
+    title: "Forbrukslånkalkulator – se hva lånet egentlig koster",
+    description:
+      "Se totalkostnaden for forbrukslånet, effektiv rente og hvor mye du sparer på å betale ned raskere. Gratis kalkulator uten registrering.",
+  },
+  student: {
+    title: "Studielånkalkulator – regn på nedbetaling av studielån",
+    description:
+      "Regn på studielånet fra Lånekassen: terminbeløp, renter og hva ekstra innbetalinger betyr for nedbetalingstiden. Gratis og privat.",
+  },
+}
+
+/** The calculator in English and Polish. */
+export const LANG_META: Record<"en" | "pl", { title: string; description: string; locale: string }> = {
+  en: {
+    title: "Loan calculator for Norway – extra payments, interest-only, rates",
+    description:
+      "Free loan calculator for Norwegian mortgages, startlån, car and student loans. See what extra payments, interest-only periods and rate changes do.",
+    locale: "en_GB",
+  },
+  pl: {
+    title: "Kalkulator kredytu w Norwegii – nadpłaty i oprocentowanie",
+    description:
+      "Darmowy kalkulator kredytów w Norwegii: hipoteka, startlån, kredyt samochodowy i studencki. Zobacz efekt nadpłat, okresów bez spłaty i zmian stóp.",
+    locale: "pl_PL",
+  },
 }

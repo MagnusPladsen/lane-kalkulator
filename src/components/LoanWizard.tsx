@@ -12,7 +12,7 @@ import { LoanTypePicker } from "@/components/LoanTypePicker"
 import { fmtMoney } from "@/lib/format"
 import type { DayCount, LoanCategory, LoanInput } from "@/lib/loan/types"
 import type { LoanValidation } from "@/lib/scenarioReducer"
-import { PRESETS, tableRate } from "@/lib/rates"
+import { startLoanFor, TYPICAL_AMOUNT } from "@/lib/rates"
 import { todayIso } from "@/lib/loan/engine"
 
 const STEPS = ["type", "money", "time", "now"] as const
@@ -25,15 +25,6 @@ const TERM_PRESETS: Record<LoanCategory, number[]> = {
   car: [3, 5, 7, 10],
   consumer: [1, 3, 5, 10],
   student: [10, 20, 25],
-}
-
-/** A sensible starting amount per loan type for a brand-new setup; the user replaces it in step 2. */
-const TYPICAL_AMOUNT: Record<LoanCategory, number> = {
-  mortgage: 3_000_000,
-  startlan: 2_500_000,
-  car: 400_000,
-  consumer: 100_000,
-  student: 300_000,
 }
 
 /** Which inputs live on each step, so a step only blocks on its own errors. */
@@ -99,8 +90,7 @@ export function LoanWizard({
   const pickType = (patch: Partial<LoanInput>) => {
     const c = patch.category
     if (!autoFill || !c) return onChange(patch)
-    const typical = c === "mortgage" ? undefined : tableRate(c, todayIso())
-    onChange({ ...patch, ...PRESETS[c], principal: TYPICAL_AMOUNT[c], ...(typical ? { annualRatePct: typical.ratePct } : {}) })
+    onChange({ ...patch, ...startLoanFor(c, todayIso()) })
   }
 
   const go = (i: number) => {

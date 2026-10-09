@@ -31,7 +31,8 @@
           var t = localStorage.getItem("lane-kalkulator:theme");
           var dark = t === "dark" || (t !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
           if (dark) document.documentElement.classList.add("dark");
-          var l = localStorage.getItem("lane-kalkulator:lang");
+          var p = location.pathname.replace(/\/+$/, "");
+          var l = p === "/en" ? "en" : p === "/pl" ? "pl" : localStorage.getItem("lane-kalkulator:lang");
           if (l === "nb" || l === "en" || l === "pl") document.documentElement.lang = l;
           else document.documentElement.lang = "nb";
         } catch (e) {}
