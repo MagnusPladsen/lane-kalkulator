@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 import { applyRouteMeta } from "@/lib/seo"
 import type { LoanCategory } from "@/lib/loan/types"
 
-export type Route = "calc" | "compare" | "loans" | "rates"
+export type Route = "calc" | "compare" | "loans" | "rates" | "guides"
 
 /** Real paths so each page can be indexed. Share links stay in the hash, which never reaches a server. */
-export const ROUTE_HREF: Record<Route, string> = { calc: "/", compare: "/sammenlign", loans: "/mine-lan", rates: "/renter" }
+export const ROUTE_HREF: Record<Route, string> = { calc: "/", compare: "/sammenlign", loans: "/mine-lan", rates: "/renter", guides: "/guider" }
 
 const EVENT = "lane-kalkulator:navigate"
 
@@ -39,6 +39,12 @@ export function setServerPath(p: string): void {
   serverPath = p
 }
 
+/** "/guider/avdragsfrihet" -> "avdragsfrihet". */
+export function guideSlugOfPath(pathname: string): string | undefined {
+  const m = /^\/guider\/([a-z0-9-]+)\/?$/.exec(pathname)
+  return m?.[1]
+}
+
 /** The current path, in the browser or while prerendering. */
 export function currentPath(): string {
   return typeof location === "undefined" ? serverPath : location.pathname
@@ -52,6 +58,7 @@ export function routeOf(pathname: string, hash = ""): Route {
   if (p === ROUTE_HREF.compare) return "compare"
   if (p === ROUTE_HREF.loans) return "loans"
   if (p === ROUTE_HREF.rates) return "rates"
+  if (p === ROUTE_HREF.guides || p.startsWith(ROUTE_HREF.guides + "/")) return "guides"
   return "calc"
 }
 

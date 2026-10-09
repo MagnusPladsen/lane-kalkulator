@@ -1,0 +1,200 @@
+{
+  "slug": "effektiv-og-nominell-rente",
+  "title": "Effektiv og nominell rente forklart",
+  "description": "Hva er forskjellen på nominell og effektiv rente? Se hvordan gebyrer slår ut, og hvorfor du bør sammenligne lånetilbud på effektiv rente.",
+  "updated": "2026-10-09",
+  "intro": "Nominell rente er renten banken regner av gjelden din. Effektiv rente viser hva lånet faktisk koster per år, med gebyrer og med at du betaler renter hver måned. Når du sammenligner lån, er det den effektive renten som sier mest. Banken må oppgi den når den markedsfører lån.",
+  "sections": [
+    {
+      "heading": "Nominell rente: prisen på selve lånet",
+      "paragraphs": [
+        "Den nominelle renten brukes til å regne ut rentene du betaler hver måned. Rentene regnes av restgjelden, og gebyrer kommer i tillegg.",
+        "Den nominelle renten sier ingenting om gebyrer. To lån med samme nominelle rente kan derfor koste ulikt."
+      ]
+    },
+    {
+      "heading": "Effektiv rente: hele prisen",
+      "paragraphs": [
+        "Finansavtaleloven § 1-7 sier at effektiv rente er kredittkostnadene uttrykt i prosent per år av kredittbeløpet. Kredittkostnader er blant annet renter, gebyrer og avgifter du må betale for lånet (finansavtaleforskriften § 1-4).",
+        "Effektiv rente er høyere enn nominell rente også uten gebyrer, fordi rentene betales hver måned og ikke én gang i året. Eksempel: 3 000 000 kr med 5,5 % nominell rente over 25 år."
+      ],
+      "bullets": [
+        "Uten gebyrer: 5,64 % effektiv rente.",
+        "Med 50 kr i termingebyr: 5,67 %.",
+        "Med 50 kr i termingebyr og 2 500 kr i etableringsgebyr: 5,68 %."
+      ]
+    },
+    {
+      "heading": "Gebyrer betyr mest på små lån",
+      "paragraphs": [
+        "På et stort boliglån fordeles gebyrene på mange kroner. På et mindre lån med kort løpetid slår de mye mer ut. Se på to tilbud på et billån på 300 000 kr over 5 år:"
+      ],
+      "bullets": [
+        "Tilbud A: 6,9 % nominell rente, 95 kr i termingebyr og 3 500 kr i etableringsgebyr. Effektiv rente 8,37 %. Renter og gebyrer til sammen: 64 776 kr.",
+        "Tilbud B: 7,2 % nominell rente og ingen gebyrer. Effektiv rente 7,44 %. Renter og gebyrer til sammen: 58 126 kr.",
+        "Tilbud B har høyere nominell rente, men er 6 650 kr billigere."
+      ]
+    },
+    {
+      "heading": "Banken må oppgi effektiv rente",
+      "paragraphs": [
+        "Etter finansavtaleforskriften § 3-4 skal all markedsføring av lån opplyse om kredittkostnadene, blant annet effektiv rente. Forbrukertilsynet skriver at opplysningene skal gis med et representativt eksempel.",
+        "Det er forbudt å fremheve en annen rente tydeligere enn den effektive renten. Ifølge Forbrukertilsynet gjelder dette også boliglån.",
+        "Renten i en annonse gjelder et eksempel. Be om et tilbud som gjelder ditt lånebeløp og din løpetid, og se på den effektive renten der."
+      ]
+    },
+    {
+      "heading": "Sjekk tallene i kalkulatoren",
+      "paragraphs": [
+        "Når du legger inn lånet, kan du også skrive inn den effektive renten fra banken. Kalkulatoren regner ut effektiv rente med tallene dine og sier fra hvis de ikke stemmer. Forskjellen er som regel et gebyr som mangler.",
+        "Har du to tilbud, legg dem inn på Sammenlign-siden. Der ser du terminbeløp, renter, gebyrer, total kostnad og effektiv rente side om side."
+      ]
+    }
+  ],
+  "cta": {
+    "text": "Sammenlign to lånetilbud",
+    "path": "/sammenlign"
+  },
+  "sources": [
+    {
+      "title": "Finansavtaleloven § 1-7 (Lovdata)",
+      "url": "https://lovdata.no/lov/2020-12-18-146/§1-7"
+    },
+    {
+      "title": "Finansavtaleforskriften §§ 1-4 og 3-4 (Lovdata)",
+      "url": "https://lovdata.no/forskrift/2022-09-19-1612/§3-4"
+    },
+    {
+      "title": "Veileder for kredittmarkedsføring (Forbrukertilsynet)",
+      "url": "https://www.forbrukertilsynet.no/vi-jobber-med/finansielle-tjenester/veileder-om-kredittmarkedsforing"
+    }
+  ],
+  "figures": [
+    {
+      "claim": "Uten gebyrer: 5,64 % effektiv rente.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 0,
+          "dayCount": "act/act",
+          "setupFee": 0
+        },
+        "extras": [],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "planEffectiveRate(scenario.loan, \"2026-10-09\") = 5.6409 (engine export used by the calculator's effective-rate check and Compare page)."
+    },
+    {
+      "claim": "Med 50 kr i termingebyr: 5,67 %.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act",
+          "setupFee": 0
+        },
+        "extras": [],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "planEffectiveRate(scenario.loan, \"2026-10-09\") = 5.6702."
+    },
+    {
+      "claim": "Med 50 kr i termingebyr og 2 500 kr i etableringsgebyr: 5,68 %.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act",
+          "setupFee": 2500
+        },
+        "extras": [],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "planEffectiveRate(scenario.loan, \"2026-10-09\") = 5.6792."
+    },
+    {
+      "claim": "Tilbud A: 6,9 % nominell rente, 95 kr i termingebyr og 3 500 kr i etableringsgebyr. Effektiv rente 8,37 %. Renter og gebyrer til sammen: 64 776 kr.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 300000,
+          "annualRatePct": 6.9,
+          "termMonths": 60,
+          "loanType": "annuity",
+          "monthlyFee": 95,
+          "dayCount": "act/act",
+          "setupFee": 3500
+        },
+        "extras": [],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "planEffectiveRate = 8.3705; analyze: lifetime.baseline.interest = 55576, lifetime.baseline.fees = 9200 (60 x 95 + 3500); sum 64776."
+    },
+    {
+      "claim": "Tilbud B: 7,2 % nominell rente og ingen gebyrer. Effektiv rente 7,44 %. Renter og gebyrer til sammen: 58 126 kr.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 300000,
+          "annualRatePct": 7.2,
+          "termMonths": 60,
+          "loanType": "annuity",
+          "monthlyFee": 0,
+          "dayCount": "act/act",
+          "setupFee": 0
+        },
+        "extras": [],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "planEffectiveRate = 7.4427; analyze: lifetime.baseline.interest = 58126, fees = 0."
+    },
+    {
+      "claim": "Tilbud B har høyere nominell rente, men er 6 650 kr billigere.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 300000,
+          "annualRatePct": 7.2,
+          "termMonths": 60,
+          "loanType": "annuity",
+          "monthlyFee": 0,
+          "dayCount": "act/act",
+          "setupFee": 0
+        },
+        "extras": [],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "64776 - 58126 = 6650 (from the two scenarios above; lifetime.baseline.paid A = 364776, B = 358126)."
+    }
+  ]
+}

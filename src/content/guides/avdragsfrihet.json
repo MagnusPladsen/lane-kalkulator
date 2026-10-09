@@ -1,0 +1,209 @@
+{
+  "slug": "avdragsfrihet",
+  "title": "Avdragsfrihet på boliglån – hva koster det?",
+  "description": "I en avdragsfri periode betaler du bare renter. Se hva det koster totalt, når banken kan gi det, og hvordan du regner på det selv.",
+  "updated": "2026-10-09",
+  "intro": "Avdragsfrihet betyr at du i en periode bare betaler renter og gebyrer, ikke avdrag. Det gir lavere terminbeløp nå, men lånet blir dyrere totalt. To avdragsfrie år i starten av et lån på 3 000 000 kr med 5,5 % rente over 25 år koster 96 226 kr ekstra i renter hvis du beholder sluttdatoen, og 329 682 kr hvis lånet i stedet varer 2 år lenger.",
+  "sections": [
+    {
+      "heading": "Hva er avdragsfrihet?",
+      "paragraphs": [
+        "Et vanlig lån betales ned litt hver måned. Det kalles avdrag. I en avdragsfri periode betaler du bare renter og gebyr, og restgjelden står stille.",
+        "Det gir luft i budsjettet, men du skylder like mye når perioden er over. I eksempelet går den første betalingen ned fra 18 473 kr til 14 064 kr."
+      ]
+    },
+    {
+      "heading": "Når kan du få avdragsfrihet?",
+      "paragraphs": [
+        "Utlånsforskriften § 9 krever at boliglån over 60 prosent av boligens verdi betales ned med minst 2,5 prosent av innvilget lån i året, eller det et annuitetslån over 30 år ville gitt hvis det er lavere. Er gjelden 60 prosent av boligens verdi eller lavere, stiller forskriften ikke noe avdragskrav, og det er opp til banken om du kan få avdragsfrihet.",
+        "Banken kan også gi avdragsutsettelse hvis noe skjer i løpet av lånetiden som midlertidig gjør det vanskeligere for deg å betale. I tillegg kan bankene hvert kvartal gi noen lån som ikke oppfyller alle kravene, den såkalte fleksibilitetskvoten (§ 12).",
+        "For startlån kan kommunen i noen tilfeller gi en avdragsfri periode i starten, for eksempel når du har faste utgifter som snart tar slutt. Studielån fra Lånekassen har egne regler. Der kan du utsette regningen, til sammen 36 ganger. Da blir det lagt til renter for månedene du ikke betaler, og nedbetalingstiden blir lengre."
+      ]
+    },
+    {
+      "heading": "Hva koster det?",
+      "paragraphs": [
+        "Når perioden er over, må gjelden betales ned på kortere tid, eller lånet må vare lenger. I eksempelet, med 2 avdragsfrie år:"
+      ],
+      "bullets": [
+        "Behold sluttdatoen: terminbeløpet øker fra 18 473 kr til 19 229 kr i måneden etterpå. Ekstra renter: 96 226 kr.",
+        "Behold terminbeløpet: lånet varer 2 år lenger. Ekstra renter: 329 682 kr, pluss 1 200 kr mer i gebyrer."
+      ]
+    },
+    {
+      "heading": "Før du ber om avdragsfrihet",
+      "bullets": [
+        "Spør banken hvor høyt terminbeløpet blir når perioden er over.",
+        "Vurder om en kortere periode er nok.",
+        "Har du problemer med å betale, ta kontakt med banken tidlig."
+      ]
+    },
+    {
+      "heading": "Regn på det i kalkulatoren",
+      "paragraphs": [
+        "Legg inn lånet ditt, åpne «Hva om …?» og velg «Perioder». Legg til en periode av typen «Avdragsfritt» og velg fra og til. Under «Etterpå» velger du «Behold sluttdatoen» eller «Behold terminbeløpet». Da ser du hva perioden koster i renter, og hva terminbeløpet blir etterpå.",
+        "Har lånet avdragsfrihet fra start, kan du legge det inn som «Avdragsfri eller rentefri start» når du setter opp lånet."
+      ]
+    }
+  ],
+  "cta": {
+    "text": "Se hva avdragsfrihet koster deg",
+    "path": "/"
+  },
+  "sources": [
+    {
+      "title": "Utlånsforskriften § 9 Avdrag (Lovdata)",
+      "url": "https://lovdata.no/forskrift/2020-12-09-2648/§9"
+    },
+    {
+      "title": "Avdragsfri periode for startlån (Husbanken)",
+      "url": "https://www.husbanken.no/kommune/startlaan/veileder/renter-og-avdragsvilkar/nedbetalingsvilkar/avdragsfri-periode/"
+    },
+    {
+      "title": "Betalingsutsettelse (Lånekassen)",
+      "url": "https://lanekassen.no/nb-NO/gjeld-og-betaling/betalingsutsettelse/"
+    }
+  ],
+  "figures": [
+    {
+      "claim": "To avdragsfrie år i starten av et lån på 3 000 000 kr med 5,5 % rente over 25 år koster 96 226 kr ekstra i renter hvis du beholder sluttdatoen",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "interest-only",
+            "from": "2026-11",
+            "to": "2028-10",
+            "annualRatePct": 0
+          }
+        ],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "delta.interest = 96226, delta.months = 0."
+    },
+    {
+      "claim": "og 329 682 kr hvis lånet i stedet varer 2 år lenger.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "interest-only",
+            "from": "2026-11",
+            "to": "2028-10",
+            "annualRatePct": 0
+          }
+        ],
+        "afterInterestOnly": "keep-payment"
+      },
+      "result": "delta.interest = 329682, delta.months = 24 (300 -> 324); fees 15000 -> 16200 (+1200); delta.totalCost = 330882."
+    },
+    {
+      "claim": "I eksempelet går den første betalingen ned fra 18 473 kr til 14 064 kr.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "interest-only",
+            "from": "2026-11",
+            "to": "2028-10",
+            "annualRatePct": 0
+          }
+        ],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "baseline.monthlyPayment = 18473; scenario.rows[0].payment = 14064 (interest 14014 + fee 50, interestOnly = true; November 2026, 30 days)."
+    },
+    {
+      "claim": "Behold sluttdatoen: terminbeløpet øker fra 18 473 kr til 19 229 kr i måneden etterpå. Ekstra renter: 96 226 kr.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "interest-only",
+            "from": "2026-11",
+            "to": "2028-10",
+            "annualRatePct": 0
+          }
+        ],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "scenario.maxMonthlyPayment = 19229 (payment from month 25 on, e.g. rows[26].payment = 19229); baseline.monthlyPayment = 18473; delta.interest = 96226."
+    },
+    {
+      "claim": "Behold terminbeløpet: lånet varer 2 år lenger. Ekstra renter: 329 682 kr, pluss 1 200 kr mer i gebyrer.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "interest-only",
+            "from": "2026-11",
+            "to": "2028-10",
+            "annualRatePct": 0
+          }
+        ],
+        "afterInterestOnly": "keep-payment"
+      },
+      "result": "delta.months = 24; delta.interest = 329682; lifetime fees 15000 -> 16200."
+    }
+  ]
+}

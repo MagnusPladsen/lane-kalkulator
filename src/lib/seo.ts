@@ -35,6 +35,13 @@ export const ROUTE_META: Record<Route, RouteMeta> = {
       "Snittrenten på nye boliglån i Norge, flytende og fast, måned for måned fra SSB. Se utviklingen de siste ti årene og regn på ditt eget lån.",
     index: true,
   },
+  guides: {
+    path: "/guider",
+    title: "Guider om lån – ekstra nedbetaling, rente og avdragsfrihet",
+    description:
+      "Korte guider om lån: lønner det seg å betale ekstra, effektiv og nominell rente, å forhandle boliglånsrenten og hva avdragsfrihet koster.",
+    index: true,
+  },
   loans: {
     path: "/mine-lan",
     title: "Mine lån | Lånekalkulator",
