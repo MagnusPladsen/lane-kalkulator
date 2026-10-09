@@ -609,5 +609,24 @@
     "balanceEnd": "Restgjeld ved årets slutt",
     "month": "Måned",
     "ratePct": "Rente %"
+  },
+  "all": {
+    "title": "Alle lånene dine",
+    "desc_one": "Ett lån som det står i dag.",
+    "desc_other": "{{count}} lån samlet, slik de står i dag.",
+    "debt": "Gjeld i dag",
+    "monthly": "Betaler i måneden",
+    "interestLeft": "Renter igjen",
+    "debtFree": "Gjeldfri",
+    "extraTitle": "Hvor bør ekstra penger gå?",
+    "extraDesc": "Legg ekstra på ett lån om gangen. Når det er nedbetalt, flyttes både terminbeløpet og ekstrabeløpet til neste lån.",
+    "extraAmount": "Ekstra hver måned",
+    "avalanche": "Høyeste rente først",
+    "avalancheDesc": "Gir minst renter totalt.",
+    "snowball": "Minste lån først",
+    "snowballDesc": "Gir raske delmål, og færre lån å holde styr på tidligere.",
+    "best": "Sparer mest",
+    "saves": "Du sparer <0>{{amount}}</0> i renter og er gjeldfri <1>{{date}}</1>.",
+    "was": "var {{date}}"
   }
 }
