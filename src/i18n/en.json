@@ -697,5 +697,14 @@
     "sources": "Sources",
     "disclaimer": "The guides are general information, not personal advice. Ask your bank, Husbanken, Lånekassen or Skatteetaten about your own case.",
     "norwegianOnly": "The guides are only available in Norwegian."
+  },
+  "sections": {
+    "all": "All figures",
+    "allSummary": "Total interest {{amount}}",
+    "money": "Where the money goes",
+    "moneySummary": "Next payment {{amount}}",
+    "stressSummary": "Try −2 to +3 percentage points",
+    "chart": "Chart and repayment plan",
+    "chartSummary": "Balance, interest and plan year by year"
   }
 }

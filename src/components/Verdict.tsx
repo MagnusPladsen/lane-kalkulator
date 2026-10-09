@@ -6,8 +6,11 @@ import { fmtDuration, fmtMoney } from "@/lib/format"
 import { useVerdictText } from "./useVerdictText"
 import type { Analysis } from "@/lib/loan/types"
 
-export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolean; stale?: boolean; setup?: boolean }>(
-  function Verdict({ a, hasChanges, stale, setup }, ref) {
+export const Verdict = forwardRef<
+  HTMLElement,
+  { a: Analysis; hasChanges: boolean; stale?: boolean; setup?: boolean; figures?: { label: string; value: string }[] }
+>(
+  function Verdict({ a, hasChanges, stale, setup, figures }, ref) {
     const { t } = useTranslation()
     const { mood, headline, figure, costText } = useVerdictText(a, hasChanges)
 
@@ -37,6 +40,7 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
               components={[<span key="0" className="font-mono tabular-nums" />]}
             />
           </p>
+          <KeyFigures figures={figures} />
         </section>
       )
     }
@@ -101,6 +105,7 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
             {t("verdict.truncated")}
           </p>
         )}
+        <KeyFigures figures={figures} />
       </section>
     )
   },
@@ -116,5 +121,19 @@ function Highlighted({ text = "", mark }: { text?: string; mark?: string }) {
       <span className="highlight">{mark}</span>
       {text.slice(at + mark.length)}
     </>
+  )
+}
+
+/** The two numbers people look for first, kept in the result card so nothing else is needed at a glance. */
+function KeyFigures({ figures }: { figures?: { label: string; value: string }[] }) {
+  if (!figures?.length) return null
+  return (
+    <p className="mt-3 flex flex-wrap gap-x-5 gap-y-1 border-t pt-3 text-sm text-muted-foreground">
+      {figures.map((f) => (
+        <span key={f.label}>
+          {f.label} <strong className="font-mono font-semibold whitespace-nowrap text-foreground tabular-nums">{f.value}</strong>
+        </span>
+      ))}
+    </p>
   )
 }

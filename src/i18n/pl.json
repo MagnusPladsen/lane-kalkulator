@@ -711,5 +711,14 @@
     "sources": "Źródła",
     "disclaimer": "Poradniki to ogólne informacje, nie porada osobista. O swoją sytuację zapytaj bank, Husbanken, Lånekassen lub Skatteetaten.",
     "norwegianOnly": "Poradniki są dostępne tylko po norwesku."
+  },
+  "sections": {
+    "all": "Wszystkie liczby",
+    "allSummary": "Łączne odsetki {{amount}}",
+    "money": "Na co idą pieniądze",
+    "moneySummary": "Następna rata {{amount}}",
+    "stressSummary": "Sprawdź od −2 do +3 pkt proc.",
+    "chart": "Wykres i plan spłaty",
+    "chartSummary": "Saldo, odsetki i plan rok po roku"
   }
 }
