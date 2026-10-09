@@ -91,7 +91,9 @@
     "dayCountHint": "Jest w warunkach kredytu. Kredyty o zmiennym oprocentowaniu zwykle liczą rzeczywiste dni (365/365). 365/360 jest nieco droższe.",
     "dayCountActAct": "Rzeczywiste dni (365/365)",
     "dayCountAct360": "Rzeczywiste dni / 360 (365/360)",
-    "dayCount30360": "Równe miesiące (360/360)"
+    "dayCount30360": "Równe miesiące (360/360)",
+    "paidShare": "{{pct}} % spłacone do tej pory",
+    "paidShareLabel": "Spłacona część"
   },
   "extras": {
     "title": "Nadpłaty",
@@ -149,15 +151,17 @@
     "dearerSameDate": "{{amount}} drożej, ta sama data spłaty",
     "noEffect": "Twoje zmiany nie wpływają na kredyt",
     "sameInterest": "Te same odsetki łącznie.",
-    "lessInterest": "{{amount}} mniej odsetek",
-    "moreInterest": "{{amount}} więcej odsetek",
-    "lessFees": " i {{amount}} mniej opłat",
-    "moreFees": " i {{amount}} więcej opłat",
     "totalCost": "Koszt całkowity",
     "paidOffTitle": "Ten kredyt jest spłacony",
     "paidOffBody": "Przy tej dacie rozpoczęcia i pozostałym kapitale nie ma już nic do zapłaty.",
     "truncated": "Plan urywa się po 100 latach. To się nie spina, skróć przerwy.",
-    "setup": "Wpisz swój kredyt, a tutaj zobaczysz, ile kosztuje."
+    "setup": "Wpisz swój kredyt, a tutaj zobaczysz, ile kosztuje.",
+    "saveInterest": "Oszczędzasz <0>{{amount}}</0> na odsetkach",
+    "payInterest": "Płacisz <0>{{amount}}</0> więcej odsetek",
+    "feesSaveToo": " i <0>{{amount}}</0> na opłatach",
+    "feesPayToo": " i <0>{{amount}}</0> więcej opłat",
+    "feesSaveBut": ", ale oszczędzasz <0>{{amount}}</0> na opłatach",
+    "feesPayBut": ", ale płacisz <0>{{amount}}</0> więcej opłat"
   },
   "tiles": {
     "monthly": "Rata miesięczna",
@@ -439,7 +443,10 @@
     "interestPart": "Odsetki",
     "principalPart": "Kapitał",
     "feePart": "Opłata",
-    "interestOnlyNote": "Na razie tylko odsetki i opłata. Saldo w tym okresie się nie zmniejsza."
+    "interestOnlyNote": "Na razie tylko odsetki i opłata. Saldo w tym okresie się nie zmniejsza.",
+    "wholeTitle": "Cały kredyt",
+    "borrowedPart": "Pożyczone",
+    "feesPart": "Opłaty"
   },
   "compare": {
     "title": "Porównaj",
@@ -564,19 +571,22 @@
       "short": "Kredyt",
       "title": "Jaki to kredyt?",
       "desc": "Wybierz rodzaj, a pokażemy typowe warunki i aktualne oprocentowanie.",
-      "scan": "Masz zrzut ekranu z bankowości internetowej? Uzupełnimy to za Ciebie."
+      "scan": "Masz zrzut ekranu z bankowości internetowej? Uzupełnimy to za Ciebie.",
+      "filled": "Uzupełniliśmy typowe wartości dla tego rodzaju kredytu. Zmienisz je w następnym kroku."
     },
     "money": {
       "short": "Kwota",
       "title": "Kwota i oprocentowanie",
       "desc": "Ile pożyczyłeś i jakie oprocentowanie nalicza bank.",
       "amountHint": "Kwota z dnia zaciągnięcia kredytu. Dzisiejsze saldo podasz w ostatnim kroku.",
-      "effToggle": "Masz też oprocentowanie efektywne z banku?"
+      "effToggle": "Masz też oprocentowanie efektywne z banku?",
+      "example": "Przykładowe wartości dla tego rodzaju kredytu. Zastąp je swoimi."
     },
     "time": {
       "short": "Spłata",
       "title": "Jak długo i w jaki sposób?",
-      "desc": "Okres kredytu i sposób spłaty."
+      "desc": "Okres kredytu i sposób spłaty.",
+      "quick": "Typowe okresy"
     },
     "now": {
       "short": "Dziś",
@@ -587,5 +597,8 @@
       "advanced": "Zaawansowane",
       "advancedHint": "naliczanie odsetek"
     }
+  },
+  "amounts": {
+    "quick": "Szybki wybór"
   }
 }

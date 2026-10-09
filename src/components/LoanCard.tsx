@@ -15,6 +15,7 @@ export function LoanCard({
   firstPayment,
   editing,
   fresh = false,
+  paidShare,
   onEditingChange,
   onChange,
 }: {
@@ -26,6 +27,8 @@ export function LoanCard({
   editing: boolean
   /** First setup of a new loan (see LoanWizard). */
   fresh?: boolean
+  /** Share of the original amount already repaid (loans with a start date). */
+  paidShare?: number
   onEditingChange: (e: boolean) => void
   onChange: (patch: Partial<LoanInput>) => void
 }) {
@@ -62,6 +65,23 @@ export function LoanCard({
             )}
             <p className="mt-1 font-mono text-lg font-semibold tabular-nums">{summary}</p>
             <p className="mt-0.5 text-xs text-muted-foreground">{bits.join(" · ")}</p>
+            {paidShare !== undefined && (
+              <div className="mt-3 grid gap-1.5">
+                <div
+                  role="progressbar"
+                  aria-label={t("loan.paidShareLabel")}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(paidShare * 100)}
+                  className="h-2 overflow-hidden rounded-full bg-muted"
+                >
+                  <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(paidShare * 100, 1.5)}%` }} />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {t("loan.paidShare", { pct: Math.round(paidShare * 100) })}
+                </p>
+              </div>
+            )}
           </div>
           <Button variant="outline" size="sm" onClick={() => onEditingChange(true)} aria-label={t("loan.editLoan")}>
             <PencilIcon data-icon="inline-start" />
