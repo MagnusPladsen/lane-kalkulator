@@ -3,7 +3,14 @@
 // Run by `bun run build`; needs dist/ (client) and dist-ssr/ (server entry).
 import { readFileSync, writeFileSync } from "node:fs"
 
-const { render, ROUTE_META, SITE_NAME, SITE_URL, CALC_FAQ, COMPARE_FAQ } = await import("../dist-ssr/entry-server.js")
+const { render, ROUTE_META, SITE_NAME, SITE_URL, CALC_FAQ, COMPARE_FAQ, fetchRateHistory, setRateSnapshot } = await import(
+  "../dist-ssr/entry-server.js"
+)
+
+// Mortgage rates for /renter, baked into the page. If SSB is unreachable the page fetches in the browser.
+const rates = await fetchRateHistory().catch(() => undefined)
+setRateSnapshot(rates)
+console.log(rates ? `rates: ${rates.months.length} months to ${rates.months.at(-1)}` : "rates: SSB unreachable, page will fetch live")
 const nb = JSON.parse(readFileSync(new URL("../src/i18n/nb.json", import.meta.url), "utf8"))
 const template = readFileSync("dist/index.html", "utf8")
 
@@ -37,13 +44,27 @@ const faq = (ids) => ({
   })),
 })
 
+const dataset = rates && {
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  name: "Renter på nye boliglån til husholdninger",
+  description: ROUTE_META.rates.description,
+  url: SITE_URL + ROUTE_META.rates.path,
+  isBasedOn: "https://www.ssb.no/statbank/table/10748",
+  creator: { "@type": "Organization", name: "Statistisk sentralbyrå", url: "https://www.ssb.no" },
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  temporalCoverage: `${rates.months[0]}/${rates.months.at(-1)}`,
+  inLanguage: "nb",
+}
+
 const pages = [
   { route: "calc", file: "dist/index.html", ld: [app, faq(CALC_FAQ)] },
   { route: "compare", file: "dist/sammenlign.html", ld: [faq(COMPARE_FAQ)] },
+  { route: "rates", file: "dist/renter.html", ld: dataset ? [dataset] : [], data: rates && { id: "rate-snapshot", value: rates } },
   { route: "loans", file: "dist/mine-lan.html", ld: [] },
 ]
 
-for (const { route, file, ld } of pages) {
+for (const { route, file, ld, data } of pages) {
   const m = ROUTE_META[route]
   const url = SITE_URL + m.path
   let html = template
@@ -55,7 +76,10 @@ for (const { route, file, ld } of pages) {
   html = setTag(html, /<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(m.title)}" />`)
   html = setTag(html, /<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(m.description)}" />`)
   if (ld.length) html = html.replace("</head>", `    ${ld.map(jsonLd).join("\n    ")}\n  </head>`)
-  html = setTag(html, /<div id="root"><\/div>/, `<div id="root">${await render(route)}</div>`)
+  const embedded = data
+    ? `\n    <script id="${data.id}" type="application/json">${JSON.stringify(data.value).replace(/</g, "\\u003c")}</script>`
+    : ""
+  html = setTag(html, /<div id="root"><\/div>/, `<div id="root">${await render(route)}</div>${embedded}`)
   writeFileSync(file, html)
   console.log(`prerendered ${m.path} -> ${file} (${Math.round(html.length / 1024)} kB)`)
 }

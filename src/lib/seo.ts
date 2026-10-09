@@ -27,6 +27,13 @@ export const ROUTE_META: Record<Route, RouteMeta> = {
       "Sammenlign to lånetilbud på totalkostnad, ikke bare rente. Se om det lønner seg å bytte bank, og når etableringsgebyret er tjent inn.",
     index: true,
   },
+  rates: {
+    path: "/renter",
+    title: "Boliglånsrenten nå – snittrente og utvikling | Lånekalkulator",
+    description:
+      "Snittrenten på nye boliglån i Norge, flytende og fast, måned for måned fra SSB. Se utviklingen de siste ti årene og regn på ditt eget lån.",
+    index: true,
+  },
   loans: {
     path: "/mine-lan",
     title: "Mine lån | Lånekalkulator",

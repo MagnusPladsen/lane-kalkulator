@@ -3,11 +3,13 @@ import { lazyWithPreload } from "@/lib/lazy"
 import type { BalanceChart as BalanceChartT } from "./BalanceChart"
 import type { YearlyChart as YearlyChartT } from "./YearlyChart"
 import type { CumulativeChart as CumulativeChartT } from "./CumulativeChart"
+import type { RateChart as RateChartT } from "./RateChart"
 
 // The chart library is the largest dependency, so it loads after the first screen.
 const Balance = lazyWithPreload(() => import("./BalanceChart").then((m) => m.BalanceChart))
 const Yearly = lazyWithPreload(() => import("./YearlyChart").then((m) => m.YearlyChart))
 const Cumulative = lazyWithPreload(() => import("./CumulativeChart").then((m) => m.CumulativeChart))
+const Rate = lazyWithPreload(() => import("./RateChart").then((m) => m.RateChart))
 
 /** Same size as a chart, so nothing moves when it arrives. */
 function Placeholder() {
@@ -35,8 +37,16 @@ export function CumulativeChart(props: ComponentProps<typeof CumulativeChartT>) 
     </Suspense>
   )
 }
+export function RateChart(props: ComponentProps<typeof RateChartT>) {
+  return (
+    <Suspense fallback={<Placeholder />}>
+      <Rate {...props} />
+    </Suspense>
+  )
+}
 
 /** Prerendering loads the charts first so the HTML comes out complete and in order. */
 BalanceChart.preload = Balance.preload
 YearlyChart.preload = Yearly.preload
 CumulativeChart.preload = Cumulative.preload
+RateChart.preload = Rate.preload

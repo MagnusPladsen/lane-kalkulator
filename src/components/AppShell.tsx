@@ -11,6 +11,7 @@ import {
   ShieldCheckIcon,
   SunIcon,
   ScaleIcon,
+  TrendingUpIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -26,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ROUTE_HREF, type Route } from "@/hooks/useRoute"
+import { go, ROUTE_HREF, type Route } from "@/hooks/useRoute"
 import { LANGUAGES, setLang, currentLang, type Lang } from "@/i18n"
 import type { Theme } from "@/lib/storage"
 
@@ -129,6 +130,9 @@ export function AppShell({
                   <DropdownMenuSeparator />
                 </>
               )}
+              <DropdownMenuItem onClick={() => go("rates")}>
+                <TrendingUpIcon /> {t("rates.pageLink")}
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={onToggleTheme}>
                 {theme === "dark" ? <SunIcon /> : <MoonIcon />} {t("theme.toggle")}
               </DropdownMenuItem>
@@ -157,6 +161,9 @@ export function AppShell({
           <ShieldCheckIcon className="size-3.5 shrink-0" aria-hidden />
           {t("footer.privacy")}
         </span>
+        <a href={ROUTE_HREF.rates} data-route="rates" className="underline-offset-2 hover:underline">
+          {t("rates.pageLink")}
+        </a>
         <span className="sm:ml-auto">{t("footer.estimates")}</span>
       </footer>
 

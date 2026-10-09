@@ -419,7 +419,8 @@
     "noteMortgage": "snitt for nye boliglån, flytende",
     "noteStartlan": "kommunen kan legge på et lite påslag",
     "noteCar": "elbil ofte lavere",
-    "noteConsumer": "effektiv rente ofte 13–20 %"
+    "noteConsumer": "effektiv rente ofte 13–20 %",
+    "pageLink": "Boliglånsrenten nå"
   },
   "insight": {
     "split": "Av neste betaling på {{payment}} går {{interest}} til renter, {{principal}} til avdrag og {{fee}} i gebyr.",
@@ -628,5 +629,33 @@
     "best": "Sparer mest",
     "saves": "Du sparer <0>{{amount}}</0> i renter og er gjeldfri <1>{{date}}</1>.",
     "was": "var {{date}}"
+  },
+  "ratesPage": {
+    "title": "Boliglånsrenten nå",
+    "lede": "Snittrenten på nye nedbetalingslån med pant i bolig til husholdninger, fra Statistisk sentralbyrå. Tallene kommer én gang i måneden.",
+    "loading": "Henter tall fra SSB …",
+    "failed": "Fikk ikke hentet tallene fra SSB akkurat nå. Prøv igjen senere.",
+    "floatingNow": "Flytende rente, snitt for nye lån",
+    "asOf": "{{month}}",
+    "change1": "{{pp}} prosentpoeng fra måneden før",
+    "change12": "{{pp}} siste 12 måneder",
+    "chartTitle": "Utviklingen",
+    "range": "Tidsrom",
+    "years_one": "{{count}} år",
+    "years_other": "{{count}} år",
+    "seriesLabel": "Vis renter",
+    "series": {
+      "floating": "Flytende",
+      "fixed1to3": "Fast 1–3 år",
+      "fixed3to5": "Fast 3–5 år",
+      "fixedOver5": "Fast over 5 år"
+    },
+    "meaningTitle": "Hva betyr snittrenten for deg?",
+    "meaning1": "Snittet er renten folk faktisk fikk på nye boliglån den måneden. Din egen rente kan være lavere eller høyere. Det avhenger blant annet av hvor mye du låner sammenlignet med boligens verdi, og av banken.",
+    "meaning2": "Ligger renten din godt over snittet, kan det lønne seg å be banken om et bedre tilbud eller sammenligne med andre banker.",
+    "cta": "Regn på ditt eget lån",
+    "source": "Kilde:",
+    "license": "Tallene er lisensiert under CC BY 4.0.",
+    "fixedTitle": "Fast rente, snitt for nye lån"
   }
 }
