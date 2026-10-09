@@ -13,6 +13,11 @@ import { BalanceChart, CumulativeChart, YearlyChart } from "@/components/charts/
 import { ScheduleTable } from "@/components/ScheduleTable"
 import { Faq } from "@/components/Faq"
 import { CALC_FAQ } from "@/lib/faq"
+import { PrintPlan } from "@/components/PrintPlan"
+import { Button } from "@/components/ui/button"
+import { DownloadIcon, PrinterIcon } from "lucide-react"
+import { planCsv } from "@/lib/exportPlan"
+import { downloadText } from "@/lib/share"
 import { addMonths, analyze, todayIso } from "@/lib/loan/engine"
 import { balanceSeries, cumulativeSeries, yearlySeries } from "@/lib/chartData"
 import { validateLoan, type Action } from "@/lib/scenarioReducer"
@@ -76,6 +81,22 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
   const payoffIso = shown ? dateFor(shown.offsetMonths + shown.scenario.months) : today
   const hasExtra = shown ? shown.scenario.rows.some((r) => r.extra > 0) : false
   const firstPayment = analysis && !analysis.paidOff ? analysis.baseline.monthlyPayment : undefined
+
+  const downloadCsv = () => {
+    if (!shown) return
+    const csv = planCsv(shown.scenario.rows, (i) => dateFor(shown.offsetMonths + i + 1).slice(0, 7), {
+      month: t("print.month"),
+      payment: t("tiles.monthly"),
+      interest: t("insight.interestPart"),
+      principal: t("insight.principalPart"),
+      extra: t("print.extra"),
+      fee: t("insight.feePart"),
+      balance: t("charts.balance"),
+      rate: t("print.ratePct"),
+    })
+    const name = (scenario.loan.name || t("loan.title")).replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "").toLowerCase()
+    downloadText(`${name || "lan"}-nedbetalingsplan.csv`, csv, "text/csv;charset=utf-8")
+  }
 
   const chartTabs: { id: ChartTab; label: string; desc: string }[] = [
     { id: "balance", label: t("charts.balance"), desc: t("charts.balanceDesc") },
@@ -193,7 +214,17 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
                         <TabsContent value="interest" className="rounded-lg pt-2 focus-visible:ring-3 focus-visible:ring-ring/50">
                           <CumulativeChart data={cumulative} showScenario={hasChanges} />
                         </TabsContent>
-                        <TabsContent value="table" className="pt-2">
+                        <TabsContent value="table" className="grid gap-2 pt-2">
+                          <div className="flex flex-wrap gap-2">
+                            <Button variant="outline" size="sm" onClick={downloadCsv}>
+                              <DownloadIcon data-icon="inline-start" />
+                              {t("print.csv")}
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => window.print()}>
+                              <PrinterIcon data-icon="inline-start" />
+                              {t("print.pdf")}
+                            </Button>
+                          </div>
                           <ScheduleTable
                             rows={shown.scenario.rows}
                             offset={shown.offsetMonths}
@@ -215,6 +246,7 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
       </div>
 
       <Faq ids={CALC_FAQ} />
+      {shown && <PrintPlan scenario={scenario} a={shown} dateFor={dateFor} />}
 
       {shown && (
         <div className="fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 sm:hidden">

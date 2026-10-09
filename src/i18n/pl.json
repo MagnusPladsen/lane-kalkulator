@@ -435,8 +435,8 @@
     "split": "Z następnej raty {{payment}} na odsetki idzie {{interest}}, na kapitał {{principal}}, a na opłaty {{fee}}.",
     "interestOnly": "Następna rata {{payment}} to tylko odsetki ({{interest}}) i opłaty. Dług w tym okresie nie maleje.",
     "turn": "Od {{date}} więcej idzie na kapitał niż na odsetki.",
-    "stressTitle": "Co jeśli stopy wzrosną?",
-    "stressHint": "Wybierz o ile punktów procentowych, aby zobaczyć, co to dla ciebie znaczy.",
+    "stressTitle": "A jeśli oprocentowanie się zmieni?",
+    "stressHint": "Wybierz, o ile punktów procentowych w górę lub w dół, a zobaczysz, co to dla Ciebie znaczy.",
     "stressResult": "Przy {{rate}} % rata wynosi {{payment}}, o {{delta}} więcej miesięcznie. Kredyt kosztuje łącznie {{cost}} więcej.",
     "stressAdd": "Dodaj jako okres",
     "nextTitle": "Następna rata",
@@ -446,7 +446,8 @@
     "interestOnlyNote": "Na razie tylko odsetki i opłata. Saldo w tym okresie się nie zmniejsza.",
     "wholeTitle": "Cały kredyt",
     "borrowedPart": "Pożyczone",
-    "feesPart": "Opłaty"
+    "feesPart": "Opłaty",
+    "stressResultDown": "Przy {{rate}} % rata wynosi {{payment}}, o {{delta}} mniej miesięcznie. Kredyt kosztuje łącznie {{cost}} mniej."
   },
   "compare": {
     "title": "Porównaj",
@@ -476,7 +477,12 @@
     "perMonth": "Miesięcznie",
     "useNew": "Otwórz nowy kredyt w kalkulatorze",
     "moved": "przeniesiony",
-    "needLoan": "Najpierw wypełnij swój kredyt w kalkulatorze, potem sprawdzisz, czy zmiana się opłaca."
+    "needLoan": "Najpierw wypełnij swój kredyt w kalkulatorze, potem sprawdzisz, czy zmiana się opłaca.",
+    "share": "Udostępnij porównanie",
+    "shareCopied": "Link skopiowany",
+    "shareHint": "Link zawiera tylko liczby dla dwóch ofert.",
+    "shareManual": "Skopiuj link:",
+    "sharedLoaded": "Pokazujemy porównanie, które ktoś Ci udostępnił."
   },
   "ai": {
     "short": "AI",
@@ -602,5 +608,16 @@
   },
   "amounts": {
     "quick": "Szybki wybór"
+  },
+  "print": {
+    "csv": "Pobierz jako arkusz (CSV)",
+    "pdf": "Drukuj / zapisz jako PDF",
+    "made": "utworzono {{date}}",
+    "yearly": "Spłata rok po roku",
+    "year": "Rok",
+    "extra": "Nadpłata",
+    "balanceEnd": "Saldo na koniec roku",
+    "month": "Miesiąc",
+    "ratePct": "Oprocentowanie %"
   }
 }

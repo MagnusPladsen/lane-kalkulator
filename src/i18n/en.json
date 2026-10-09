@@ -425,8 +425,8 @@
     "split": "Of your next payment of {{payment}}, {{interest}} goes to interest, {{principal}} to principal and {{fee}} to fees.",
     "interestOnly": "Your next payment of {{payment}} is interest only ({{interest}}) plus fees. The debt doesn't go down in this period.",
     "turn": "From {{date}}, more goes to principal than to interest.",
-    "stressTitle": "What if the rate rises?",
-    "stressHint": "Pick how many percentage points to see what it means for you.",
+    "stressTitle": "What if the rate changes?",
+    "stressHint": "Pick how many percentage points up or down to see what it means for you.",
     "stressResult": "At {{rate}} % the payment becomes {{payment}}, {{delta}} more a month. The loan costs {{cost}} more in total.",
     "stressAdd": "Add as a period",
     "nextTitle": "Next payment",
@@ -436,7 +436,8 @@
     "interestOnlyNote": "Interest and fee only for now. The balance does not go down in this period.",
     "wholeTitle": "Whole loan",
     "borrowedPart": "Borrowed",
-    "feesPart": "Fees"
+    "feesPart": "Fees",
+    "stressResultDown": "At {{rate}} % the payment becomes {{payment}}, {{delta}} less a month. The loan costs {{cost}} less in total."
   },
   "compare": {
     "title": "Compare",
@@ -466,7 +467,12 @@
     "perMonth": "Per month",
     "useNew": "Open the new loan in the calculator",
     "moved": "moved",
-    "needLoan": "Fill in your loan in the calculator first, then you can check whether switching pays off."
+    "needLoan": "Fill in your loan in the calculator first, then you can check whether switching pays off.",
+    "share": "Share this comparison",
+    "shareCopied": "Link copied",
+    "shareHint": "The link holds only the figures for the two offers.",
+    "shareManual": "Copy the link:",
+    "sharedLoaded": "Showing a comparison someone shared with you."
   },
   "ai": {
     "short": "AI",
@@ -592,5 +598,16 @@
   },
   "amounts": {
     "quick": "Quick amounts"
+  },
+  "print": {
+    "csv": "Download as spreadsheet (CSV)",
+    "pdf": "Print / save as PDF",
+    "made": "made {{date}}",
+    "yearly": "Repayment year by year",
+    "year": "Year",
+    "extra": "Extra",
+    "balanceEnd": "Balance at year end",
+    "month": "Month",
+    "ratePct": "Rate %"
   }
 }
