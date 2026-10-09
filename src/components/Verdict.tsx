@@ -43,18 +43,27 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
 
     const { interest } = a.delta
     const feeDelta = a.lifetime.scenario.fees - a.lifetime.baseline.fees
+    // Framed as a gain or a cost, with the amount in bold: "Du sparer 530 928 kr i renter".
+    const bold = [<strong key="0" className="font-semibold" />]
+    const feeKey =
+      Math.abs(feeDelta) < 1
+        ? undefined
+        : (feeDelta < 0) === (interest < 0)
+          ? feeDelta < 0 ? "verdict.feesSaveToo" : "verdict.feesPayToo"
+          : feeDelta < 0 ? "verdict.feesSaveBut" : "verdict.feesPayBut"
     const sub =
-      Math.abs(interest) < 1
-        ? t("verdict.sameInterest")
-        : (interest < 0
-            ? t("verdict.lessInterest", { amount: fmtMoney(Math.abs(interest)) })
-            : t("verdict.moreInterest", { amount: fmtMoney(Math.abs(interest)) })) +
-          (Math.abs(feeDelta) >= 1
-            ? feeDelta < 0
-              ? t("verdict.lessFees", { amount: fmtMoney(Math.abs(feeDelta)) })
-              : t("verdict.moreFees", { amount: fmtMoney(Math.abs(feeDelta)) })
-            : "") +
-          "."
+      Math.abs(interest) < 1 ? (
+        t("verdict.sameInterest")
+      ) : (
+        <>
+          <Trans
+            i18nKey={interest < 0 ? "verdict.saveInterest" : "verdict.payInterest"}
+            values={{ amount: fmtMoney(Math.abs(interest)) }}
+            components={bold}
+          />
+          {feeKey && <Trans i18nKey={feeKey} values={{ amount: fmtMoney(Math.abs(feeDelta)) }} components={bold} />}.
+        </>
+      )
 
     return (
       <section
@@ -71,7 +80,7 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
         <p className="mt-1 font-heading text-3xl leading-tight font-extrabold tracking-tight text-balance sm:text-4xl" aria-live="polite" aria-atomic>
           <Highlighted text={headline} mark={mood === "good" ? figure : undefined} />
         </p>
-        <p className="mt-2 text-sm">{sub}</p>
+        <p className="mt-2 text-base">{sub}</p>
         {/* Only when fees make the total differ from the interest line above; otherwise it repeats it. */}
         {costText && Math.abs(a.delta.totalCost - interest) >= 1 && (
           <p className="mt-3 text-sm">

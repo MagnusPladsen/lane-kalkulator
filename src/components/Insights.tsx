@@ -21,11 +21,18 @@ export function LoanSentence({ a, dateFor }: { a: Analysis; dateFor: (i: number)
   const base = r.interest + r.principal + r.fee
   // First month where more goes to principal than to interest.
   const turn = rows.findIndex((x) => !x.interestOnly && x.principal > x.interest)
-  const parts = [
+  const next = [
     { key: "interest", label: t("insight.interestPart"), value: r.interest, className: "bg-chart-interest" },
     { key: "principal", label: t("insight.principalPart"), value: r.principal, className: "bg-chart-principal" },
     { key: "fee", label: t("insight.feePart"), value: r.fee, className: "bg-chart-history" },
-  ].filter((p) => p.value >= 0.5)
+  ]
+  // The whole loan, history included: what was borrowed against what it costs on top.
+  const life = a.lifetime.scenario
+  const whole = [
+    { key: "principal", label: t("insight.borrowedPart"), value: life.paid - life.interest - life.fees, className: "bg-chart-principal" },
+    { key: "interest", label: t("insight.interestPart"), value: life.interest, className: "bg-chart-interest" },
+    { key: "fee", label: t("insight.feesPart"), value: life.fees, className: "bg-chart-history" },
+  ]
   const note = r.interestOnly
     ? t("insight.interestOnlyNote")
     : turn > 0 && r.principal <= r.interest
@@ -33,27 +40,48 @@ export function LoanSentence({ a, dateFor }: { a: Analysis; dateFor: (i: number)
       : undefined
   return (
     <Card size="sm" className="rise rise-1">
-      <CardContent className="grid gap-2.5">
-        <p className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
-          <span className="font-medium">{t("insight.nextTitle")}</span>
-          <span className="font-mono font-semibold tabular-nums">{fmtMoney(base)}</span>
-        </p>
-        <div className="flex h-3 overflow-hidden rounded-full bg-muted" aria-hidden>
-          {parts.map((p) => (
-            <span key={p.key} className={p.className} style={{ width: `${(p.value / base) * 100}%` }} />
-          ))}
-        </div>
-        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-          {parts.map((p) => (
-            <li key={p.key} className="flex items-center gap-1.5">
-              <span aria-hidden className={cn("size-2.5 rounded-full", p.className)} />
-              {p.label} <span className="font-mono font-medium text-foreground tabular-nums">{fmtMoney(p.value)}</span>
-            </li>
-          ))}
-        </ul>
-        {note && <p className="text-xs text-muted-foreground">{note}</p>}
+      <CardContent className="grid gap-4">
+        <SplitBar title={t("insight.nextTitle")} total={base} parts={next} note={note} />
+        <SplitBar title={t("insight.wholeTitle")} total={life.paid} parts={whole} />
       </CardContent>
     </Card>
+  )
+}
+
+/** A titled split bar with the amounts beside it. The bar is decoration; the numbers carry the meaning. */
+function SplitBar({
+  title,
+  total,
+  parts,
+  note,
+}: {
+  title: string
+  total: number
+  parts: { key: string; label: string; value: number; className: string }[]
+  note?: string
+}) {
+  const shown = parts.filter((p) => p.value >= 0.5)
+  return (
+    <div className="grid gap-2">
+      <p className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
+        <span className="font-medium">{title}</span>
+        <span className="font-mono font-semibold tabular-nums">{fmtMoney(total)}</span>
+      </p>
+      <div className="flex h-3 gap-0.5 overflow-hidden rounded-full bg-muted" aria-hidden>
+        {shown.map((p) => (
+          <span key={p.key} className={p.className} style={{ width: `${(p.value / total) * 100}%` }} />
+        ))}
+      </div>
+      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+        {shown.map((p) => (
+          <li key={p.key} className="flex items-center gap-1.5">
+            <span aria-hidden className={cn("size-2.5 rounded-full", p.className)} />
+            {p.label} <span className="font-mono font-medium text-foreground tabular-nums">{fmtMoney(p.value)}</span>
+          </li>
+        ))}
+      </ul>
+      {note && <p className="text-xs text-muted-foreground">{note}</p>}
+    </div>
   )
 }
 

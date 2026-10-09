@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LoanCard } from "@/components/LoanCard"
@@ -79,7 +80,14 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
     <>
       <h1 className="sr-only">{t("a11y.mainHeading")}</h1>
       <div className="grid gap-4 lg:grid-cols-[400px_minmax(0,1fr)] lg:items-start lg:gap-6">
-        <div className="grid gap-4">
+        {/* Desktop: once set up, the inputs stay in view while the results scroll. */}
+        <div
+          className={cn(
+            "grid gap-4",
+            !editing &&
+              "lg:sticky lg:top-3 lg:-m-2 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:p-2 lg:[scrollbar-width:thin]",
+          )}
+        >
           <LoanCard
             loan={scenario.loan}
             errors={validation.errors}
@@ -87,6 +95,11 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
             firstPayment={firstPayment}
             editing={editing}
             fresh={fresh}
+            paidShare={
+              shown && scenario.loan.startDate && scenario.loan.principal > 0
+                ? Math.min(1, Math.max(0, 1 - shown.startingBalance / scenario.loan.principal))
+                : undefined
+            }
             onEditingChange={(e) => {
               setEditing(e)
               if (e) return

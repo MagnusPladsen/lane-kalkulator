@@ -91,7 +91,9 @@
     "dayCountHint": "Står i lånevilkårene. Lån med flytende rente bruker som regel faktiske dager (365/365). 365/360 blir litt dyrere.",
     "dayCountActAct": "Faktiske dager (365/365)",
     "dayCountAct360": "Faktiske dager / 360 (365/360)",
-    "dayCount30360": "Like måneder (360/360)"
+    "dayCount30360": "Like måneder (360/360)",
+    "paidShare": "{{pct}} % nedbetalt så langt",
+    "paidShareLabel": "Andel nedbetalt"
   },
   "extras": {
     "title": "Betal ekstra",
@@ -149,15 +151,17 @@
     "dearerSameDate": "{{amount}} dyrere, samme sluttdato",
     "noEffect": "Endringene påvirker ikke lånet",
     "sameInterest": "Samme rentekostnad.",
-    "lessInterest": "{{amount}} mindre i renter",
-    "moreInterest": "{{amount}} mer i renter",
-    "lessFees": " og {{amount}} mindre i gebyrer",
-    "moreFees": " og {{amount}} mer i gebyrer",
     "totalCost": "Total kostnad",
     "paidOffTitle": "Dette lånet er nedbetalt",
     "paidOffBody": "Ut fra startdato og restgjeld er det ingenting igjen å betale.",
     "truncated": "Planen stopper etter 100 år. Dette går ikke opp, reduser pausene.",
-    "setup": "Fyll inn lånet ditt, så ser du her hva det koster."
+    "setup": "Fyll inn lånet ditt, så ser du her hva det koster.",
+    "saveInterest": "Du sparer <0>{{amount}}</0> i renter",
+    "payInterest": "Du betaler <0>{{amount}}</0> mer i renter",
+    "feesSaveToo": " og <0>{{amount}}</0> i gebyrer",
+    "feesPayToo": " og <0>{{amount}}</0> mer i gebyrer",
+    "feesSaveBut": ", men sparer <0>{{amount}}</0> i gebyrer",
+    "feesPayBut": ", men betaler <0>{{amount}}</0> mer i gebyrer"
   },
   "tiles": {
     "monthly": "Terminbeløp",
@@ -429,7 +433,10 @@
     "interestPart": "Renter",
     "principalPart": "Avdrag",
     "feePart": "Gebyr",
-    "interestOnlyNote": "Bare renter og gebyr nå. Gjelden går ikke ned i perioden."
+    "interestOnlyNote": "Bare renter og gebyr nå. Gjelden går ikke ned i perioden.",
+    "wholeTitle": "Hele lånet",
+    "borrowedPart": "Lånt",
+    "feesPart": "Gebyrer"
   },
   "compare": {
     "title": "Sammenlign",
@@ -554,19 +561,22 @@
       "short": "Lån",
       "title": "Hva slags lån er det?",
       "desc": "Velg typen, så viser vi vanlige vilkår og en typisk rente akkurat nå.",
-      "scan": "Har du et skjermbilde fra nettbanken? Da kan vi fylle ut for deg."
+      "scan": "Har du et skjermbilde fra nettbanken? Da kan vi fylle ut for deg.",
+      "filled": "Vi har fylt inn vanlige tall for denne lånetypen. Du endrer dem i neste steg."
     },
     "money": {
       "short": "Beløp",
       "title": "Beløp og rente",
       "desc": "Hvor mye du lånte, og renten banken tar.",
       "amountHint": "Beløpet da lånet ble tatt opp. Restgjeld i dag kommer i siste steg.",
-      "effToggle": "Har du effektiv rente fra banken også?"
+      "effToggle": "Har du effektiv rente fra banken også?",
+      "example": "Eksempeltall fra lånetypen. Bytt dem ut med dine egne."
     },
     "time": {
       "short": "Nedbetaling",
       "title": "Hvor lenge, og hvordan?",
-      "desc": "Løpetiden og hvordan lånet betales ned."
+      "desc": "Løpetiden og hvordan lånet betales ned.",
+      "quick": "Vanlige løpetider"
     },
     "now": {
       "short": "I dag",
@@ -577,5 +587,8 @@
       "advanced": "Avansert",
       "advancedHint": "renteberegning"
     }
+  },
+  "amounts": {
+    "quick": "Hurtigvalg"
   }
 }

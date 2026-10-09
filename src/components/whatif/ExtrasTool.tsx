@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch"
 import { Field, MoneyInput, MonthPicker, Segmented } from "@/components/fields"
 import { addYearMonths, extraToSchedule } from "@/lib/loan/engine"
 import type { CalendarExtra } from "@/lib/loan/types"
+import { AmountPicker } from "@/components/AmountPicker"
 import { EmptyHint, ItemBox } from "./shared"
 import { timingOf, type TimingContext } from "./timing"
 import { TimingHint } from "./TimingHint"
@@ -65,6 +66,14 @@ export function ExtrasTool({
             <Field label={t("extras.amount")}>
               <MoneyInput value={e.amount} onChange={(v) => onUpdate(e.id, { amount: v ?? 0 })} />
             </Field>
+            <AmountPicker
+              value={e.amount}
+              onChange={(amount) => onUpdate(e.id, { amount })}
+              label={t("extras.amount")}
+              {...(e.kind === "recurring"
+                ? { presets: [1000, 2000, 5000], max: 20000, step: 500 }
+                : { presets: [25000, 50000, 100000], max: 500000, step: 5000 })}
+            />
             <Field label={e.kind === "oneoff" ? t("extras.inMonth") : t("extras.fromMonth")}>
               <MonthPicker
                 value={e.from}

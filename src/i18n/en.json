@@ -91,7 +91,9 @@
     "dayCountHint": "It's in the loan terms. Floating-rate loans usually use actual days (365/365). 365/360 costs a little more.",
     "dayCountActAct": "Actual days (365/365)",
     "dayCountAct360": "Actual days / 360 (365/360)",
-    "dayCount30360": "Equal months (360/360)"
+    "dayCount30360": "Equal months (360/360)",
+    "paidShare": "{{pct}} % paid off so far",
+    "paidShareLabel": "Share paid off"
   },
   "extras": {
     "title": "Pay extra",
@@ -149,15 +151,17 @@
     "dearerSameDate": "{{amount}} more expensive, same payoff date",
     "noEffect": "Your changes don't affect the loan",
     "sameInterest": "Same total interest.",
-    "lessInterest": "{{amount}} less interest",
-    "moreInterest": "{{amount}} more interest",
-    "lessFees": " and {{amount}} less in fees",
-    "moreFees": " and {{amount}} more in fees",
     "totalCost": "Total cost",
     "paidOffTitle": "This loan is paid off",
     "paidOffBody": "Given the start date and remaining balance there is nothing left to pay.",
     "truncated": "The plan stops after 100 years. This doesn't add up, shorten the pauses.",
-    "setup": "Fill in your loan and you'll see what it costs here."
+    "setup": "Fill in your loan and you'll see what it costs here.",
+    "saveInterest": "You save <0>{{amount}}</0> in interest",
+    "payInterest": "You pay <0>{{amount}}</0> more in interest",
+    "feesSaveToo": " and <0>{{amount}}</0> in fees",
+    "feesPayToo": " and <0>{{amount}}</0> more in fees",
+    "feesSaveBut": ", but save <0>{{amount}}</0> in fees",
+    "feesPayBut": ", but pay <0>{{amount}}</0> more in fees"
   },
   "tiles": {
     "monthly": "Monthly payment",
@@ -429,7 +433,10 @@
     "interestPart": "Interest",
     "principalPart": "Principal",
     "feePart": "Fee",
-    "interestOnlyNote": "Interest and fee only for now. The balance does not go down in this period."
+    "interestOnlyNote": "Interest and fee only for now. The balance does not go down in this period.",
+    "wholeTitle": "Whole loan",
+    "borrowedPart": "Borrowed",
+    "feesPart": "Fees"
   },
   "compare": {
     "title": "Compare",
@@ -554,19 +561,22 @@
       "short": "Loan",
       "title": "What kind of loan is it?",
       "desc": "Pick the type and we show the usual terms and a typical rate right now.",
-      "scan": "Have a screenshot from your online bank? We can fill this in for you."
+      "scan": "Have a screenshot from your online bank? We can fill this in for you.",
+      "filled": "We've filled in usual figures for this loan type. You change them in the next step."
     },
     "money": {
       "short": "Amount",
       "title": "Amount and rate",
       "desc": "How much you borrowed, and the rate the bank charges.",
       "amountHint": "The amount when the loan was taken out. Today's balance comes in the last step.",
-      "effToggle": "Do you also have the effective rate from the bank?"
+      "effToggle": "Do you also have the effective rate from the bank?",
+      "example": "Example figures for this loan type. Replace them with your own."
     },
     "time": {
       "short": "Repayment",
       "title": "How long, and how?",
-      "desc": "The term and how the loan is paid down."
+      "desc": "The term and how the loan is paid down.",
+      "quick": "Common terms"
     },
     "now": {
       "short": "Today",
@@ -577,5 +587,8 @@
       "advanced": "Advanced",
       "advancedHint": "interest day count"
     }
+  },
+  "amounts": {
+    "quick": "Quick amounts"
   }
 }

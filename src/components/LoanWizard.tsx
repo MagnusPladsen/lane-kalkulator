@@ -10,11 +10,31 @@ import { Field, FieldGroup, FieldInput, MoneyInput, NativeSelect, NumberInput, S
 import { EffectiveRateCheck, IntroTerms } from "@/components/LoanExtras"
 import { LoanTypePicker } from "@/components/LoanTypePicker"
 import { fmtMoney } from "@/lib/format"
-import type { DayCount, LoanInput } from "@/lib/loan/types"
+import type { DayCount, LoanCategory, LoanInput } from "@/lib/loan/types"
 import type { LoanValidation } from "@/lib/scenarioReducer"
+import { PRESETS, tableRate } from "@/lib/rates"
+import { todayIso } from "@/lib/loan/engine"
 
 const STEPS = ["type", "money", "time", "now"] as const
 type StepId = (typeof STEPS)[number]
+
+/** Usual terms in years per loan type, offered as one-tap choices. */
+const TERM_PRESETS: Record<LoanCategory, number[]> = {
+  mortgage: [10, 15, 20, 25, 30],
+  startlan: [20, 30, 40, 50],
+  car: [3, 5, 7, 10],
+  consumer: [1, 3, 5, 10],
+  student: [10, 20, 25],
+}
+
+/** A sensible starting amount per loan type for a brand-new setup; the user replaces it in step 2. */
+const TYPICAL_AMOUNT: Record<LoanCategory, number> = {
+  mortgage: 3_000_000,
+  startlan: 2_500_000,
+  car: 400_000,
+  consumer: 100_000,
+  student: 300_000,
+}
 
 /** Which inputs live on each step, so a step only blocks on its own errors. */
 const STEP_FIELDS: Record<StepId, (keyof LoanInput)[]> = {
@@ -73,6 +93,16 @@ export function LoanWizard({
     }
   }, [step])
 
+  // A brand-new loan: picking the type fills in its usual terms, a typical amount and, where
+  // known, a typical rate, until the user has seen the amount step. Never overwrites later.
+  const autoFill = fresh && visited < 1
+  const pickType = (patch: Partial<LoanInput>) => {
+    const c = patch.category
+    if (!autoFill || !c) return onChange(patch)
+    const typical = c === "mortgage" ? undefined : tableRate(c, todayIso())
+    onChange({ ...patch, ...PRESETS[c], principal: TYPICAL_AMOUNT[c], ...(typical ? { annualRatePct: typical.ratePct } : {}) })
+  }
+
   const go = (i: number) => {
     moved.current = true
     setStep(i)
@@ -130,7 +160,8 @@ export function LoanWizard({
       <CardContent className="grid grid-cols-1 gap-5" aria-live="off">
         {id === "type" && (
           <>
-            <LoanTypePicker loan={loan} onChange={onChange} variant="tiles" />
+            <LoanTypePicker loan={loan} onChange={pickType} variant="tiles" />
+            {autoFill && loan.category && <p className="-mt-2 text-xs text-muted-foreground">{t("wizard.type.filled")}</p>}
             <Field label={t("loan.name")} help={t("help.name")} optional optionalLabel={t("steps.optional")}>
               <FieldInput
                 autoComplete="off"
@@ -153,6 +184,9 @@ export function LoanWizard({
 
         {id === "money" && (
           <>
+            {fresh && loan.category && loan.principal === TYPICAL_AMOUNT[loan.category] && (
+              <p className="rounded-2xl bg-highlight px-3.5 py-2.5 text-sm text-highlight-foreground">{t("wizard.money.example")}</p>
+            )}
             <Field label={t("loan.amount")} help={t("help.amount")} hint={t("wizard.money.amountHint")} error={err("principal")}>
               <MoneyInput value={loan.principal} onChange={(v) => onChange({ principal: v ?? 0 })} />
             </Field>
@@ -206,6 +240,22 @@ export function LoanWizard({
                 />
               </FieldGroup>
             </Field>
+            <div className="-mt-2 flex flex-wrap gap-1.5" role="group" aria-label={t("wizard.time.quick")}>
+              {TERM_PRESETS[loan.category ?? "mortgage"].map((y) => (
+                <button
+                  key={y}
+                  type="button"
+                  aria-pressed={loan.termMonths === y * 12}
+                  onClick={() => onChange({ termMonths: y * 12 })}
+                  className={cn(
+                    "min-h-8 cursor-pointer rounded-full border px-3 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [@media(pointer:coarse)]:min-h-10",
+                    loan.termMonths === y * 12 ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-muted",
+                  )}
+                >
+                  {y} {t("loan.years")}
+                </button>
+              ))}
+            </div>
             <Field label={t("loan.type")} help={t("help.type")} hint={loan.loanType === "annuity" ? t("loan.annuityHint") : t("loan.serialHint")}>
               <Segmented
                 value={loan.loanType}
