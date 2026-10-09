@@ -424,7 +424,12 @@
     "stressTitle": "What if the rate rises?",
     "stressHint": "Pick how many percentage points to see what it means for you.",
     "stressResult": "At {{rate}} % the payment becomes {{payment}}, {{delta}} more a month. The loan costs {{cost}} more in total.",
-    "stressAdd": "Add as a period"
+    "stressAdd": "Add as a period",
+    "nextTitle": "Next payment",
+    "interestPart": "Interest",
+    "principalPart": "Principal",
+    "feePart": "Fee",
+    "interestOnlyNote": "Interest and fee only for now. The balance does not go down in this period."
   },
   "compare": {
     "title": "Compare",

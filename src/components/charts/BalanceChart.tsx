@@ -50,7 +50,9 @@ export function BalanceChart({
             label={{ value: t("charts.today"), position: "top", fill: "var(--muted-foreground)", fontSize: 11 }}
           />
         )}
-        <Line dataKey="history" type="monotone" stroke="var(--color-history)" strokeWidth={2} dot={false} isAnimationActive={false} />
+        {todayIndex > 0 && (
+          <Line dataKey="history" type="monotone" stroke="var(--color-history)" strokeWidth={2} dot={false} isAnimationActive={false} />
+        )}
         <Line
           dataKey="baseline"
           type="monotone"

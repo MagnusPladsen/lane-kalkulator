@@ -162,6 +162,7 @@
   box-shadow: var(--card-shadow);
 }
 .highlight {
+  white-space: nowrap;
   background: var(--highlight);
   color: var(--highlight-foreground);
   border-radius: 0.5em;

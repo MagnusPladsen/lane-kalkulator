@@ -3,6 +3,7 @@ import { PencilIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { LoanWizard } from "@/components/LoanWizard"
+import { keepTogether } from "@/lib/ai/format"
 import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
 import type { LoanInput } from "@/lib/loan/types"
 import type { LoanValidation } from "@/lib/scenarioReducer"
@@ -30,11 +31,12 @@ export function LoanCard({
 }) {
   const { t } = useTranslation()
 
-  const summary = t("loan.summary", {
+  // Break only between the parts, never inside "25 år" or "3 000 000 kr".
+  const summary = keepTogether(t("loan.summary", {
     amount: fmtMoney(loan.principal),
     rate: fmtRate(loan.annualRatePct),
     term: fmtDuration(loan.termMonths, t),
-  })
+  }))
 
   if (!editing) {
     const bits = [
