@@ -42,7 +42,11 @@ bun run lint
 | `src/lib/share.ts` | Share-link encoding and JSON export/import. |
 | `src/lib/chartData.ts` | Turns an `Analysis` into chart series. |
 | `src/pages/` | `CalculatorPage`, `ComparePage`, `LoansPage` (the last two load on demand). |
-| `src/hooks/useRoute.ts` | Path routing: `/`, `/sammenlign`, `/mine-lan`. Old `#/compare` links are upgraded. |
+| `src/hooks/useRoute.ts` | Path routing: `/`, `/sammenlign`, `/mine-lan`, `/renter`, `/guider[/slug]`; loan-type pages (`/billan` …) and `/en`, `/pl` render the calculator. Old `#/compare` links are upgraded. |
+| `src/lib/rateHistory.ts`, `src/pages/RatesPage.tsx` | SSB table 10748 mortgage rates: fetched at build (embedded), refreshed in the browser. |
+| `src/content/guides/` | Norwegian guides as JSON; each lists its sources and the engine scenarios behind its figures. |
+| `src/lib/multiLoan.ts`, `src/components/AllLoans.tsx` | All saved loans together and the highest-rate / smallest-loan pay-down plans. |
+| `scripts/sw.template.js` | Offline service worker; `scripts/prerender.mjs` writes `dist/sw.js` with the build's file list. |
 | `src/lib/seo.ts`, `scripts/prerender.mjs`, `src/entry-server.ts` | Per-page title, description and canonical URL; build-time prerendering with JSON-LD. |
 | `src/components/` | Form panels, verdict, stat tiles, charts, schedule table, dialogs. |
 | `docs/superpowers/specs/` | Design spec. |
