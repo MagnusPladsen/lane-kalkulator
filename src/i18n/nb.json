@@ -697,5 +697,14 @@
     "sources": "Kilder",
     "disclaimer": "Guidene er generell informasjon, ikke personlig råd. Spør banken, Husbanken, Lånekassen eller Skatteetaten om det som gjelder deg.",
     "norwegianOnly": "Guidene finnes bare på norsk."
+  },
+  "sections": {
+    "all": "Alle tall",
+    "allSummary": "Totale renter {{amount}}",
+    "money": "Hvor pengene går",
+    "moneySummary": "Neste betaling {{amount}}",
+    "stressSummary": "Prøv fra −2 til +3 prosentpoeng",
+    "chart": "Graf og nedbetalingsplan",
+    "chartSummary": "Restgjeld, renter og plan år for år"
   }
 }

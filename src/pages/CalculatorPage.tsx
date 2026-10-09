@@ -15,6 +15,8 @@ import { Faq } from "@/components/Faq"
 import { CALC_FAQ } from "@/lib/faq"
 import { categoryOfPath, currentPath } from "@/hooks/useRoute"
 import { PrintPlan } from "@/components/PrintPlan"
+import { ResultSection } from "@/components/ResultSection"
+import { fmtMoney, fmtMonthYear } from "@/lib/format"
 import { Button } from "@/components/ui/button"
 import { DownloadIcon, PrinterIcon } from "lucide-react"
 import { planCsv } from "@/lib/exportPlan"
@@ -173,75 +175,101 @@ export function CalculatorPage({ scenario, dispatch }: { scenario: Scenario; dis
                   {t("invalid.stale")}
                 </p>
               )}
-              <Verdict ref={verdictRef} a={shown} hasChanges={hasChanges} stale={stale} setup={editing} />
+              <Verdict
+                ref={verdictRef}
+                a={shown}
+                hasChanges={hasChanges}
+                stale={stale}
+                setup={editing}
+                figures={
+                  shown.paidOff
+                    ? undefined
+                    : [
+                        { label: t("tiles.monthly"), value: fmtMoney(shown.scenario.monthlyPayment) },
+                        { label: t("tiles.paidOff"), value: fmtMonthYear(payoffIso) },
+                      ]
+                }
+              />
               {!shown.paidOff && (
-                <>
-                  <SummaryCards
-                    a={shown}
-                    hasChanges={hasChanges}
-                    payoffIso={payoffIso}
-                    nominalRatePct={scenario.loan.annualRatePct}
-                    stale={stale}
-                  />
-                  <LoanSentence a={shown} dateFor={dateFor} />
-                  {analysis && (
-                    <RateStress
-                      scenario={scenario}
-                      analysis={analysis}
-                      monthDate={monthDate}
-                      onAddPeriod={(period) => {
-                        dispatch({ type: "period/add", period })
-                        setTool("periods")
-                      }}
+                <div className={cn("grid gap-3", stale && "opacity-50 transition-opacity")}>
+                  {/* "One number first": the result above, everything else one click away. */}
+                  <ResultSection
+                    title={t("sections.all")}
+                    summary={t("sections.allSummary", { amount: fmtMoney(shown.lifetime.scenario.interest) })}
+                  >
+                    <SummaryCards
+                      a={shown}
+                      hasChanges={hasChanges}
+                      payoffIso={payoffIso}
+                      nominalRatePct={scenario.loan.annualRatePct}
+                      flat
                     />
+                  </ResultSection>
+                  <ResultSection
+                    title={t("sections.money")}
+                    summary={t("sections.moneySummary", { amount: fmtMoney(shown.scenario.monthlyPayment) })}
+                  >
+                    <LoanSentence a={shown} dateFor={dateFor} bare />
+                  </ResultSection>
+                  {analysis && (
+                    <ResultSection title={t("insight.stressTitle")} summary={t("sections.stressSummary")}>
+                      <RateStress
+                        scenario={scenario}
+                        analysis={analysis}
+                        monthDate={monthDate}
+                        bare
+                        onAddPeriod={(period) => {
+                          dispatch({ type: "period/add", period })
+                          setTool("periods")
+                        }}
+                      />
+                    </ResultSection>
                   )}
-                  <Card className={stale ? "rise rise-2 opacity-50 transition-opacity" : "rise rise-2 transition-opacity"}>
-                    <CardContent>
-                      <Tabs value={chartTab} onValueChange={(v) => setChartTab(v as ChartTab)}>
-                        <TabsList className="grid h-auto w-full grid-cols-4">
-                          {chartTabs.map((c) => (
-                            <TabsTrigger key={c.id} value={c.id} className="min-w-0 px-1 text-xs sm:text-sm">
-                              <span className="truncate">{c.label}</span>
-                            </TabsTrigger>
-                          ))}
-                        </TabsList>
-                        <p className="pt-2 text-xs text-muted-foreground">
-                          {chartTabs.find((c) => c.id === chartTab)?.desc}
-                        </p>
-                        <TabsContent value="balance" className="rounded-lg pt-2 focus-visible:ring-3 focus-visible:ring-ring/50">
-                          <BalanceChart data={balance} todayIndex={shown.offsetMonths} showScenario={hasChanges} />
-                        </TabsContent>
-                        <TabsContent value="yearly" className="rounded-lg pt-2 focus-visible:ring-3 focus-visible:ring-ring/50">
-                          <YearlyChart data={yearly} />
-                        </TabsContent>
-                        <TabsContent value="interest" className="rounded-lg pt-2 focus-visible:ring-3 focus-visible:ring-ring/50">
-                          <CumulativeChart data={cumulative} showScenario={hasChanges} />
-                        </TabsContent>
-                        <TabsContent value="table" className="grid gap-2 pt-2">
-                          <div className="flex flex-wrap gap-2">
-                            <Button variant="outline" size="sm" onClick={downloadCsv}>
-                              <DownloadIcon data-icon="inline-start" />
-                              {t("print.csv")}
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={() => window.print()}>
-                              <PrinterIcon data-icon="inline-start" />
-                              {t("print.pdf")}
-                            </Button>
-                          </div>
-                          <ScheduleTable
-                            rows={shown.scenario.rows}
-                            offset={shown.offsetMonths}
-                            dateFor={dateFor}
-                            hasExtra={hasExtra}
-                            baseRatePct={scenario.loan.annualRatePct}
-                            open={openYears}
-                            onOpenChange={setOpenYears}
-                          />
-                        </TabsContent>
-                      </Tabs>
-                    </CardContent>
-                  </Card>
-                </>
+                  <ResultSection title={t("sections.chart")} summary={t("sections.chartSummary")} defaultOpen>
+                    <Tabs value={chartTab} onValueChange={(v) => setChartTab(v as ChartTab)}>
+                      <TabsList className="grid h-auto w-full grid-cols-4">
+                        {chartTabs.map((c) => (
+                          <TabsTrigger key={c.id} value={c.id} className="min-w-0 px-1 text-xs sm:text-sm">
+                            <span className="truncate">{c.label}</span>
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      <p className="pt-2 text-xs text-muted-foreground">
+                        {chartTabs.find((c) => c.id === chartTab)?.desc}
+                      </p>
+                      <TabsContent value="balance" className="rounded-lg pt-2 focus-visible:ring-3 focus-visible:ring-ring/50">
+                        <BalanceChart data={balance} todayIndex={shown.offsetMonths} showScenario={hasChanges} />
+                      </TabsContent>
+                      <TabsContent value="yearly" className="rounded-lg pt-2 focus-visible:ring-3 focus-visible:ring-ring/50">
+                        <YearlyChart data={yearly} />
+                      </TabsContent>
+                      <TabsContent value="interest" className="rounded-lg pt-2 focus-visible:ring-3 focus-visible:ring-ring/50">
+                        <CumulativeChart data={cumulative} showScenario={hasChanges} />
+                      </TabsContent>
+                      <TabsContent value="table" className="grid gap-2 pt-2">
+                        <div className="flex flex-wrap gap-2">
+                          <Button variant="outline" size="sm" onClick={downloadCsv}>
+                            <DownloadIcon data-icon="inline-start" />
+                            {t("print.csv")}
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => window.print()}>
+                            <PrinterIcon data-icon="inline-start" />
+                            {t("print.pdf")}
+                          </Button>
+                        </div>
+                        <ScheduleTable
+                          rows={shown.scenario.rows}
+                          offset={shown.offsetMonths}
+                          dateFor={dateFor}
+                          hasExtra={hasExtra}
+                          baseRatePct={scenario.loan.annualRatePct}
+                          open={openYears}
+                          onOpenChange={setOpenYears}
+                        />
+                      </TabsContent>
+                    </Tabs>
+                  </ResultSection>
+                </div>
               )}
             </>
           )}

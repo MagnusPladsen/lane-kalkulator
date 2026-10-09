@@ -13,7 +13,7 @@ import type { Analysis, CustomPeriod, Scenario } from "@/lib/loan/types"
  * Where the next payment goes: a split bar with the amounts beside it, plus when principal
  * overtakes interest. The bar is decoration; the numbers carry the meaning.
  */
-export function LoanSentence({ a, dateFor }: { a: Analysis; dateFor: (i: number) => string }) {
+export function LoanSentence({ a, dateFor, bare }: { a: Analysis; dateFor: (i: number) => string; bare?: boolean }) {
   const { t } = useTranslation()
   const rows = a.scenario.rows
   const r = rows[0]
@@ -38,12 +38,16 @@ export function LoanSentence({ a, dateFor }: { a: Analysis; dateFor: (i: number)
     : turn > 0 && r.principal <= r.interest
       ? t("insight.turn", { date: fmtMonthYear(dateFor(a.offsetMonths + turn + 1)) })
       : undefined
+  const bars = (
+    <>
+      <SplitBar title={t("insight.nextTitle")} total={base} parts={next} note={note} />
+      <SplitBar title={t("insight.wholeTitle")} total={life.paid} parts={whole} />
+    </>
+  )
+  if (bare) return <div className="grid gap-4">{bars}</div>
   return (
     <Card size="sm" className="rise rise-1">
-      <CardContent className="grid gap-4">
-        <SplitBar title={t("insight.nextTitle")} total={base} parts={next} note={note} />
-        <SplitBar title={t("insight.wholeTitle")} total={life.paid} parts={whole} />
-      </CardContent>
+      <CardContent className="grid gap-4">{bars}</CardContent>
     </Card>
   )
 }
@@ -97,9 +101,12 @@ export function RateStress({
   analysis,
   monthDate,
   onAddPeriod,
+  bare,
 }: {
   scenario: Scenario
   analysis: Analysis
+  /** Inside a result section that already shows the title. */
+  bare?: boolean
   /** Calendar date of forward payment m (1 = next). */
   monthDate: (m: number) => string
   onAddPeriod: (p: CustomPeriod) => void
@@ -130,49 +137,57 @@ export function RateStress({
     }
   }, [step, scenario, analysis, monthDate, nominal])
 
+  const body = (
+    <>
+      <div className="flex flex-wrap items-center gap-2">
+        {!bare && (
+    <>
+            <ArrowDownUpIcon className="size-4 text-muted-foreground" aria-hidden />
+            <p className="text-sm font-medium">{t("insight.stressTitle")}</p>
+    </>
+        )}
+        <div role="radiogroup" aria-label={t("insight.stressTitle")} className={cn("flex flex-wrap gap-1.5", !bare && "ml-auto")}>
+          {STEPS.filter((s) => nominal + s >= 0).map((s) => (
+            <button
+              key={s}
+              type="button"
+              role="radio"
+              aria-checked={step === s}
+              onClick={() => setStep(step === s ? null : s)}
+              className={cn(
+                "min-h-8 cursor-pointer rounded-full border px-3 font-mono text-sm tabular-nums transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [@media(pointer:coarse)]:min-h-10",
+                step === s ? "border-primary bg-primary text-primary-foreground" : "hover:bg-muted",
+              )}
+            >
+              {s > 0 ? "+" : "−"}
+              {Math.abs(s)}
+            </button>
+          ))}
+        </div>
+      </div>
+      {result ? (
+        <div className="flex flex-wrap items-end justify-between gap-2" aria-live="polite">
+          <p className="text-sm">
+            {t(result.paymentDelta < 0 ? "insight.stressResultDown" : "insight.stressResult", {
+              rate: fmtRate(result.period.annualRatePct),
+              payment: fmtMoney(result.payment),
+              delta: fmtMoney(Math.abs(result.paymentDelta)),
+              cost: fmtMoney(Math.abs(result.costDelta)),
+            })}
+          </p>
+          <Button variant="outline" size="sm" onClick={() => onAddPeriod(result.period)}>
+            {t("insight.stressAdd")}
+          </Button>
+        </div>
+      ) : (
+        <p className="text-xs text-muted-foreground">{t("insight.stressHint")}</p>
+      )}
+    </>
+  )
+  if (bare) return <div className="grid gap-3">{body}</div>
   return (
     <Card className="rise rise-2" size="sm">
-      <CardContent className="grid gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <ArrowDownUpIcon className="size-4 text-muted-foreground" aria-hidden />
-          <p className="text-sm font-medium">{t("insight.stressTitle")}</p>
-          <div role="radiogroup" aria-label={t("insight.stressTitle")} className="ml-auto flex flex-wrap gap-1.5">
-            {STEPS.filter((s) => nominal + s >= 0).map((s) => (
-              <button
-                key={s}
-                type="button"
-                role="radio"
-                aria-checked={step === s}
-                onClick={() => setStep(step === s ? null : s)}
-                className={cn(
-                  "min-h-8 cursor-pointer rounded-full border px-3 font-mono text-sm tabular-nums transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [@media(pointer:coarse)]:min-h-10",
-                  step === s ? "border-primary bg-primary text-primary-foreground" : "hover:bg-muted",
-                )}
-              >
-                {s > 0 ? "+" : "−"}
-                {Math.abs(s)}
-              </button>
-            ))}
-          </div>
-        </div>
-        {result ? (
-          <div className="flex flex-wrap items-end justify-between gap-2" aria-live="polite">
-            <p className="text-sm">
-              {t(result.paymentDelta < 0 ? "insight.stressResultDown" : "insight.stressResult", {
-                rate: fmtRate(result.period.annualRatePct),
-                payment: fmtMoney(result.payment),
-                delta: fmtMoney(Math.abs(result.paymentDelta)),
-                cost: fmtMoney(Math.abs(result.costDelta)),
-              })}
-            </p>
-            <Button variant="outline" size="sm" onClick={() => onAddPeriod(result.period)}>
-              {t("insight.stressAdd")}
-            </Button>
-          </div>
-        ) : (
-          <p className="text-xs text-muted-foreground">{t("insight.stressHint")}</p>
-        )}
-      </CardContent>
+      <CardContent className="grid gap-3">{body}</CardContent>
     </Card>
   )
 }
