@@ -138,7 +138,7 @@ export function AiProvider({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="fixed right-4 bottom-[calc(7.5rem+env(safe-area-inset-bottom))] z-40 inline-flex h-12 cursor-pointer items-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground shadow-lg outline-none hover:bg-primary/90 focus-visible:ring-3 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
+          className="ai-launcher fixed right-4 bottom-[calc(7.5rem+env(safe-area-inset-bottom))] z-40 inline-flex h-12 cursor-pointer items-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground shadow-lg outline-none hover:bg-primary/90 focus-visible:ring-3 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
         >
           <SparklesIcon className="size-4" aria-hidden />
           {t("ai.open")}

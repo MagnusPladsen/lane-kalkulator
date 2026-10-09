@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Field, FieldGroup, FieldInput, MoneyInput, NativeSelect, NumberInput, Segmented } from "@/components/fields"
+import { Field, FieldGroup, FieldInput, FieldRow, MoneyInput, NativeSelect, NumberInput, Segmented } from "@/components/fields"
 import { EffectiveRateCheck, IntroTerms } from "@/components/LoanExtras"
 import { LoanTypePicker } from "@/components/LoanTypePicker"
 import { fmtMoney } from "@/lib/format"
@@ -166,7 +166,7 @@ export function LoanWizard({
               <FieldInput
                 autoComplete="off"
                 value={loan.name}
-                placeholder={t("loan.namePlaceholder")}
+                placeholder={t("wizard.type.namePlaceholder")}
                 maxLength={80}
                 onChange={(e) => onChange({ name: e.target.value })}
                 className="h-10 text-base"
@@ -285,7 +285,7 @@ export function LoanWizard({
               ]}
             />
             {hasLoan && (
-              <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2">
+              <FieldRow>
                 <Field label={t("loan.startDate")} help={t("help.startDate")} error={err("startDate")} hint={t("loan.startHint")}>
                   <FieldInput
                     type="date"
@@ -314,12 +314,12 @@ export function LoanWizard({
                     onChange={(v) => onChange({ remainingBalance: v })}
                     allowEmpty
                     disabled={!loan.startDate}
-                    placeholder={loan.startDate ? "–" : ""}
+                    placeholder={loan.startDate ? undefined : ""}
                   />
                 </Field>
-              </div>
+              </FieldRow>
             )}
-            <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2">
+            <FieldRow>
               <Field label={t("loan.fee")} help={t("help.fee")} hint={t("loan.feeHint")} error={err("monthlyFee")}>
                 <MoneyInput value={loan.monthlyFee} onChange={(v) => onChange({ monthlyFee: v ?? 0 })} />
               </Field>
@@ -333,7 +333,7 @@ export function LoanWizard({
               >
                 <MoneyInput value={loan.setupFee} allowEmpty onChange={(v) => onChange({ setupFee: v })} />
               </Field>
-            </div>
+            </FieldRow>
             <Collapsible open={advOpen} onOpenChange={setAdvOpen} className="min-w-0">
               <CollapsibleTrigger className="touch-target flex min-h-9 w-full cursor-pointer items-center gap-2 rounded-lg text-left text-sm font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
                 <ChevronDownIcon className={cn("size-4 shrink-0 transition-transform", advOpen && "rotate-180")} aria-hidden />

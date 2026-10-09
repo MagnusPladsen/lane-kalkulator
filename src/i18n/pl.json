@@ -513,7 +513,8 @@
       "remaining": "Gdzie znajdę saldo i co jeśli zostawię pole puste?",
       "intro": "Jaka jest różnica między okresem tylko z odsetkami a bez odsetek i co to znaczy dla mojego kredytu?",
       "gap": "RRSO z moich danych nie zgadza się z bankiem. Czego brakuje?"
-    }
+    },
+    "askLink": "Zapytaj AI"
   },
   "faq": {
     "title": "Pytania i odpowiedzi o kredytach",
@@ -572,7 +573,8 @@
       "title": "Jaki to kredyt?",
       "desc": "Wybierz rodzaj, a pokażemy typowe warunki i aktualne oprocentowanie.",
       "scan": "Masz zrzut ekranu z bankowości internetowej? Uzupełnimy to za Ciebie.",
-      "filled": "Uzupełniliśmy typowe wartości dla tego rodzaju kredytu. Zmienisz je w następnym kroku."
+      "filled": "Uzupełniliśmy typowe wartości dla tego rodzaju kredytu. Zmienisz je w następnym kroku.",
+      "namePlaceholder": "Opcjonalnie, np. Kredyt hipoteczny"
     },
     "money": {
       "short": "Kwota",
