@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import {
+  BookOpenIcon,
   CalculatorIcon,
   EllipsisVerticalIcon,
   FolderIcon,
@@ -131,6 +132,9 @@ export function AppShell({
                   <DropdownMenuSeparator />
                 </>
               )}
+              <DropdownMenuItem onClick={() => go("guides")}>
+                <BookOpenIcon /> {t("guides.link")}
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => go("rates")}>
                 <TrendingUpIcon /> {t("rates.pageLink")}
               </DropdownMenuItem>
@@ -157,23 +161,29 @@ export function AppShell({
         {children}
       </main>
 
-      <footer className="mb-20 flex flex-wrap items-center gap-x-4 gap-y-1 border-t py-4 text-xs text-muted-foreground sm:mb-0">
-        <span className="inline-flex items-center gap-1.5">
-          <ShieldCheckIcon className="size-3.5 shrink-0" aria-hidden />
-          {t("footer.privacy")}
-        </span>
-        <a href={ROUTE_HREF.rates} data-route="rates" className="underline-offset-2 hover:underline">
-          {t("rates.pageLink")}
-        </a>
-        <span className="sm:ml-auto">{t("footer.estimates")}</span>
+      <footer className="mb-20 grid gap-2.5 border-t py-4 text-xs text-muted-foreground sm:mb-0">
+        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-1">
+          <span className="inline-flex min-w-0 items-start gap-1.5">
+            <ShieldCheckIcon className="mt-px size-3.5 shrink-0" aria-hidden />
+            {t("footer.privacy")}
+          </span>
+          <span>{t("footer.estimates")}</span>
+        </div>
         {/* Plain links (full page loads) so each page opens with its own starting loan and language. */}
-        <nav aria-label={t("footer.calculators")} className="flex basis-full flex-wrap gap-x-3 gap-y-1">
-          <span>{t("footer.calculators")}:</span>
+        <nav aria-label={t("footer.more")} className="flex flex-wrap gap-x-3 gap-y-1">
+          <a href={ROUTE_HREF.guides} data-route="guides" className="underline-offset-2 hover:underline">
+            {t("guides.link")}
+          </a>
+          <a href={ROUTE_HREF.rates} data-route="rates" className="underline-offset-2 hover:underline">
+            {t("rates.pageLink")}
+          </a>
+          <span aria-hidden className="text-border">|</span>
           {(Object.keys(TYPE_PATH) as LoanCategory[]).map((c) => (
             <a key={c} href={TYPE_PATH[c]} className="underline-offset-2 hover:underline">
               {t(`rates.${c}`)}
             </a>
           ))}
+          <span aria-hidden className="text-border">|</span>
           <a href={LANG_PATH.en} hrefLang="en" lang="en" className="underline-offset-2 hover:underline">
             English
           </a>

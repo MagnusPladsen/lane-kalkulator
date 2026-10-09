@@ -284,7 +284,8 @@
   "footer": {
     "privacy": "Twoje kredyty są zapisane tylko w tej przeglądarce. Liczymy anonimowe odwiedziny bez plików cookie. Jeśli korzystasz z pomocy AI, pytanie i liczby kredytu (bez nazw) są wysyłane do OpenAI.",
     "estimates": "Tylko szacunki. Liczą się liczby z twojego banku.",
-    "calculators": "Kalkulatory"
+    "calculators": "Kalkulatory",
+    "more": "Więcej stron"
   },
   "storage": {
     "off": "Ta przeglądarka blokuje pamięć lokalną, więc zapisywanie jest wyłączone. Kalkulator nadal działa.",
@@ -699,5 +700,16 @@
       "introTitle": "O kredycie studenckim",
       "intro": "Kredyt studencki z Lånekassen spłaca się zwykle przez wiele lat. Oprocentowanie bywa niższe niż przy innych kredytach, ale nadpłaty i tak obniżają łączny koszt i skracają spłatę. Zobacz, co stanie się z Twoim."
     }
+  },
+  "guides": {
+    "link": "Poradniki",
+    "title": "Poradniki o kredytach",
+    "lede": "Krótkie wyjaśnienia z przykładami policzonymi w kalkulatorze. Źródła są na końcu każdego poradnika.",
+    "all": "Wszystkie poradniki",
+    "updated": "Ostatnia aktualizacja {{date}}",
+    "try": "Wypróbuj na swoim kredycie",
+    "sources": "Źródła",
+    "disclaimer": "Poradniki to ogólne informacje, nie porada osobista. O swoją sytuację zapytaj bank, Husbanken, Lånekassen lub Skatteetaten.",
+    "norwegianOnly": "Poradniki są dostępne tylko po norwesku."
   }
 }

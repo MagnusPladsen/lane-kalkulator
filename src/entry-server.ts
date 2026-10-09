@@ -9,11 +9,12 @@ import { langOfPath, setServerPath } from "./hooks/useRoute"
 import i18n from "./i18n"
 import en from "./i18n/en.json"
 import pl from "./i18n/pl.json"
-import { ComparePage, LoansPage, RatesPage } from "./pages/lazy"
+import { ComparePage, GuidesPage, LoansPage, RatesPage } from "./pages/lazy"
 import { BalanceChart, CumulativeChart, RateChart, YearlyChart } from "./components/charts/lazy"
 
 export { LANG_META, ROUTE_META, SITE_NAME, SITE_URL, TYPE_META } from "./lib/seo"
 export { LANG_PATH, TYPE_PATH } from "./hooks/useRoute"
+export { GUIDES } from "./content/guides"
 export { CALC_FAQ, COMPARE_FAQ } from "./lib/faq"
 export { fetchRateHistory, setRateSnapshot } from "./lib/rateHistory"
 
@@ -30,6 +31,7 @@ export async function render(path: string): Promise<string> {
     ComparePage.preload(),
     LoansPage.preload(),
     RatesPage.preload(),
+    GuidesPage.preload(),
     BalanceChart.preload(),
     YearlyChart.preload(),
     CumulativeChart.preload(),

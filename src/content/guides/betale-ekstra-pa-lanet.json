@@ -1,0 +1,203 @@
+{
+  "slug": "betale-ekstra-pa-lanet",
+  "title": "Lønner det seg å betale ekstra på lånet?",
+  "description": "Slik kutter ekstra innbetalinger renter og nedbetalingstid, hvorfor buffer kommer først, og hvordan du regner på ditt eget lån.",
+  "updated": "2026-10-09",
+  "intro": "Ofte, ja. Hver krone du betaler ekstra går rett på restgjelden, og du slipper renten på den kronen resten av lånetiden. På et boliglån på 3 000 000 kr med 5,5 % rente over 25 år sparer du 530 928 kr i renter hvis du betaler 2 000 kr ekstra i måneden, og lånet blir nedbetalt 4 år og 7 måneder tidligere. Men ha en buffer først, og betal ned dyrere gjeld før boliglånet.",
+  "sections": [
+    {
+      "heading": "Slik virker en ekstra innbetaling",
+      "paragraphs": [
+        "Renten regnes av det du skylder. Når restgjelden blir mindre, blir rentene mindre hver måned etterpå. Beholder du samme terminbeløp, går en større del av det til avdrag, og lånet blir ferdig før.",
+        "Du har rett til å betale tilbake hele eller deler av lånet før tiden. Det står i finansavtaleloven § 2-9.",
+        "Eksempel: 3 000 000 kr, 5,5 % rente, 25 år, annuitetslån og 50 kr i termingebyr. Terminbeløpet er 18 473 kr i måneden."
+      ],
+      "bullets": [
+        "1 000 kr ekstra i måneden: 299 175 kr mindre i renter, ferdig 2 år og 6 måneder tidligere.",
+        "2 000 kr ekstra i måneden: 530 928 kr mindre i renter, ferdig 4 år og 7 måneder tidligere.",
+        "100 000 kr én gang, neste måned: 275 284 kr mindre i renter, ferdig 1 år og 8 måneder tidligere."
+      ]
+    },
+    {
+      "heading": "Lavere terminbeløp eller kortere lånetid?",
+      "paragraphs": [
+        "Spør banken hvordan den gjør det. Hos Husbanken blir terminbeløpet lavere etter en ekstra innbetaling, mens løpetiden er den samme. Du kan søke om å beholde terminbeløpet for å bli ferdig før.",
+        "Eksemplene over forutsetter at du beholder terminbeløpet og blir ferdig tidligere. Går terminbeløpet ned i stedet, synker gjelden saktere etterpå, og du sparer mindre i renter.",
+        "Har du fastrente, kan det bli beregnet overkurs eller underkurs på det du betaler inn ekstra. Sjekk dette med banken først."
+      ]
+    },
+    {
+      "heading": "Buffer først",
+      "paragraphs": [
+        "Penger du har betalt inn på lånet, har du ikke lenger på konto. Hos Husbanken er det for eksempel ikke mulig å låne opp igjen beløp du har betalt inn ekstra.",
+        "Forbrukerrådet råder deg til å ha en solid buffer før du for eksempel sparer i aksjefond, og til å betale ned lånet med høyest rente først. Sammenlign renten på alle lånene dine, og start med det dyreste."
+      ]
+    },
+    {
+      "heading": "Ekstra på lånet eller sparing?",
+      "paragraphs": [
+        "Å betale ned gjeld gir en sikker gevinst: hver krone du betaler inn, sparer deg for lånerenten på den kronen. Sammenlign det med renten du får på sparekontoen.",
+        "Husk skatten. Du får fradrag for 22 prosent av rentekostnadene, så lånet koster deg litt mindre enn renten tilsier. Renter på sparing påvirkes også av skatt. Tallene i eksemplene er før skatt. Har du spørsmål om din egen skatt, se Skatteetaten."
+      ]
+    },
+    {
+      "heading": "Regn på ditt eget lån",
+      "paragraphs": [
+        "Fyll inn lånet ditt i kalkulatoren. Under «Hva om …?» velger du «Betal ekstra» og legger til «Månedlig ekstra» eller «Engangsbeløp». Da ser du med en gang hvor mye du sparer i renter, og hvor mye tidligere lånet blir nedbetalt.",
+        "Vil du være gjeldfri innen et bestemt år, velg «Ferdig innen». Da regner kalkulatoren ut hvor mye du må betale ekstra for å klare det."
+      ]
+    }
+  ],
+  "cta": {
+    "text": "Regn på ekstra innbetalinger",
+    "path": "/"
+  },
+  "sources": [
+    {
+      "title": "Finansavtaleloven § 2-9 Tilbakebetaling av kredittbeløp (Lovdata)",
+      "url": "https://lovdata.no/lov/2020-12-18-146/§2-9"
+    },
+    {
+      "title": "Ekstra innbetaling på lånet (Husbanken)",
+      "url": "https://www.husbanken.no/kunde-i-husbanken/ekstraordinaer-betaling-paa-laan/"
+    },
+    {
+      "title": "Tips til en tryggere økonomi (Forbrukerrådet, Finansportalen)",
+      "url": "https://www.forbrukerradet.no/finansportalen/bank/tips-og-rad/tips-til-en-tryggere-okonomi/"
+    },
+    {
+      "title": "Fordeling av lån og renter (Skatteetaten)",
+      "url": "https://www.skatteetaten.no/person/skatt/hjelp-til-riktig-skatt/bank-og-lan/lan-og-renter/fordeling/"
+    }
+  ],
+  "figures": [
+    {
+      "claim": "På et boliglån på 3 000 000 kr med 5,5 % rente over 25 år sparer du 530 928 kr i renter hvis du betaler 2 000 kr ekstra i måneden, og lånet blir nedbetalt 4 år og 7 måneder tidligere.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [
+          {
+            "id": "e",
+            "kind": "recurring",
+            "amount": 2000,
+            "from": "2026-11"
+          }
+        ],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "analyze(scenario, \"2026-10-09\"): delta.interest = -530928 (rounded), delta.months = -55 (300 -> 245 months)."
+    },
+    {
+      "claim": "Terminbeløpet er 18 473 kr i måneden.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "baseline.monthlyPayment = 18473 (rounded; first month, incl. 50 kr fee)."
+    },
+    {
+      "claim": "1 000 kr ekstra i måneden: 299 175 kr mindre i renter, ferdig 2 år og 6 måneder tidligere.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [
+          {
+            "id": "e",
+            "kind": "recurring",
+            "amount": 1000,
+            "from": "2026-11"
+          }
+        ],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "delta.interest = -299175, delta.months = -30 (300 -> 270)."
+    },
+    {
+      "claim": "2 000 kr ekstra i måneden: 530 928 kr mindre i renter, ferdig 4 år og 7 måneder tidligere.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [
+          {
+            "id": "e",
+            "kind": "recurring",
+            "amount": 2000,
+            "from": "2026-11"
+          }
+        ],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "delta.interest = -530928, delta.months = -55 (300 -> 245)."
+    },
+    {
+      "claim": "100 000 kr én gang, neste måned: 275 284 kr mindre i renter, ferdig 1 år og 8 måneder tidligere.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [
+          {
+            "id": "e",
+            "kind": "oneoff",
+            "amount": 100000,
+            "from": "2026-11"
+          }
+        ],
+        "periods": [],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "delta.interest = -275284, delta.months = -20 (300 -> 280). One-off in 2026-11 = month 1 of the forward plan."
+    }
+  ]
+}

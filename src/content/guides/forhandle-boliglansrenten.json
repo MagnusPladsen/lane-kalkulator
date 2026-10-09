@@ -1,0 +1,186 @@
+{
+  "slug": "forhandle-boliglansrenten",
+  "title": "Slik forhandler du boliglånsrenten",
+  "description": "Sjekk hva andre banker tilbyr, be banken din matche, og regn på om det lønner seg å bytte. Enkle steg mot lavere boliglånsrente.",
+  "updated": "2026-10-09",
+  "intro": "Det kan lønne seg å forhandle. Finn det beste tilbudet du kan få andre steder, be banken din matche det, og bytt bank hvis den ikke gjør det. Forbrukerrådet påpeker at lojale kunder i snitt har dårligere rentebetingelser enn nye kunder. Selv en liten rentenedgang blir mye penger over mange år.",
+  "sections": [
+    {
+      "heading": "Hvor mye er det verdt?",
+      "paragraphs": [
+        "Eksempel: et boliglån på 3 000 000 kr over 25 år, annuitet og 50 kr i termingebyr. Renten går ned fra 5,5 % til 5,0 %."
+      ],
+      "bullets": [
+        "Terminbeløpet går ned fra 18 473 kr til 17 588 kr, altså 885 kr i måneden.",
+        "Det første året betaler du 14 969 kr mindre i renter.",
+        "Over hele lånetiden betaler du 265 493 kr mindre i renter.",
+        "Bare 0,25 prosentpoeng lavere rente (5,25 %) gir 133 566 kr mindre i renter over 25 år."
+      ]
+    },
+    {
+      "heading": "Finn ut hva andre banker tilbyr",
+      "paragraphs": [
+        "Forbrukerrådets Finansportalen viser hva bankene tar for boliglån. Forbrukerrådet anbefaler å sammenligne prisen på lånet ditt med markedets beste minst én gang i året.",
+        "Gjennom Finansportalen kan du også gi banken din mulighet til å matche en lavere rente fra en annen bank. Se på effektiv rente, ikke bare nominell, så gebyrene kommer med."
+      ]
+    },
+    {
+      "heading": "Hva banken ser på",
+      "paragraphs": [
+        "Gjelden sammenlignet med hva boligen er verdt, er en viktig faktor for hvilken rente du får, ifølge Forbrukerrådet. Har boligen steget i verdi, kan du få bedre lånebetingelser. Det kan derfor lønne seg å be om en ny verdivurdering.",
+        "Har du vært kunde lenge, oppfordrer Forbrukerrådet deg til å argumentere for hvorfor du fortjener bedre rente. Ha et konkret tilbud fra en annen bank klart når du tar kontakt."
+      ]
+    },
+    {
+      "heading": "Hva koster det å bytte?",
+      "paragraphs": [
+        "Den nye banken skal ha pant i boligen, og det tinglyses hos Kartverket. Kartverkets prisliste for 2026 oppgir 545 kr for tinglysing av pantedokument.",
+        "Spør den nye banken hva byttet koster deg totalt, også om den tar etableringsgebyr, og ta det med i regnestykket.",
+        "Har du fastrente, kan banken kreve dekket tap (overkurs) hvis du innfrir lånet før tiden og avtalen gir rett til det. Det følger av finansavtaleloven § 2-10. Sjekk dette før du bytter."
+      ]
+    },
+    {
+      "heading": "Regn på det før du ringer banken",
+      "paragraphs": [
+        "På Sammenlign-siden kan du legge inn to tilbud og se terminbeløp, renter, gebyrer, total kostnad og effektiv rente side om side.",
+        "Under «Bytte bank?» legger du inn den nye renten og hva byttet koster. Da ser du hvor mye du sparer totalt, og hvor mange måneder det tar før byttekostnaden er tjent inn."
+      ]
+    }
+  ],
+  "cta": {
+    "text": "Sjekk om det lønner seg å bytte",
+    "path": "/sammenlign"
+  },
+  "sources": [
+    {
+      "title": "Nå bør du prute på den renta du har eller bytte bank (Forbrukerrådet, 7. mai 2026)",
+      "url": "https://www.forbrukerradet.no/siste-nytt/na-bor-du-prute-pa-den-renta-du-har-eller-bytte-bank/"
+    },
+    {
+      "title": "Bank (Forbrukerrådet, Finansportalen)",
+      "url": "https://www.forbrukerradet.no/finansportalen/bank/"
+    },
+    {
+      "title": "Tinglysingsgebyr (Kartverket)",
+      "url": "https://www.kartverket.no/eiendom/dokumentavgift-og-gebyr/tinglysingsgebyr"
+    },
+    {
+      "title": "Finansavtaleloven § 2-10 Tap og gevinst ved førtidig tilbakebetaling av fastrentekreditt (Lovdata)",
+      "url": "https://lovdata.no/lov/2020-12-18-146/§2-10"
+    }
+  ],
+  "figures": [
+    {
+      "claim": "Terminbeløpet går ned fra 18 473 kr til 17 588 kr, altså 885 kr i måneden.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "rate",
+            "from": "2026-11",
+            "to": "2051-10",
+            "annualRatePct": 5.0
+          }
+        ],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "Rate period 5,0 % over the whole term (all 300 months). baseline.monthlyPayment = 18473, scenario.monthlyPayment = 17588 (first month, incl. 50 kr fee); difference 885."
+    },
+    {
+      "claim": "Det første året betaler du 14 969 kr mindre i renter.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "rate",
+            "from": "2026-11",
+            "to": "2051-10",
+            "annualRatePct": 5.0
+          }
+        ],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "Sum of rows[0..11].interest: baseline = 163563, scenario = 148594; difference 14969."
+    },
+    {
+      "claim": "Over hele lånetiden betaler du 265 493 kr mindre i renter.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "rate",
+            "from": "2026-11",
+            "to": "2051-10",
+            "annualRatePct": 5.0
+          }
+        ],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "delta.interest = -265493 (lifetime interest 2526867 -> 2261374), delta.months = 0."
+    },
+    {
+      "claim": "Bare 0,25 prosentpoeng lavere rente (5,25 %) gir 133 566 kr mindre i renter over 25 år.",
+      "scenario": {
+        "id": "x",
+        "savedAt": "",
+        "loan": {
+          "name": "",
+          "principal": 3000000,
+          "annualRatePct": 5.5,
+          "termMonths": 300,
+          "loanType": "annuity",
+          "monthlyFee": 50,
+          "dayCount": "act/act"
+        },
+        "extras": [],
+        "periods": [
+          {
+            "id": "p",
+            "kind": "rate",
+            "from": "2026-11",
+            "to": "2051-10",
+            "annualRatePct": 5.25
+          }
+        ],
+        "afterInterestOnly": "keep-term"
+      },
+      "result": "delta.interest = -133566 (rate period 5,25 % over the whole term), delta.months = 0."
+    }
+  ]
+}

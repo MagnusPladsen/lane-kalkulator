@@ -280,7 +280,8 @@
   "footer": {
     "privacy": "Your loans are stored only in this browser. We count anonymous visits without cookies. If you use the AI help, your question and loan figures (not names) are sent to OpenAI.",
     "estimates": "Estimates only. Your bank's numbers are the ones that count.",
-    "calculators": "Calculators"
+    "calculators": "Calculators",
+    "more": "More pages"
   },
   "storage": {
     "off": "This browser blocks local storage, so saving is off. The calculator still works.",
@@ -685,5 +686,16 @@
       "introTitle": "About student loans",
       "intro": "Student loans from Lånekassen are usually repaid over many years. The rate is often lower than on other loans, but extra payments still lower the total cost and shorten the loan. See what happens to yours."
     }
+  },
+  "guides": {
+    "link": "Guides",
+    "title": "Loan guides",
+    "lede": "Short explanations with examples worked out in the calculator. Sources are listed at the end of each guide.",
+    "all": "All guides",
+    "updated": "Last updated {{date}}",
+    "try": "Try it on your own loan",
+    "sources": "Sources",
+    "disclaimer": "The guides are general information, not personal advice. Ask your bank, Husbanken, Lånekassen or Skatteetaten about your own case.",
+    "norwegianOnly": "The guides are only available in Norwegian."
   }
 }

@@ -1,7 +1,7 @@
 // Writes one ready HTML file per page after `vite build`: the rendered app inside #root,
 // the page's own title, description, canonical URL and social tags, and JSON-LD.
 // Run by `bun run build`; needs dist/ (client) and dist-ssr/ (server entry).
-import { readdirSync, readFileSync, writeFileSync } from "node:fs"
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { createHash } from "node:crypto"
 
 const {
@@ -17,6 +17,7 @@ const {
   COMPARE_FAQ,
   fetchRateHistory,
   setRateSnapshot,
+  GUIDES,
 } = await import(
   "../dist-ssr/entry-server.js"
 )
@@ -92,6 +93,25 @@ const pages = [
     data: rates && { id: "rate-snapshot", value: rates },
   },
   { path: "/mine-lan", file: "dist/mine-lan.html", meta: meta(ROUTE_META.loans), ld: [] },
+  { path: "/guider", file: "dist/guider.html", meta: meta(ROUTE_META.guides), ld: [] },
+  ...GUIDES.map((g) => ({
+    path: `/guider/${g.slug}`,
+    file: `dist/guider/${g.slug}.html`,
+    meta: { title: `${g.title} | ${SITE_NAME}`, description: g.description, index: true },
+    ld: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: g.title,
+        description: g.description,
+        dateModified: g.updated,
+        inLanguage: "nb",
+        mainEntityOfPage: `${SITE_URL}/guider/${g.slug}`,
+        publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+        citation: g.sources.map((x) => x.url),
+      },
+    ],
+  })),
   ...Object.entries(TYPE_PATH).map(([category, path]) => ({
     path,
     file: `dist${path}.html`,
@@ -132,6 +152,7 @@ for (const { path, file, meta: m, ld, data, lang, locale, alternates } of pages)
     ? `\n    <script id="${data.id}" type="application/json">${JSON.stringify(data.value).replace(/</g, "\\u003c")}</script>`
     : ""
   html = setTag(html, /<div id="root"><\/div>/, `<div id="root">${await render(path)}</div>${embedded}`)
+  mkdirSync(file.slice(0, file.lastIndexOf("/")), { recursive: true })
   writeFileSync(file, html)
   console.log(`prerendered ${path} -> ${file} (${Math.round(html.length / 1024)} kB)`)
 }

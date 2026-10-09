@@ -280,7 +280,8 @@
   "footer": {
     "privacy": "Lånene dine lagres bare i denne nettleseren. Vi teller anonyme besøk uten informasjonskapsler. Bruker du AI-hjelpen, sendes spørsmålet og lånetallene (ikke navn) til OpenAI.",
     "estimates": "Kun anslag. Bankens tall er de som gjelder.",
-    "calculators": "Kalkulatorer"
+    "calculators": "Kalkulatorer",
+    "more": "Flere sider"
   },
   "storage": {
     "off": "Denne nettleseren blokkerer lokal lagring, så lagring er av. Kalkulatoren virker likevel.",
@@ -685,5 +686,16 @@
       "introTitle": "Om studielån",
       "intro": "Studielånet fra Lånekassen betales vanligvis ned over mange år. Renten er ofte lavere enn på andre lån, men ekstra innbetalinger gir likevel lavere totalkostnad og kortere nedbetaling. Se hva som skjer med lånet ditt."
     }
+  },
+  "guides": {
+    "link": "Guider",
+    "title": "Guider om lån",
+    "lede": "Korte forklaringer med eksempler regnet ut i kalkulatoren. Kildene står nederst i hver guide.",
+    "all": "Alle guider",
+    "updated": "Sist oppdatert {{date}}",
+    "try": "Prøv det på ditt eget lån",
+    "sources": "Kilder",
+    "disclaimer": "Guidene er generell informasjon, ikke personlig råd. Spør banken, Husbanken, Lånekassen eller Skatteetaten om det som gjelder deg.",
+    "norwegianOnly": "Guidene finnes bare på norsk."
   }
 }

@@ -8,7 +8,7 @@ import { SaveDialog } from "@/components/SaveDialog"
 import { ShareFallbackDialog } from "@/components/ShareFallbackDialog"
 import { CalculatorPage } from "@/pages/CalculatorPage"
 import { categoryOfPath, currentPath, go, useRoute } from "@/hooks/useRoute"
-import { ComparePage, LoansPage, RatesPage } from "@/pages/lazy"
+import { ComparePage, GuidesPage, LoansPage, RatesPage } from "@/pages/lazy"
 import { isPristine, loadDraft, newScenario, saveDraft, storageAvailable, useSavedScenarios, useTheme } from "@/lib/storage"
 import { decodeShare, shareUrl } from "@/lib/share"
 import { scenarioReducer } from "@/lib/scenarioReducer"
@@ -164,6 +164,8 @@ export default function App() {
         <CalculatorPage key={scenario.id} scenario={scenario} dispatch={dispatch} />
       ) : route === "rates" ? (
         <RatesPage />
+      ) : route === "guides" ? (
+        <GuidesPage />
       ) : route === "compare" ? (
         <ComparePage
           scenario={scenario}
