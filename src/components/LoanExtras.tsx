@@ -139,24 +139,28 @@ export function EffectiveRateCheck({
           </p>
         ) : (
           <>
-            <p className="flex flex-wrap items-start gap-1.5 text-muted-foreground">
-              <AiExplainGap />
+            <p className="flex items-start gap-1.5 text-muted-foreground">
               <InfoIcon className="mt-0.5 size-4 shrink-0" aria-hidden />
-              {gap > 0 ? t("loan.effHigher", { bank: fmtRate(bank) }) : t("loan.effLower", { bank: fmtRate(bank) })}
+              <span className="min-w-0 flex-1">
+                {gap > 0 ? t("loan.effHigher", { bank: fmtRate(bank) }) : t("loan.effLower", { bank: fmtRate(bank) })}
+              </span>
             </p>
-            {gap > 0 && (
-              <Button
-                variant="outline"
-                className="w-fit"
-                onClick={() => {
-                  const fee = solveMonthlyFee(loan, bank)
-                  setSolved({ signature, fee })
-                  if (fee !== undefined && fee <= PLAUSIBLE_FEE) onChange({ monthlyFee: fee })
-                }}
-              >
-                {t("loan.effSolve", { bank: fmtRate(bank) })}
-              </Button>
-            )}
+            <div className="flex flex-wrap gap-2">
+              {gap > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const fee = solveMonthlyFee(loan, bank)
+                    setSolved({ signature, fee })
+                    if (fee !== undefined && fee <= PLAUSIBLE_FEE) onChange({ monthlyFee: fee })
+                  }}
+                >
+                  {t("loan.effSolve", { bank: fmtRate(bank) })}
+                </Button>
+              )}
+              <AiExplainGap />
+            </div>
           </>
         ))}
       {result && (
@@ -188,7 +192,7 @@ function AiExplainGap() {
   const ai = useAi()
   if (!ai.enabled) return null
   return (
-    <Button variant="outline" size="sm" className="order-last basis-full sm:basis-auto" onClick={() => ai.ask({ focus: "field:effectiveRatePct", question: t("ai.q.gap") })}>
+    <Button variant="outline" size="sm" onClick={() => ai.ask({ focus: "field:effectiveRatePct", question: t("ai.q.gap") })}>
       {t("ai.explainGap")}
     </Button>
   )

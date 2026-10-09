@@ -379,22 +379,25 @@ export function LoanWizard({
                 {t("wizard.back")}
               </Button>
             )}
-            {!fresh && !last && (
-              <Button variant="ghost" disabled={!valid} onClick={onDone}>
-                {t("steps.done")}
-              </Button>
-            )}
-            {last ? (
-              <Button className="ml-auto" disabled={!valid} onClick={onDone}>
-                <CheckIcon data-icon="inline-start" />
-                {fresh ? t("wizard.finish") : t("steps.done")}
-              </Button>
-            ) : (
-              <Button className="ml-auto" disabled={stepHasErrors(id)} onClick={() => go(step + 1)}>
-                {t("wizard.next")}
-                <ArrowRightIcon data-icon="inline-end" />
-              </Button>
-            )}
+            {/* Forward actions sit together on the right: finish now, or continue. */}
+            <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+              {!fresh && !last && (
+                <Button variant="ghost" disabled={!valid} onClick={onDone}>
+                  {t("steps.done")}
+                </Button>
+              )}
+              {last ? (
+                <Button disabled={!valid} onClick={onDone}>
+                  <CheckIcon data-icon="inline-start" />
+                  {fresh ? t("wizard.finish") : t("steps.done")}
+                </Button>
+              ) : (
+                <Button disabled={stepHasErrors(id)} onClick={() => go(step + 1)}>
+                  {t("wizard.next")}
+                  <ArrowRightIcon data-icon="inline-end" />
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </CardContent>
