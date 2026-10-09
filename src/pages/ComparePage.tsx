@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react"
 import { Faq } from "@/components/Faq"
 import { COMPARE_FAQ } from "@/lib/faq"
 import { useTranslation } from "react-i18next"
-import { ArrowRightIcon, TrophyIcon } from "lucide-react"
+import { ArrowRightIcon, TrophyIcon, CheckIcon, Share2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Field, FieldGroup, FieldInput, FieldRow, MoneyInput, NumberInput, SectionTitle, Segmented } from "@/components/fields"
 import { evaluateOffer, offerLoan, refinance, type Offer } from "@/lib/compare"
+import { COMPARE_SHARE_PREFIX, compareShareUrl, decodeOffers } from "@/lib/compareShare"
 import { fmtDuration, fmtMoney, fmtMonthYear, fmtRate } from "@/lib/format"
 import { addMonths, analyze, todayIso } from "@/lib/loan/engine"
 import type { LoanInput, LoanType, Scenario } from "@/lib/loan/types"
@@ -62,10 +63,32 @@ export function ComparePage({
 }) {
   const { t } = useTranslation()
   const [saved] = useState(load)
-  const [a, setA] = useState<Offer>(saved.a ?? offerFrom(scenario.loan, t("compare.offerA")))
-  const [b, setB] = useState<Offer>(
-    saved.b ?? { ...offerFrom(scenario.loan, t("compare.offerB")), annualRatePct: Math.max(0, scenario.loan.annualRatePct - 0.3) },
+  // A shared comparison in the link wins over what this browser had saved.
+  const [shared] = useState(() =>
+    typeof location !== "undefined" && location.hash.startsWith(COMPARE_SHARE_PREFIX)
+      ? decodeOffers(location.hash.slice(COMPARE_SHARE_PREFIX.length))
+      : undefined,
   )
+  const [a, setA] = useState<Offer>(shared?.a ?? saved.a ?? offerFrom(scenario.loan, t("compare.offerA")))
+  const [b, setB] = useState<Offer>(
+    shared?.b ??
+      saved.b ?? { ...offerFrom(scenario.loan, t("compare.offerB")), annualRatePct: Math.max(0, scenario.loan.annualRatePct - 0.3) },
+  )
+  const [shareState, setShareState] = useState<"idle" | "copied" | { url: string }>("idle")
+  useEffect(() => {
+    // Drop the offers from the address bar once read, so a reload does not re-apply them.
+    if (location.hash.startsWith(COMPARE_SHARE_PREFIX)) history.replaceState(null, "", location.pathname)
+  }, [])
+  const share = async () => {
+    const url = compareShareUrl(a, b)
+    try {
+      await navigator.clipboard.writeText(url)
+      setShareState("copied")
+      setTimeout(() => setShareState("idle"), 2500)
+    } catch {
+      setShareState({ url })
+    }
+  }
   const [sw, setSw] = useState<Switch>(
     saved.sw && saved.swFor === scenario.id
       ? saved.sw
@@ -92,7 +115,30 @@ export function ComparePage({
           <TabsTrigger value="offers">{t("compare.tabOffers")}</TabsTrigger>
           <TabsTrigger value="switch">{t("compare.tabSwitch")}</TabsTrigger>
         </TabsList>
-        <TabsContent value="offers" className="pt-3">
+        <TabsContent value="offers" className="grid gap-3 pt-3">
+          {shared && (
+            <p role="status" className="rounded-2xl bg-highlight px-3.5 py-2.5 text-sm text-highlight-foreground">
+              {t("compare.sharedLoaded")}
+            </p>
+          )}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={share}>
+              {shareState === "copied" ? <CheckIcon data-icon="inline-start" /> : <Share2Icon data-icon="inline-start" />}
+              {shareState === "copied" ? t("compare.shareCopied") : t("compare.share")}
+            </Button>
+            <span className="text-xs text-muted-foreground">{t("compare.shareHint")}</span>
+          </div>
+          {typeof shareState === "object" && (
+            <label className="grid gap-1 text-xs text-muted-foreground">
+              {t("compare.shareManual")}
+              <input
+                readOnly
+                value={shareState.url}
+                onFocus={(e) => e.currentTarget.select()}
+                className="h-10 w-full rounded-xl border border-input bg-transparent px-3 font-mono text-xs text-foreground"
+              />
+            </label>
+          )}
           <OffersCompare
             a={a}
             b={b}

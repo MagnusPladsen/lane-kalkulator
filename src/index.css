@@ -236,3 +236,17 @@
 @media (max-width: 1023px) {
   body[data-setup] .ai-launcher { display: none; }
 }
+
+/* Printing / "Save as PDF": black on white, no app chrome. On the calculator the
+   print sheet (PrintPlan) replaces the screen layout. */
+@media print {
+  :root, .dark {
+    --background: #fff; --foreground: #000; --card: #fff; --card-foreground: #000;
+    --muted-foreground: #333; --border: #bbb;
+  }
+  html.dark { color-scheme: light; }
+  body { background: #fff !important; }
+  .app-header, footer, .fixed, [role="dialog"], .ai-launcher { display: none !important; }
+  main:has(> .print-sheet) > :not(.print-sheet) { display: none !important; }
+  @page { margin: 14mm 12mm; }
+}

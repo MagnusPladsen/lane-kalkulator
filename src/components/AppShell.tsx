@@ -64,7 +64,7 @@ export function AppShell({
         {t("app.skip")}
       </button>
 
-      <header className="flex items-center gap-2 py-3 sm:gap-3 sm:py-5">
+      <header className="app-header flex items-center gap-2 py-3 sm:gap-3 sm:py-5">
         <a
           href={ROUTE_HREF.calc}
           data-route="calc"

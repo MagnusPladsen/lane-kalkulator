@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { TrendingUpIcon } from "lucide-react"
+import { ArrowDownUpIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -85,11 +85,12 @@ function SplitBar({
   )
 }
 
-const STEPS = [1, 2, 3] as const
+/** Percentage-point changes to try; falls are offered only when the rate can go that low. */
+const STEPS = [-2, -1, 1, 2, 3] as const
 
 /**
- * "What if the rate rises?" One click shows the new payment and the extra cost;
- * a second click adds the rise as a rate period for the rest of the loan.
+ * "What if the rate changes?" One click shows the new payment and the change in cost;
+ * a second click adds the change as a rate period for the rest of the loan.
  */
 export function RateStress({
   scenario,
@@ -133,10 +134,10 @@ export function RateStress({
     <Card className="rise rise-2" size="sm">
       <CardContent className="grid gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <TrendingUpIcon className="size-4 text-muted-foreground" aria-hidden />
+          <ArrowDownUpIcon className="size-4 text-muted-foreground" aria-hidden />
           <p className="text-sm font-medium">{t("insight.stressTitle")}</p>
-          <div role="radiogroup" aria-label={t("insight.stressTitle")} className="ml-auto flex gap-1.5">
-            {STEPS.map((s) => (
+          <div role="radiogroup" aria-label={t("insight.stressTitle")} className="ml-auto flex flex-wrap gap-1.5">
+            {STEPS.filter((s) => nominal + s >= 0).map((s) => (
               <button
                 key={s}
                 type="button"
@@ -148,7 +149,8 @@ export function RateStress({
                   step === s ? "border-primary bg-primary text-primary-foreground" : "hover:bg-muted",
                 )}
               >
-                +{s}
+                {s > 0 ? "+" : "−"}
+                {Math.abs(s)}
               </button>
             ))}
           </div>
@@ -156,11 +158,11 @@ export function RateStress({
         {result ? (
           <div className="flex flex-wrap items-end justify-between gap-2" aria-live="polite">
             <p className="text-sm">
-              {t("insight.stressResult", {
+              {t(result.paymentDelta < 0 ? "insight.stressResultDown" : "insight.stressResult", {
                 rate: fmtRate(result.period.annualRatePct),
                 payment: fmtMoney(result.payment),
-                delta: fmtMoney(result.paymentDelta),
-                cost: fmtMoney(result.costDelta),
+                delta: fmtMoney(Math.abs(result.paymentDelta)),
+                cost: fmtMoney(Math.abs(result.costDelta)),
               })}
             </p>
             <Button variant="outline" size="sm" onClick={() => onAddPeriod(result.period)}>

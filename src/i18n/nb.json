@@ -425,8 +425,8 @@
     "split": "Av neste betaling på {{payment}} går {{interest}} til renter, {{principal}} til avdrag og {{fee}} i gebyr.",
     "interestOnly": "Neste betaling på {{payment}} er bare renter ({{interest}}) og gebyr. Gjelden går ikke ned i perioden.",
     "turn": "Fra {{date}} går mer til avdrag enn til renter.",
-    "stressTitle": "Hva om renten stiger?",
-    "stressHint": "Velg hvor mange prosentpoeng, så ser du hva det betyr for deg.",
+    "stressTitle": "Hva om renten endres?",
+    "stressHint": "Velg hvor mange prosentpoeng opp eller ned, så ser du hva det betyr for deg.",
     "stressResult": "Ved {{rate}} % blir terminbeløpet {{payment}}, {{delta}} mer i måneden. Lånet koster {{cost}} mer totalt.",
     "stressAdd": "Legg til som periode",
     "nextTitle": "Neste betaling",
@@ -436,7 +436,8 @@
     "interestOnlyNote": "Bare renter og gebyr nå. Gjelden går ikke ned i perioden.",
     "wholeTitle": "Hele lånet",
     "borrowedPart": "Lånt",
-    "feesPart": "Gebyrer"
+    "feesPart": "Gebyrer",
+    "stressResultDown": "Ved {{rate}} % blir terminbeløpet {{payment}}, {{delta}} mindre i måneden. Lånet koster {{cost}} mindre totalt."
   },
   "compare": {
     "title": "Sammenlign",
@@ -466,7 +467,12 @@
     "perMonth": "Per måned",
     "useNew": "Åpne det nye lånet i kalkulatoren",
     "moved": "flyttet",
-    "needLoan": "Fyll ut lånet ditt i kalkulatoren først, så kan du sjekke om det lønner seg å bytte."
+    "needLoan": "Fyll ut lånet ditt i kalkulatoren først, så kan du sjekke om det lønner seg å bytte.",
+    "share": "Del sammenligningen",
+    "shareCopied": "Lenke kopiert",
+    "shareHint": "Lenken inneholder bare tallene for de to tilbudene.",
+    "shareManual": "Kopier lenken:",
+    "sharedLoaded": "Viser en sammenligning noen har delt med deg."
   },
   "ai": {
     "short": "AI",
@@ -592,5 +598,16 @@
   },
   "amounts": {
     "quick": "Hurtigvalg"
+  },
+  "print": {
+    "csv": "Last ned som regneark (CSV)",
+    "pdf": "Skriv ut / lagre som PDF",
+    "made": "laget {{date}}",
+    "yearly": "Nedbetaling år for år",
+    "year": "År",
+    "extra": "Ekstra",
+    "balanceEnd": "Restgjeld ved årets slutt",
+    "month": "Måned",
+    "ratePct": "Rente %"
   }
 }

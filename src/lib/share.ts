@@ -2,14 +2,14 @@ import { uid } from "./ids"
 import { sanitizeScenario } from "./loan/sanitize"
 import type { Scenario } from "./loan/types"
 
-function toBase64Url(s: string): string {
+export function toBase64Url(s: string): string {
   const bytes = new TextEncoder().encode(s)
   let bin = ""
   for (const b of bytes) bin += String.fromCharCode(b)
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")
 }
 
-function fromBase64Url(s: string): string {
+export function fromBase64Url(s: string): string {
   const b64 = s.replace(/-/g, "+").replace(/_/g, "/")
   const bin = atob(b64 + "=".repeat((4 - (b64.length % 4)) % 4))
   const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0))
@@ -64,8 +64,8 @@ export function parseImport(text: string): Scenario[] {
   return items.map((x) => sanitizeScenario(x)).filter((s): s is Scenario => s !== undefined)
 }
 
-export function downloadText(filename: string, text: string): void {
-  const blob = new Blob([text], { type: "application/json" })
+export function downloadText(filename: string, text: string, type = "application/json"): void {
+  const blob = new Blob([text], { type })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
   a.href = url
