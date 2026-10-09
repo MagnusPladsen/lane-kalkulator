@@ -434,7 +434,12 @@
     "stressTitle": "Co jeśli stopy wzrosną?",
     "stressHint": "Wybierz o ile punktów procentowych, aby zobaczyć, co to dla ciebie znaczy.",
     "stressResult": "Przy {{rate}} % rata wynosi {{payment}}, o {{delta}} więcej miesięcznie. Kredyt kosztuje łącznie {{cost}} więcej.",
-    "stressAdd": "Dodaj jako okres"
+    "stressAdd": "Dodaj jako okres",
+    "nextTitle": "Następna rata",
+    "interestPart": "Odsetki",
+    "principalPart": "Kapitał",
+    "feePart": "Opłata",
+    "interestOnlyNote": "Na razie tylko odsetki i opłata. Saldo w tym okresie się nie zmniejsza."
   },
   "compare": {
     "title": "Porównaj",

@@ -424,7 +424,12 @@
     "stressTitle": "Hva om renten stiger?",
     "stressHint": "Velg hvor mange prosentpoeng, så ser du hva det betyr for deg.",
     "stressResult": "Ved {{rate}} % blir terminbeløpet {{payment}}, {{delta}} mer i måneden. Lånet koster {{cost}} mer totalt.",
-    "stressAdd": "Legg til som periode"
+    "stressAdd": "Legg til som periode",
+    "nextTitle": "Neste betaling",
+    "interestPart": "Renter",
+    "principalPart": "Avdrag",
+    "feePart": "Gebyr",
+    "interestOnlyNote": "Bare renter og gebyr nå. Gjelden går ikke ned i perioden."
   },
   "compare": {
     "title": "Sammenlign",

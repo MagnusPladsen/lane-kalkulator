@@ -9,7 +9,10 @@ import { addMonths, analyze, todayIso, yearMonthOf } from "@/lib/loan/engine"
 import { uid } from "@/lib/ids"
 import type { Analysis, CustomPeriod, Scenario } from "@/lib/loan/types"
 
-/** Where the next payment goes, in one sentence. Template, no AI. */
+/**
+ * Where the next payment goes: a split bar with the amounts beside it, plus when principal
+ * overtakes interest. The bar is decoration; the numbers carry the meaning.
+ */
 export function LoanSentence({ a, dateFor }: { a: Analysis; dateFor: (i: number) => string }) {
   const { t } = useTranslation()
   const rows = a.scenario.rows
@@ -18,23 +21,39 @@ export function LoanSentence({ a, dateFor }: { a: Analysis; dateFor: (i: number)
   const base = r.interest + r.principal + r.fee
   // First month where more goes to principal than to interest.
   const turn = rows.findIndex((x) => !x.interestOnly && x.principal > x.interest)
-  const main = r.interestOnly
-    ? t("insight.interestOnly", { payment: fmtMoney(base), interest: fmtMoney(r.interest) })
-    : t("insight.split", {
-        payment: fmtMoney(base),
-        interest: fmtMoney(r.interest),
-        principal: fmtMoney(r.principal),
-        fee: fmtMoney(r.fee),
-      })
-  const tail =
-    turn > 0 && r.principal <= r.interest
-      ? " " + t("insight.turn", { date: fmtMonthYear(dateFor(a.offsetMonths + turn + 1)) })
-      : ""
+  const parts = [
+    { key: "interest", label: t("insight.interestPart"), value: r.interest, className: "bg-chart-interest" },
+    { key: "principal", label: t("insight.principalPart"), value: r.principal, className: "bg-chart-principal" },
+    { key: "fee", label: t("insight.feePart"), value: r.fee, className: "bg-chart-history" },
+  ].filter((p) => p.value >= 0.5)
+  const note = r.interestOnly
+    ? t("insight.interestOnlyNote")
+    : turn > 0 && r.principal <= r.interest
+      ? t("insight.turn", { date: fmtMonthYear(dateFor(a.offsetMonths + turn + 1)) })
+      : undefined
   return (
-    <p className="rise rise-1 text-sm text-muted-foreground">
-      {main}
-      {tail}
-    </p>
+    <Card size="sm" className="rise rise-1">
+      <CardContent className="grid gap-2.5">
+        <p className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
+          <span className="font-medium">{t("insight.nextTitle")}</span>
+          <span className="font-mono font-semibold tabular-nums">{fmtMoney(base)}</span>
+        </p>
+        <div className="flex h-3 overflow-hidden rounded-full bg-muted" aria-hidden>
+          {parts.map((p) => (
+            <span key={p.key} className={p.className} style={{ width: `${(p.value / base) * 100}%` }} />
+          ))}
+        </div>
+        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          {parts.map((p) => (
+            <li key={p.key} className="flex items-center gap-1.5">
+              <span aria-hidden className={cn("size-2.5 rounded-full", p.className)} />
+              {p.label} <span className="font-mono font-medium text-foreground tabular-nums">{fmtMoney(p.value)}</span>
+            </li>
+          ))}
+        </ul>
+        {note && <p className="text-xs text-muted-foreground">{note}</p>}
+      </CardContent>
+    </Card>
   )
 }
 

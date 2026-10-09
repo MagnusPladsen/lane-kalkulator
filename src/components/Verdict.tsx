@@ -72,7 +72,8 @@ export const Verdict = forwardRef<HTMLElement, { a: Analysis; hasChanges: boolea
           <Highlighted text={headline} mark={mood === "good" ? figure : undefined} />
         </p>
         <p className="mt-2 text-sm">{sub}</p>
-        {costText && (
+        {/* Only when fees make the total differ from the interest line above; otherwise it repeats it. */}
+        {costText && Math.abs(a.delta.totalCost - interest) >= 1 && (
           <p className="mt-3 text-sm">
             {t("verdict.totalCost")}{" "}
             <span
